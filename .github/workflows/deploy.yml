@@ -34,7 +34,7 @@ jobs:
         run: cd web && npx next build
         env:
           GITHUB_PAGES: 'true'
-          NEXT_PUBLIC_API_URL: ''
+          NEXT_PUBLIC_BASE_PATH: '/circle'
 
       - name: Add .nojekyll
         run: touch web/out/.nojekyll

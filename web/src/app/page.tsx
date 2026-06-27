@@ -57,14 +57,13 @@ export default function HomePage() {
 
   // 初始化客户端搜索引擎
   useEffect(() => {
-    fetch('/data/buildings.json')
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/data/buildings.json`)
       .then(r => r.json())
       .then((data: BuildingData[]) => {
         initSearchEngine(data);
         setEngineReady(true);
       })
       .catch(() => {
-        // 降级：使用内联空数据
         setEngineReady(true);
       });
   }, []);

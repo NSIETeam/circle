@@ -20,7 +20,7 @@ export default function BuildingDetailPage({ params }: { params: { id: string } 
 
   useEffect(() => {
     // 从静态JSON读取数据（适配GitHub Pages）
-    fetch('/data/buildings.json')
+    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/data/buildings.json`)
       .then(r => r.json())
       .then((data: any[]) => {
         const found = data.find(b => b.id === id);
