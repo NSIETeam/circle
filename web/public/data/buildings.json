@@ -1,0 +1,2750 @@
+[
+  {
+    "id": "000671f7-bf1e-4ee2-9033-b2a3e13fdb96",
+    "name": "南山科技园B栋",
+    "park_name": "南山科技园",
+    "region": "南山区",
+    "city": "深圳",
+    "total_area": 3987.0,
+    "floor_height": 4.14,
+    "floor_load": 1.99,
+    "power_capacity": 3304,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 280,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "班车",
+      "中央空调",
+      "双回路供电",
+      "机房空调",
+      "宿舍",
+      "食堂"
+    ],
+    "latitude": 22.5652416,
+    "longitude": 113.9406486
+  },
+  {
+    "id": "051e7755-b75a-40f6-9aa6-68ead696a3ec",
+    "name": "张江高科技园区A栋",
+    "park_name": "张江高科技园区",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 929.0,
+    "floor_height": 5.98,
+    "floor_load": 1.24,
+    "power_capacity": 2829,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "AI",
+      "大模型"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.9,
+    "tenant_count": 350,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "班车",
+      "双回路供电",
+      "便利店",
+      "机房空调",
+      "咖啡厅",
+      "食堂",
+      "宿舍",
+      "安保系统"
+    ],
+    "latitude": 31.219944,
+    "longitude": 121.5256618
+  },
+  {
+    "id": "0caca142-b5f5-417f-a3ef-566fb28421e1",
+    "name": "上海航空航天产业园C栋",
+    "park_name": "上海航空航天产业园",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 16844.0,
+    "floor_height": 15.63,
+    "floor_load": 11.09,
+    "power_capacity": 7597,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "航空航天"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 120,
+    "amenities": [
+      "精密空调",
+      "行车",
+      "中央空调",
+      "环评",
+      "高厂房",
+      "食堂",
+      "安保系统"
+    ],
+    "latitude": 31.2357051,
+    "longitude": 121.5502077
+  },
+  {
+    "id": "1009b4f0-b228-4892-8292-d92df93aa889",
+    "name": "未来科学城创新基地B栋",
+    "park_name": "未来科学城创新基地",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 6012.0,
+    "floor_height": 8.79,
+    "floor_load": 3.73,
+    "power_capacity": 3674,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新材料",
+      "新能源",
+      "锂电池"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.5,
+    "tenant_count": 75,
+    "amenities": [
+      "通风",
+      "除尘",
+      "班车",
+      "中央空调",
+      "防爆",
+      "环评",
+      "食堂",
+      "宿舍",
+      "危化品仓库",
+      "大功率配电"
+    ],
+    "latitude": 40.2405501,
+    "longitude": 116.2077566
+  },
+  {
+    "id": "12fc3e73-856d-45d5-b489-ca931e1b287b",
+    "name": "昆山电子科技城1号楼",
+    "park_name": "昆山电子科技城",
+    "region": "昆山市",
+    "city": "苏州",
+    "total_area": 2806.0,
+    "floor_height": 4.08,
+    "floor_load": 2.6,
+    "power_capacity": 2379,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "集成电路",
+      "半导体"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.5,
+    "tenant_count": 180,
+    "amenities": [
+      "洁净室",
+      "宿舍",
+      "超纯水",
+      "大宗气体",
+      "防静电",
+      "食堂",
+      "污水处理"
+    ],
+    "latitude": 31.3594781,
+    "longitude": 120.7468764
+  },
+  {
+    "id": "18fae658-783f-4e64-80e4-f3bfc2813417",
+    "name": "广州科学城1号楼",
+    "park_name": "广州科学城",
+    "region": "黄埔区",
+    "city": "广州",
+    "total_area": 5131.0,
+    "floor_height": 10.62,
+    "floor_load": 8.5,
+    "power_capacity": 4865,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "注塑"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 240,
+    "amenities": [
+      "行车",
+      "班车",
+      "环评",
+      "便利店",
+      "货梯",
+      "宿舍",
+      "卸货平台",
+      "安保系统",
+      "污水处理"
+    ],
+    "latitude": 23.0770887,
+    "longitude": 113.4366142
+  },
+  {
+    "id": "1aac251c-e94d-41e8-ab15-72e9f65c01d3",
+    "name": "坪山新能源基地A栋",
+    "park_name": "坪山新能源基地",
+    "region": "坪山区",
+    "city": "深圳",
+    "total_area": 7206.0,
+    "floor_height": 12.29,
+    "floor_load": 9.29,
+    "power_capacity": 4353,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新能源",
+      "锂电池",
+      "光伏"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.6,
+    "tenant_count": 95,
+    "amenities": [
+      "防爆",
+      "环评",
+      "便利店",
+      "大功率配电",
+      "危化品仓库",
+      "食堂",
+      "卸货平台"
+    ],
+    "latitude": 22.6849536,
+    "longitude": 114.3081569
+  },
+  {
+    "id": "1ca98e78-1f24-448c-a01a-0743ccc03b8f",
+    "name": "张江高科技园区C栋",
+    "park_name": "张江高科技园区",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 1037.0,
+    "floor_height": 5.04,
+    "floor_load": 3.94,
+    "power_capacity": 3337,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "创新药"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 350,
+    "amenities": [
+      "班车",
+      "环评",
+      "GMP车间",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "宿舍",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 31.249673,
+    "longitude": 121.515041
+  },
+  {
+    "id": "2086b9b6-c683-4e9a-94da-05065960b60c",
+    "name": "杭州生物医药小镇A栋",
+    "park_name": "杭州生物医药小镇",
+    "region": "西湖区",
+    "city": "杭州",
+    "total_area": 2352.0,
+    "floor_height": 5.43,
+    "floor_load": 4.46,
+    "power_capacity": 2960,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "创新药"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.6,
+    "tenant_count": 85,
+    "amenities": [
+      "班车",
+      "环评",
+      "GMP车间",
+      "会议室",
+      "废气处理",
+      "实验室",
+      "食堂",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 30.2867726,
+    "longitude": 120.167853
+  },
+  {
+    "id": "236714c3-01ad-4d4f-b163-6765a12ac356",
+    "name": "G60科创走廊1号楼",
+    "park_name": "G60科创走廊",
+    "region": "松江区",
+    "city": "上海",
+    "total_area": 1508.0,
+    "floor_height": 4.6,
+    "floor_load": 1.7,
+    "power_capacity": 2950,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 220,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "中央空调",
+      "双回路供电",
+      "会议室",
+      "机房空调",
+      "卸货平台",
+      "安保系统"
+    ],
+    "latitude": 31.0202723,
+    "longitude": 121.2322719
+  },
+  {
+    "id": "27bc610c-b746-4010-b6cb-1ac1df95fade",
+    "name": "中关村生命科学园A栋",
+    "park_name": "中关村生命科学园",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 1652.0,
+    "floor_height": 4.53,
+    "floor_load": 4.24,
+    "power_capacity": 4185,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "创新药"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.9,
+    "tenant_count": 95,
+    "amenities": [
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "废气处理",
+      "实验室",
+      "宿舍",
+      "卸货平台",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 40.2009707,
+    "longitude": 116.2559611
+  },
+  {
+    "id": "280b3a3f-8f39-40e7-a0fe-c14e9d17e9c9",
+    "name": "亦庄经济技术开发区A栋",
+    "park_name": "亦庄经济技术开发区",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 2266.0,
+    "floor_height": 4.3,
+    "floor_load": 1.23,
+    "power_capacity": 2066,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "集成电路"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 200,
+    "amenities": [
+      "洁净室",
+      "宿舍",
+      "超纯水",
+      "大宗气体",
+      "便利店",
+      "防静电",
+      "污水处理"
+    ],
+    "latitude": 39.7039219,
+    "longitude": 116.3466678
+  },
+  {
+    "id": "2e5724ef-3fd6-4f8e-9041-c8ef1c6de0fe",
+    "name": "南沙生物医药产业园B栋",
+    "park_name": "南沙生物医药产业园",
+    "region": "南沙区",
+    "city": "广州",
+    "total_area": 3121.0,
+    "floor_height": 4.32,
+    "floor_load": 3.81,
+    "power_capacity": 1889,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "医疗器械"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.5,
+    "tenant_count": 110,
+    "amenities": [
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "咖啡厅",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 22.7751183,
+    "longitude": 113.5066684
+  },
+  {
+    "id": "3094fd9e-3679-447a-a657-f5d7bd8a72e9",
+    "name": "京南智能制造基地C栋",
+    "park_name": "京南智能制造基地",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 7574.0,
+    "floor_height": 7.14,
+    "floor_load": 8.46,
+    "power_capacity": 5155,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "机加工"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.4,
+    "tenant_count": 68,
+    "amenities": [
+      "蒸汽",
+      "行车",
+      "班车",
+      "环评",
+      "货梯",
+      "便利店",
+      "卸货平台",
+      "食堂",
+      "咖啡厅",
+      "宿舍",
+      "污水处理"
+    ],
+    "latitude": 39.7454091,
+    "longitude": 116.3507264
+  },
+  {
+    "id": "323e147d-4e0f-472c-9ae4-43fb25e8871d",
+    "name": "张江高科技园区1号楼",
+    "park_name": "张江高科技园区",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 1139.0,
+    "floor_height": 4.94,
+    "floor_load": 0.97,
+    "power_capacity": 2001,
+    "rent_min": 0.8,
+    "rent_max": 1.3,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "AI",
+      "大模型"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 350,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "班车",
+      "中央空调",
+      "双回路供电",
+      "便利店",
+      "会议室",
+      "机房空调",
+      "食堂",
+      "咖啡厅"
+    ],
+    "latitude": 31.2269966,
+    "longitude": 121.5304339
+  },
+  {
+    "id": "33a8dc7b-8e3f-496e-8117-0fe3422a3c69",
+    "name": "南山科技园C栋",
+    "park_name": "南山科技园",
+    "region": "南山区",
+    "city": "深圳",
+    "total_area": 4413.0,
+    "floor_height": 4.67,
+    "floor_load": 1.27,
+    "power_capacity": 1241,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "AI",
+      "大模型"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 280,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "双回路供电",
+      "便利店",
+      "机房空调",
+      "安保系统",
+      "污水处理"
+    ],
+    "latitude": 22.5540279,
+    "longitude": 113.9436842
+  },
+  {
+    "id": "38f618fd-0f49-4208-954e-1fbf06af7ad1",
+    "name": "临港智能制造基地C栋",
+    "park_name": "临港智能制造基地",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 4398.0,
+    "floor_height": 10.1,
+    "floor_load": 6.63,
+    "power_capacity": 2608,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "注塑"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 180,
+    "amenities": [
+      "蒸汽",
+      "行车",
+      "班车",
+      "环评",
+      "货梯",
+      "便利店",
+      "卸货平台",
+      "咖啡厅",
+      "食堂",
+      "污水处理"
+    ],
+    "latitude": 31.2363557,
+    "longitude": 121.5603549
+  },
+  {
+    "id": "3fdcbfdf-51e3-4ae4-80de-c64c8ed2c7e0",
+    "name": "中关村生命科学园C栋",
+    "park_name": "中关村生命科学园",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 3128.0,
+    "floor_height": 5.17,
+    "floor_load": 4.97,
+    "power_capacity": 2053,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "医疗器械",
+      "创新药"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 95,
+    "amenities": [
+      "环评",
+      "GMP车间",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "食堂",
+      "卸货平台",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 40.2171845,
+    "longitude": 116.2309986
+  },
+  {
+    "id": "401f7783-bfad-4caa-a71f-d210645f83fc",
+    "name": "上海航空航天产业园A栋",
+    "park_name": "上海航空航天产业园",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 19957.0,
+    "floor_height": 15.65,
+    "floor_load": 19.63,
+    "power_capacity": 4304,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "航空航天"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.8,
+    "tenant_count": 120,
+    "amenities": [
+      "精密空调",
+      "行车",
+      "中央空调",
+      "环评",
+      "高厂房",
+      "便利店",
+      "宿舍",
+      "咖啡厅",
+      "安保系统",
+      "污水处理"
+    ],
+    "latitude": 31.2540598,
+    "longitude": 121.5213915
+  },
+  {
+    "id": "42c30e75-37de-48ee-b277-7b5b48f3da1d",
+    "name": "杭州生物医药小镇C栋",
+    "park_name": "杭州生物医药小镇",
+    "region": "西湖区",
+    "city": "杭州",
+    "total_area": 1263.0,
+    "floor_height": 4.26,
+    "floor_load": 3.0,
+    "power_capacity": 3380,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "CRO"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.6,
+    "tenant_count": 85,
+    "amenities": [
+      "班车",
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "咖啡厅",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 30.2494125,
+    "longitude": 120.1543117
+  },
+  {
+    "id": "43c8d3d5-12c6-412c-8715-a2b7cfdd6974",
+    "name": "南山科技园A栋",
+    "park_name": "南山科技园",
+    "region": "南山区",
+    "city": "深圳",
+    "total_area": 4728.0,
+    "floor_height": 4.62,
+    "floor_load": 1.83,
+    "power_capacity": 1474,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "AI",
+      "大模型"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.9,
+    "tenant_count": 280,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "双回路供电",
+      "便利店",
+      "机房空调",
+      "宿舍",
+      "污水处理",
+      "安保系统"
+    ],
+    "latitude": 22.5230578,
+    "longitude": 113.9492519
+  },
+  {
+    "id": "44443a2d-03bc-43e9-aade-014ce03dc5ba",
+    "name": "上海航空航天产业园B栋",
+    "park_name": "上海航空航天产业园",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 7480.0,
+    "floor_height": 9.18,
+    "floor_load": 7.69,
+    "power_capacity": 5231,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新材料"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 120,
+    "amenities": [
+      "通风",
+      "除尘",
+      "环评",
+      "便利店",
+      "会议室",
+      "咖啡厅",
+      "污水处理"
+    ],
+    "latitude": 31.2550492,
+    "longitude": 121.5215478
+  },
+  {
+    "id": "47b600ee-093c-4861-89c1-63ad86fca576",
+    "name": "苏州工业园区A栋",
+    "park_name": "苏州工业园区",
+    "region": "工业园区",
+    "city": "苏州",
+    "total_area": 1500.0,
+    "floor_height": 6.06,
+    "floor_load": 1.71,
+    "power_capacity": 2117,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 400,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "班车",
+      "双回路供电",
+      "便利店",
+      "机房空调",
+      "安保系统"
+    ],
+    "latitude": 31.3392165,
+    "longitude": 120.7227231
+  },
+  {
+    "id": "56a70cf5-08db-45fc-b8d8-e52960f6b284",
+    "name": "亦庄生物医药产业园C栋",
+    "park_name": "亦庄生物医药产业园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 3388.0,
+    "floor_height": 4.13,
+    "floor_load": 3.82,
+    "power_capacity": 4391,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.6,
+    "tenant_count": 90,
+    "amenities": [
+      "班车",
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "废气处理",
+      "实验室",
+      "卸货平台",
+      "食堂",
+      "安保系统",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 39.7279958,
+    "longitude": 116.3352099
+  },
+  {
+    "id": "5d559538-40d5-4a87-81dc-6a702f06c307",
+    "name": "亦庄经济技术开发区1号楼",
+    "park_name": "亦庄经济技术开发区",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 6735.0,
+    "floor_height": 7.0,
+    "floor_load": 5.72,
+    "power_capacity": 7491,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "机加工"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 200,
+    "amenities": [
+      "行车",
+      "班车",
+      "环评",
+      "便利店",
+      "货梯",
+      "宿舍",
+      "食堂",
+      "卸货平台",
+      "安保系统"
+    ],
+    "latitude": 39.746555,
+    "longitude": 116.3478409
+  },
+  {
+    "id": "5e23e0cc-f587-4560-9de0-df1465d024d9",
+    "name": "大兴临空经济区A栋",
+    "park_name": "大兴临空经济区",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 8498.0,
+    "floor_height": 15.26,
+    "floor_load": 14.84,
+    "power_capacity": 4225,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "航空航天"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 110,
+    "amenities": [
+      "精密空调",
+      "行车",
+      "环评",
+      "高厂房",
+      "便利店",
+      "宿舍",
+      "咖啡厅",
+      "污水处理"
+    ],
+    "latitude": 39.7291707,
+    "longitude": 116.3097903
+  },
+  {
+    "id": "5f6573f6-3bb0-4ce7-85b9-8d3d096b3490",
+    "name": "临港智能制造基地B栋",
+    "park_name": "临港智能制造基地",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 13256.0,
+    "floor_height": 13.45,
+    "floor_load": 9.08,
+    "power_capacity": 7849,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新能源",
+      "锂电池"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 180,
+    "amenities": [
+      "蒸汽",
+      "行车",
+      "防爆",
+      "环评",
+      "会议室",
+      "货梯",
+      "大功率配电",
+      "危化品仓库",
+      "卸货平台",
+      "污水处理",
+      "安保系统"
+    ],
+    "latitude": 31.2101739,
+    "longitude": 121.5473986
+  },
+  {
+    "id": "5fbad6eb-f3be-4b16-9ace-eaadeb91cdc4",
+    "name": "昆山电子科技城A栋",
+    "park_name": "昆山电子科技城",
+    "region": "昆山市",
+    "city": "苏州",
+    "total_area": 2243.0,
+    "floor_height": 5.05,
+    "floor_load": 0.52,
+    "power_capacity": 1998,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.5,
+    "tenant_count": 180,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "双回路供电",
+      "便利店",
+      "会议室",
+      "机房空调",
+      "宿舍"
+    ],
+    "latitude": 31.336344,
+    "longitude": 120.7328827
+  },
+  {
+    "id": "60999d84-44c3-491d-88cd-1acc51fa38f8",
+    "name": "苏州生物医药产业园B栋",
+    "park_name": "苏州生物医药产业园",
+    "region": "工业园区",
+    "city": "苏州",
+    "total_area": 1155.0,
+    "floor_height": 4.87,
+    "floor_load": 1.67,
+    "power_capacity": 3451,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "医疗器械"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 150,
+    "amenities": [
+      "班车",
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "食堂",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 31.3344683,
+    "longitude": 120.7326957
+  },
+  {
+    "id": "68fa30c4-8d71-4c64-9384-3ddbcea56061",
+    "name": "昆山电子科技城C栋",
+    "park_name": "昆山电子科技城",
+    "region": "昆山市",
+    "city": "苏州",
+    "total_area": 3301.0,
+    "floor_height": 6.93,
+    "floor_load": 0.64,
+    "power_capacity": 1938,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.5,
+    "tenant_count": 180,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "班车",
+      "中央空调",
+      "双回路供电",
+      "会议室",
+      "机房空调",
+      "咖啡厅",
+      "食堂",
+      "污水处理"
+    ],
+    "latitude": 31.3525038,
+    "longitude": 120.7339351
+  },
+  {
+    "id": "6a4cab41-08a3-45bc-9aa4-d96da98382e7",
+    "name": "未来科学城创新基地A栋",
+    "park_name": "未来科学城创新基地",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 10882.0,
+    "floor_height": 13.47,
+    "floor_load": 14.56,
+    "power_capacity": 6795,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新能源",
+      "锂电池"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.5,
+    "tenant_count": 75,
+    "amenities": [
+      "防爆",
+      "环评",
+      "便利店",
+      "大功率配电",
+      "危化品仓库",
+      "咖啡厅",
+      "食堂",
+      "宿舍",
+      "污水处理",
+      "安保系统"
+    ],
+    "latitude": 40.2017556,
+    "longitude": 116.2298122
+  },
+  {
+    "id": "6bd1ed0d-5fd0-45a9-a314-56b254ecf7c7",
+    "name": "中关村生命科学园B栋",
+    "park_name": "中关村生命科学园",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 2480.0,
+    "floor_height": 4.31,
+    "floor_load": 3.51,
+    "power_capacity": 1642,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "医疗器械",
+      "生物医药",
+      "创新药"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 95,
+    "amenities": [
+      "班车",
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "咖啡厅",
+      "安保系统",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 40.2065986,
+    "longitude": 116.2364902
+  },
+  {
+    "id": "72ab4cd7-aa14-40f4-8aba-95c264042959",
+    "name": "广州科学城A栋",
+    "park_name": "广州科学城",
+    "region": "黄埔区",
+    "city": "广州",
+    "total_area": 3513.0,
+    "floor_height": 4.33,
+    "floor_load": 1.58,
+    "power_capacity": 1723,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 240,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "班车",
+      "双回路供电",
+      "机房空调",
+      "咖啡厅",
+      "宿舍"
+    ],
+    "latitude": 23.0927298,
+    "longitude": 113.4343597
+  },
+  {
+    "id": "78aebc0b-4d19-4bc5-8da4-0edf117979aa",
+    "name": "中关村生命科学园1号楼",
+    "park_name": "中关村生命科学园",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 838.0,
+    "floor_height": 5.82,
+    "floor_load": 4.0,
+    "power_capacity": 3426,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "医疗器械"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 95,
+    "amenities": [
+      "班车",
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "宿舍",
+      "食堂",
+      "污水处理",
+      "安保系统",
+      "纯化水"
+    ],
+    "latitude": 40.1982266,
+    "longitude": 116.2504112
+  },
+  {
+    "id": "7b3f50cc-6e5e-4c8a-8e02-c39727fe1507",
+    "name": "苏州工业园区B栋",
+    "park_name": "苏州工业园区",
+    "region": "工业园区",
+    "city": "苏州",
+    "total_area": 2947.0,
+    "floor_height": 10.99,
+    "floor_load": 7.29,
+    "power_capacity": 4154,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "电子信息",
+      "机加工"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.9,
+    "tenant_count": 400,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "行车",
+      "环评",
+      "双回路供电",
+      "货梯",
+      "会议室",
+      "便利店",
+      "机房空调",
+      "食堂",
+      "卸货平台",
+      "污水处理",
+      "安保系统"
+    ],
+    "latitude": 31.3424248,
+    "longitude": 120.7211161
+  },
+  {
+    "id": "7b73d64e-f237-459f-947b-994925a616a6",
+    "name": "亦庄生物医药产业园A栋",
+    "park_name": "亦庄生物医药产业园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 2537.0,
+    "floor_height": 4.32,
+    "floor_load": 3.3,
+    "power_capacity": 3500,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 90,
+    "amenities": [
+      "班车",
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "宿舍",
+      "食堂",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 39.7425703,
+    "longitude": 116.3278427
+  },
+  {
+    "id": "89225b8d-c508-4b9a-adcb-532b5da4d51d",
+    "name": "宏创生物医药园B栋",
+    "park_name": "宏创生物医药园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 1477.0,
+    "floor_height": 5.63,
+    "floor_load": 3.47,
+    "power_capacity": 2827,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "医疗器械"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 85,
+    "amenities": [
+      "环评",
+      "GMP车间",
+      "便利店",
+      "会议室",
+      "废气处理",
+      "实验室",
+      "咖啡厅",
+      "卸货平台",
+      "安保系统",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 39.7479555,
+    "longitude": 116.3402808
+  },
+  {
+    "id": "8ff47602-4449-4995-ac57-bc6ad071cb07",
+    "name": "宏创生物医药园C栋",
+    "park_name": "宏创生物医药园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 1253.0,
+    "floor_height": 4.35,
+    "floor_load": 3.0,
+    "power_capacity": 4791,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "CRO"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 85,
+    "amenities": [
+      "班车",
+      "环评",
+      "GMP车间",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "咖啡厅",
+      "宿舍",
+      "安保系统",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 39.7238574,
+    "longitude": 116.3231955
+  },
+  {
+    "id": "a002320e-c402-4805-b49d-cc637a06b407",
+    "name": "杭州未来科技城B栋",
+    "park_name": "杭州未来科技城",
+    "region": "余杭区",
+    "city": "杭州",
+    "total_area": 3472.0,
+    "floor_height": 4.42,
+    "floor_load": 1.0,
+    "power_capacity": 1928,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.8,
+    "tenant_count": 200,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "中央空调",
+      "双回路供电",
+      "便利店",
+      "机房空调",
+      "宿舍",
+      "卸货平台",
+      "咖啡厅",
+      "污水处理"
+    ],
+    "latitude": 30.4181762,
+    "longitude": 120.1049204
+  },
+  {
+    "id": "a32a6365-8c46-4806-bee2-23566dab6493",
+    "name": "苏州生物医药产业园C栋",
+    "park_name": "苏州生物医药产业园",
+    "region": "工业园区",
+    "city": "苏州",
+    "total_area": 2954.0,
+    "floor_height": 4.2,
+    "floor_load": 3.55,
+    "power_capacity": 4957,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 150,
+    "amenities": [
+      "班车",
+      "环评",
+      "GMP车间",
+      "会议室",
+      "废气处理",
+      "实验室",
+      "宿舍",
+      "食堂",
+      "安保系统",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 31.30278,
+    "longitude": 120.7462414
+  },
+  {
+    "id": "ac172802-78ee-4e24-bb2c-04e65619b366",
+    "name": "大兴临空经济区B栋",
+    "park_name": "大兴临空经济区",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 1592.0,
+    "floor_height": 5.78,
+    "floor_load": 1.68,
+    "power_capacity": 1466,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.6,
+    "tenant_count": 110,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "班车",
+      "中央空调",
+      "双回路供电",
+      "机房空调",
+      "卸货平台",
+      "食堂"
+    ],
+    "latitude": 39.7280038,
+    "longitude": 116.3053095
+  },
+  {
+    "id": "ae6c4d64-76c2-4183-bd64-069db249d215",
+    "name": "苏州生物医药产业园A栋",
+    "park_name": "苏州生物医药产业园",
+    "region": "工业园区",
+    "city": "苏州",
+    "total_area": 2451.0,
+    "floor_height": 5.03,
+    "floor_load": 3.98,
+    "power_capacity": 3341,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 150,
+    "amenities": [
+      "环评",
+      "GMP车间",
+      "会议室",
+      "废气处理",
+      "实验室",
+      "食堂",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 31.305109,
+    "longitude": 120.7398731
+  },
+  {
+    "id": "b2c0ed28-5e53-47a8-9a04-dfcde79e0f6c",
+    "name": "坪山新能源基地C栋",
+    "park_name": "坪山新能源基地",
+    "region": "坪山区",
+    "city": "深圳",
+    "total_area": 5001.0,
+    "floor_height": 14.2,
+    "floor_load": 7.46,
+    "power_capacity": 3602,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新能源"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 95,
+    "amenities": [
+      "班车",
+      "防爆",
+      "中央空调",
+      "环评",
+      "大功率配电",
+      "危化品仓库",
+      "宿舍"
+    ],
+    "latitude": 22.7023327,
+    "longitude": 114.3166544
+  },
+  {
+    "id": "b8dcc811-39a6-40b7-b5f8-67e1279ea154",
+    "name": "广州科学城B栋",
+    "park_name": "广州科学城",
+    "region": "黄埔区",
+    "city": "广州",
+    "total_area": 6751.0,
+    "floor_height": 7.0,
+    "floor_load": 7.19,
+    "power_capacity": 4091,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "注塑"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 240,
+    "amenities": [
+      "行车",
+      "班车",
+      "环评",
+      "货梯",
+      "食堂",
+      "宿舍",
+      "卸货平台",
+      "安保系统"
+    ],
+    "latitude": 23.0951565,
+    "longitude": 113.4269911
+  },
+  {
+    "id": "b9c7bd61-9697-4986-96f6-4ceda90bb463",
+    "name": "光明科学城A栋",
+    "park_name": "光明科学城",
+    "region": "光明区",
+    "city": "深圳",
+    "total_area": 6157.0,
+    "floor_height": 8.18,
+    "floor_load": 7.08,
+    "power_capacity": 3828,
+    "rent_min": 1.4,
+    "rent_max": 2.2,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新材料"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 130,
+    "amenities": [
+      "通风",
+      "除尘",
+      "班车",
+      "环评",
+      "便利店",
+      "食堂",
+      "宿舍",
+      "咖啡厅",
+      "卸货平台"
+    ],
+    "latitude": 22.7712149,
+    "longitude": 114.3572682
+  },
+  {
+    "id": "bb5a876d-0841-4128-bd62-41c33400ecd9",
+    "name": "临港智能制造基地A栋",
+    "park_name": "临港智能制造基地",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 7110.0,
+    "floor_height": 11.63,
+    "floor_load": 8.83,
+    "power_capacity": 5823,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "注塑"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 180,
+    "amenities": [
+      "蒸汽",
+      "行车",
+      "班车",
+      "环评",
+      "货梯",
+      "卸货平台",
+      "宿舍"
+    ],
+    "latitude": 31.2165522,
+    "longitude": 121.5176949
+  },
+  {
+    "id": "bd4c9f1a-4b74-44a8-98e7-3a0c05a49c55",
+    "name": "坪山新能源基地B栋",
+    "park_name": "坪山新能源基地",
+    "region": "坪山区",
+    "city": "深圳",
+    "total_area": 3746.0,
+    "floor_height": 11.8,
+    "floor_load": 5.05,
+    "power_capacity": 3987,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "注塑"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 95,
+    "amenities": [
+      "行车",
+      "环评",
+      "便利店",
+      "会议室",
+      "货梯",
+      "咖啡厅",
+      "卸货平台",
+      "污水处理"
+    ],
+    "latitude": 22.6872196,
+    "longitude": 114.3493281
+  },
+  {
+    "id": "be4eb550-2493-4a50-8c2f-2a48a0b59c5a",
+    "name": "宏创生物医药园A栋",
+    "park_name": "宏创生物医药园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 1223.0,
+    "floor_height": 4.24,
+    "floor_load": 3.08,
+    "power_capacity": 4840,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "医疗器械"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 85,
+    "amenities": [
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "会议室",
+      "废气处理",
+      "实验室",
+      "食堂",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 39.7421837,
+    "longitude": 116.3287766
+  },
+  {
+    "id": "c6a0dd96-184d-4598-ba31-9f7a172128f5",
+    "name": "宏创AI产业园A栋",
+    "park_name": "宏创AI产业园",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 4442.0,
+    "floor_height": 5.09,
+    "floor_load": 1.26,
+    "power_capacity": 2242,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "AI",
+      "大模型"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 120,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "班车",
+      "双回路供电",
+      "会议室",
+      "机房空调",
+      "宿舍",
+      "卸货平台",
+      "污水处理"
+    ],
+    "latitude": 40.2210439,
+    "longitude": 116.2538979
+  },
+  {
+    "id": "c9670168-0df0-401d-8dff-bb1b1a6a88d4",
+    "name": "G60科创走廊C栋",
+    "park_name": "G60科创走廊",
+    "region": "松江区",
+    "city": "上海",
+    "total_area": 9695.0,
+    "floor_height": 10.91,
+    "floor_load": 5.0,
+    "power_capacity": 2580,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "注塑"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 220,
+    "amenities": [
+      "行车",
+      "班车",
+      "环评",
+      "会议室",
+      "货梯",
+      "宿舍",
+      "卸货平台",
+      "污水处理",
+      "安保系统"
+    ],
+    "latitude": 31.0641054,
+    "longitude": 121.2174007
+  },
+  {
+    "id": "c9b2410f-76f7-4d9b-b197-4d5546ba929d",
+    "name": "亦庄生物医药产业园1号楼",
+    "park_name": "亦庄生物医药产业园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 6259.0,
+    "floor_height": 9.42,
+    "floor_load": 6.49,
+    "power_capacity": 2481,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新材料",
+      "生物医药",
+      "CRO"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.6,
+    "tenant_count": 90,
+    "amenities": [
+      "通风",
+      "除尘",
+      "GMP车间",
+      "环评",
+      "会议室",
+      "咖啡厅",
+      "实验室",
+      "废气处理",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 39.7294317,
+    "longitude": 116.3364336
+  },
+  {
+    "id": "cc271a6f-2c8a-401e-b8d9-5928d5713e5d",
+    "name": "临港智能制造基地1号楼",
+    "park_name": "临港智能制造基地",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 5334.0,
+    "floor_height": 11.81,
+    "floor_load": 13.95,
+    "power_capacity": 5046,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新能源",
+      "光伏"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 180,
+    "amenities": [
+      "蒸汽",
+      "行车",
+      "防爆",
+      "环评",
+      "便利店",
+      "货梯",
+      "大功率配电",
+      "危化品仓库",
+      "宿舍",
+      "卸货平台",
+      "污水处理"
+    ],
+    "latitude": 31.2209431,
+    "longitude": 121.5248129
+  },
+  {
+    "id": "cc717c84-fb1d-4bc9-9679-92f39f5a7ecb",
+    "name": "杭州生物医药小镇B栋",
+    "park_name": "杭州生物医药小镇",
+    "region": "西湖区",
+    "city": "杭州",
+    "total_area": 5558.0,
+    "floor_height": 7.66,
+    "floor_load": 7.92,
+    "power_capacity": 3494,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新材料"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 85,
+    "amenities": [
+      "通风",
+      "除尘",
+      "班车",
+      "环评",
+      "会议室",
+      "卸货平台",
+      "食堂",
+      "污水处理",
+      "安保系统"
+    ],
+    "latitude": 30.2618081,
+    "longitude": 120.1644924
+  },
+  {
+    "id": "ccf95f5d-6e95-489b-947b-9bb36e60a3ce",
+    "name": "京南智能制造基地A栋",
+    "park_name": "京南智能制造基地",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 6649.0,
+    "floor_height": 8.29,
+    "floor_load": 6.79,
+    "power_capacity": 4006,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "机加工"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.4,
+    "tenant_count": 68,
+    "amenities": [
+      "蒸汽",
+      "行车",
+      "中央空调",
+      "环评",
+      "货梯",
+      "卸货平台",
+      "咖啡厅",
+      "食堂",
+      "安保系统"
+    ],
+    "latitude": 39.7093366,
+    "longitude": 116.3347197
+  },
+  {
+    "id": "d3959f6d-aca3-4f8e-a363-352b7dc7a9f4",
+    "name": "未来科学城创新基地C栋",
+    "park_name": "未来科学城创新基地",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 14329.0,
+    "floor_height": 8.04,
+    "floor_load": 14.64,
+    "power_capacity": 4225,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新能源",
+      "新材料",
+      "锂电池"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.5,
+    "tenant_count": 75,
+    "amenities": [
+      "通风",
+      "除尘",
+      "班车",
+      "中央空调",
+      "防爆",
+      "环评",
+      "会议室",
+      "危化品仓库",
+      "大功率配电",
+      "安保系统"
+    ],
+    "latitude": 40.2118418,
+    "longitude": 116.2333652
+  },
+  {
+    "id": "d7f1beb1-d161-4e6a-b744-b5d343929fea",
+    "name": "亦庄经济技术开发区B栋",
+    "park_name": "亦庄经济技术开发区",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 2765.0,
+    "floor_height": 7.0,
+    "floor_load": 5.09,
+    "power_capacity": 5483,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "注塑"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 200,
+    "amenities": [
+      "行车",
+      "班车",
+      "环评",
+      "便利店",
+      "货梯",
+      "咖啡厅",
+      "卸货平台",
+      "污水处理",
+      "安保系统"
+    ],
+    "latitude": 39.7171971,
+    "longitude": 116.3218883
+  },
+  {
+    "id": "d8a70d50-e77c-461d-ac5f-bf0789dc916a",
+    "name": "杭州未来科技城A栋",
+    "park_name": "杭州未来科技城",
+    "region": "余杭区",
+    "city": "杭州",
+    "total_area": 3828.0,
+    "floor_height": 5.5,
+    "floor_load": 1.26,
+    "power_capacity": 2900,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "AI",
+      "电子信息",
+      "算力"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg",
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.8,
+    "tenant_count": 200,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "中央空调",
+      "双回路供电",
+      "便利店",
+      "机房空调",
+      "食堂",
+      "卸货平台",
+      "安保系统"
+    ],
+    "latitude": 30.3983746,
+    "longitude": 120.1096091
+  },
+  {
+    "id": "daea280f-40e3-4b7f-a62e-4b32e52e5220",
+    "name": "宏创AI产业园B栋",
+    "park_name": "宏创AI产业园",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 1457.0,
+    "floor_height": 6.63,
+    "floor_load": 0.52,
+    "power_capacity": 3071,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.8,
+    "tenant_count": 120,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "双回路供电",
+      "会议室",
+      "机房空调",
+      "食堂",
+      "咖啡厅",
+      "污水处理"
+    ],
+    "latitude": 40.2168227,
+    "longitude": 116.2354725
+  },
+  {
+    "id": "df706307-44c9-46ac-9663-742cffa1a98c",
+    "name": "张江高科技园区B栋",
+    "park_name": "张江高科技园区",
+    "region": "浦东新区",
+    "city": "上海",
+    "total_area": 2791.0,
+    "floor_height": 4.07,
+    "floor_load": 2.87,
+    "power_capacity": 1954,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "集成电路",
+      "半导体"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.9,
+    "tenant_count": 350,
+    "amenities": [
+      "超纯水",
+      "洁净室",
+      "大宗气体",
+      "便利店",
+      "防静电",
+      "宿舍",
+      "安保系统"
+    ],
+    "latitude": 31.206931,
+    "longitude": 121.5366652
+  },
+  {
+    "id": "e02616d1-3f38-4b34-87f1-58f39042a5bf",
+    "name": "杭州生物医药小镇1号楼",
+    "park_name": "杭州生物医药小镇",
+    "region": "西湖区",
+    "city": "杭州",
+    "total_area": 7034.0,
+    "floor_height": 9.35,
+    "floor_load": 7.97,
+    "power_capacity": 4135,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新材料"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 85,
+    "amenities": [
+      "通风",
+      "除尘",
+      "中央空调",
+      "环评",
+      "便利店",
+      "卸货平台",
+      "咖啡厅",
+      "安保系统",
+      "污水处理"
+    ],
+    "latitude": 30.2874339,
+    "longitude": 120.1616679
+  },
+  {
+    "id": "e3accc7d-ac7f-491f-9fd0-eec78d4a2ba3",
+    "name": "苏州工业园区C栋",
+    "park_name": "苏州工业园区",
+    "region": "工业园区",
+    "city": "苏州",
+    "total_area": 2636.0,
+    "floor_height": 5.23,
+    "floor_load": 4.2,
+    "power_capacity": 4598,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "CRO"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 400,
+    "amenities": [
+      "班车",
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "便利店",
+      "会议室",
+      "废气处理",
+      "实验室",
+      "宿舍",
+      "污水处理",
+      "安保系统",
+      "纯化水"
+    ],
+    "latitude": 31.3119416,
+    "longitude": 120.7143263
+  },
+  {
+    "id": "e3cbdfb1-e8e9-4dfc-92bb-8217eb859211",
+    "name": "光明科学城1号楼",
+    "park_name": "光明科学城",
+    "region": "光明区",
+    "city": "深圳",
+    "total_area": 2232.0,
+    "floor_height": 4.62,
+    "floor_load": 3.0,
+    "power_capacity": 3056,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "新材料",
+      "CRO"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 130,
+    "amenities": [
+      "通风",
+      "除尘",
+      "GMP车间",
+      "环评",
+      "便利店",
+      "宿舍",
+      "食堂",
+      "实验室",
+      "废气处理",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 22.7476359,
+    "longitude": 114.3534932
+  },
+  {
+    "id": "e4458e53-bed0-46c0-84e0-c1d9e61c1a6e",
+    "name": "G60科创走廊A栋",
+    "park_name": "G60科创走廊",
+    "region": "松江区",
+    "city": "上海",
+    "total_area": 3519.0,
+    "floor_height": 9.64,
+    "floor_load": 8.4,
+    "power_capacity": 2692,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "智能制造",
+      "注塑"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.6,
+    "tenant_count": 220,
+    "amenities": [
+      "行车",
+      "环评",
+      "便利店",
+      "货梯",
+      "食堂",
+      "咖啡厅",
+      "宿舍",
+      "卸货平台",
+      "污水处理"
+    ],
+    "latitude": 31.0579416,
+    "longitude": 121.1975052
+  },
+  {
+    "id": "e56238e5-b32a-4501-9f77-eb08bb4be89f",
+    "name": "南沙生物医药产业园A栋",
+    "park_name": "南沙生物医药产业园",
+    "region": "南沙区",
+    "city": "广州",
+    "total_area": 2650.0,
+    "floor_height": 5.15,
+    "floor_load": 3.76,
+    "power_capacity": 4628,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "CRO"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg",
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.5,
+    "tenant_count": 110,
+    "amenities": [
+      "中央空调",
+      "环评",
+      "GMP车间",
+      "会议室",
+      "便利店",
+      "废气处理",
+      "实验室",
+      "宿舍",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 22.8107938,
+    "longitude": 113.5166677
+  },
+  {
+    "id": "ead04ad0-2386-479c-ba1a-5dbd54e9c341",
+    "name": "光明科学城C栋",
+    "park_name": "光明科学城",
+    "region": "光明区",
+    "city": "深圳",
+    "total_area": 3769.0,
+    "floor_height": 6.96,
+    "floor_load": 4.68,
+    "power_capacity": 2909,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新材料"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 130,
+    "amenities": [
+      "通风",
+      "除尘",
+      "中央空调",
+      "环评",
+      "便利店",
+      "污水处理",
+      "安保系统"
+    ],
+    "latitude": 22.7709229,
+    "longitude": 114.350906
+  },
+  {
+    "id": "ec22718a-ec4f-4499-9de6-2223c4352e4d",
+    "name": "G60科创走廊B栋",
+    "park_name": "G60科创走廊",
+    "region": "松江区",
+    "city": "上海",
+    "total_area": 2313.0,
+    "floor_height": 4.58,
+    "floor_load": 2.63,
+    "power_capacity": 3450,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.6,
+    "tenant_count": 220,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "双回路供电",
+      "会议室",
+      "便利店",
+      "机房空调",
+      "咖啡厅",
+      "食堂",
+      "安保系统"
+    ],
+    "latitude": 31.057202,
+    "longitude": 121.2211989
+  },
+  {
+    "id": "ef0b321c-7a19-4e97-9cfb-3e89c1bfe1c4",
+    "name": "光明科学城B栋",
+    "park_name": "光明科学城",
+    "region": "光明区",
+    "city": "深圳",
+    "total_area": 2731.0,
+    "floor_height": 4.04,
+    "floor_load": 3.6,
+    "power_capacity": 2924,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "生物医药",
+      "创新药"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg",
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.7,
+    "tenant_count": 130,
+    "amenities": [
+      "班车",
+      "环评",
+      "GMP车间",
+      "会议室",
+      "废气处理",
+      "实验室",
+      "咖啡厅",
+      "食堂",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 22.7604669,
+    "longitude": 114.3676692
+  },
+  {
+    "id": "f124fd1f-3d89-405d-9d5c-a15887f09f4a",
+    "name": "京南智能制造基地B栋",
+    "park_name": "京南智能制造基地",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 2449.0,
+    "floor_height": 7.0,
+    "floor_load": 5.0,
+    "power_capacity": 3041,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "集成电路",
+      "智能制造",
+      "机加工",
+      "半导体"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.4,
+    "tenant_count": 68,
+    "amenities": [
+      "蒸汽",
+      "中央空调",
+      "洁净室",
+      "会议室",
+      "宿舍",
+      "卸货平台",
+      "安保系统",
+      "行车",
+      "班车",
+      "超纯水",
+      "环评",
+      "大宗气体",
+      "便利店",
+      "货梯",
+      "防静电"
+    ],
+    "latitude": 39.7506019,
+    "longitude": 116.3539836
+  },
+  {
+    "id": "f2612e13-1346-4b3a-9f6c-aff4995f1566",
+    "name": "昆山电子科技城B栋",
+    "park_name": "昆山电子科技城",
+    "region": "昆山市",
+    "city": "苏州",
+    "total_area": 1044.0,
+    "floor_height": 4.47,
+    "floor_load": 1.12,
+    "power_capacity": 3098,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "集成电路",
+      "电子信息",
+      "半导体"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.5,
+    "tenant_count": 180,
+    "amenities": [
+      "洁净室",
+      "双回路供电",
+      "会议室",
+      "咖啡厅",
+      "卸货平台",
+      "数据中心",
+      "光纤接入",
+      "班车",
+      "超纯水",
+      "大宗气体",
+      "防静电",
+      "食堂",
+      "机房空调",
+      "污水处理"
+    ],
+    "latitude": 31.3330779,
+    "longitude": 120.756335
+  },
+  {
+    "id": "f3bf5b34-3f03-4cc0-96a6-ce01599af971",
+    "name": "亦庄经济技术开发区C栋",
+    "park_name": "亦庄经济技术开发区",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 1878.0,
+    "floor_height": 7.0,
+    "floor_load": 5.0,
+    "power_capacity": 2158,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "集成电路",
+      "智能制造",
+      "机加工",
+      "半导体"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg",
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.8,
+    "tenant_count": 200,
+    "amenities": [
+      "行车",
+      "超纯水",
+      "洁净室",
+      "环评",
+      "大宗气体",
+      "货梯",
+      "防静电",
+      "咖啡厅",
+      "宿舍",
+      "卸货平台",
+      "食堂",
+      "污水处理",
+      "安保系统"
+    ],
+    "latitude": 39.710372,
+    "longitude": 116.3475195
+  },
+  {
+    "id": "f9e14cac-d322-448a-897d-357d042e3781",
+    "name": "亦庄生物医药产业园B栋",
+    "park_name": "亦庄生物医药产业园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 6619.0,
+    "floor_height": 8.99,
+    "floor_load": 4.29,
+    "power_capacity": 4720,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "新材料",
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg",
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 90,
+    "amenities": [
+      "通风",
+      "除尘",
+      "班车",
+      "中央空调",
+      "GMP车间",
+      "环评",
+      "食堂",
+      "宿舍",
+      "实验室",
+      "废气处理",
+      "安保系统",
+      "污水处理",
+      "纯化水"
+    ],
+    "latitude": 39.7047366,
+    "longitude": 116.328275
+  },
+  {
+    "id": "fc215fad-a424-43ea-a951-4fe8e1dd5c05",
+    "name": "广州科学城C栋",
+    "park_name": "广州科学城",
+    "region": "黄埔区",
+    "city": "广州",
+    "total_area": 1049.0,
+    "floor_height": 5.66,
+    "floor_load": 0.67,
+    "power_capacity": 1568,
+    "rent_min": 2.3,
+    "rent_max": 3.5,
+    "rent_unit": "元/㎡/天",
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg",
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 240,
+    "amenities": [
+      "数据中心",
+      "光纤接入",
+      "中央空调",
+      "双回路供电",
+      "会议室",
+      "机房空调",
+      "卸货平台",
+      "污水处理"
+    ],
+    "latitude": 23.0973784,
+    "longitude": 113.4304521
+  }
+]

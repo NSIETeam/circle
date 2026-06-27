@@ -2,8 +2,8 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { api } from '../lib/api';
 import { parseRequirement, summarizeRequirement } from '../lib/agent-parser';
+import { initSearchEngine, searchBuildings, type BuildingData } from '../lib/client-search';
 
 interface Message {
   id: string;
@@ -15,13 +15,7 @@ interface Message {
   expandedId?: string;
 }
 
-interface Building {
-  id: string; name: string; park_name: string; region: string;
-  total_area: number; floor_height: number; floor_load: number;
-  power_capacity: number; rent_min: number; rent_max: number;
-  industry_tags: string[]; images: string[]; is_featured: boolean;
-  park_rating: number; tenant_count: number; amenities?: string[];
-}
+interface Building extends BuildingData {}
 
 interface SalesChat {
   buildingId: string;
@@ -59,6 +53,21 @@ export default function HomePage() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
+  const [engineReady, setEngineReady] = useState(false);
+
+  // 初始化客户端搜索引擎
+  useEffect(() => {
+    fetch('/data/buildings.json')
+      .then(r => r.json())
+      .then((data: BuildingData[]) => {
+        initSearchEngine(data);
+        setEngineReady(true);
+      })
+      .catch(() => {
+        // 降级：使用内联空数据
+        setEngineReady(true);
+      });
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -125,40 +134,27 @@ export default function HomePage() {
     if (summary) addMessage({ role: 'agent', type: 'requirement', requirement: summary });
 
     try {
-      let results: Building[];
+      let results: BuildingData[];
       const hasReq = req.industry || req.min_area || req.min_load || req.min_height || req.min_power || req.max_rent || req.region;
 
       if (hasReq) {
-        // 有结构化需求 → 推荐引擎（带原始文本做语义搜索）
-        const res = await api.recommend.match({
-          keyword: query,
+        // 客户端搜索引擎
+        const searchResults = searchBuildings(query, {
           industry: req.industry, region: req.region, min_area: req.min_area,
           max_area: req.max_area, max_rent: req.max_rent, min_height: req.min_height,
-          min_load: req.min_load, min_power: req.min_power, page_size: '5',
-        } as any);
-        results = (res.data || []).map((r: any) => ({
-          ...r.building, images: r.building.images || [],
-          match_reason: r.reasons?.[0], match_score: r.score,
-        }));
-
-        // 推荐结果为空 → 用关键词兜底搜索
-        if (results.length === 0) {
-          const fallback = await api.buildings.search({ page_size: '5', keyword: query });
-          results = fallback.data;
-          if (results.length > 0) {
-            addMessage({ role: 'agent', type: 'text', content: '严格条件下暂无匹配，已为您放宽搜索：' });
-          }
-        }
+          min_load: req.min_load, min_power: req.min_power,
+        }, 5);
+        results = searchResults.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] }));
       } else {
-        // 无结构化需求 → 关键词搜索
-        const res = await api.buildings.search({ page_size: '5', keyword: query });
-        results = res.data;
+        // 纯语义搜索
+        const searchResults = searchBuildings(query, undefined, 5);
+        results = searchResults.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] }));
       }
 
       if (results.length > 0) {
         addMessage({ role: 'agent', type: 'results', buildings: results, content: `找到 ${results.length} 套匹配房源：` });
       } else {
-        addMessage({ role: 'agent', type: 'text', content: '暂时没有匹配的房源。试试换个说法，比如"AI产业园 2000平米"？' });
+        addMessage({ role: 'agent', type: 'text', content: '暂时没有匹配的房源。试试换个说法？' });
       }
     } catch {
       addMessage({ role: 'agent', type: 'text', content: '搜索出了点问题，请稍后再试。' });
@@ -216,10 +212,10 @@ export default function HomePage() {
     if (!next) return;
     setLoading(true);
     try {
-      const res = await api.buildings.search({ page_size: '10', industry: next });
+      const results = searchBuildings('', { industry: next }, 10);
       addMessage({ role: 'user', type: 'text', content: `筛选：${FILTERS.find(f => f.key === next)?.label}` });
-      if (res.data.length > 0) {
-        addMessage({ role: 'agent', type: 'results', buildings: res.data, content: `${next}产业 ${res.data.length} 套房源：` });
+      if (results.length > 0) {
+        addMessage({ role: 'agent', type: 'results', buildings: results.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] })), content: `${next}产业 ${results.length} 套房源：` });
       } else {
         addMessage({ role: 'agent', type: 'text', content: '该产业暂无房源。' });
       }

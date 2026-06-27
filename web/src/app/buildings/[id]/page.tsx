@@ -19,26 +19,24 @@ export default function BuildingDetailPage({ params }: { params: { id: string } 
   const [toast, setToast] = useState<{ message: string; type: string } | null>(null);
 
   useEffect(() => {
-    api.buildings.detail(id).then(res => {
-      setBuilding(res.data);
-    }).catch(err => {
-      console.error('Failed to load building:', err);
-    }).finally(() => setLoading(false));
-
-    if (user) {
-      api.buildings.checkFavorite(id).then(res => setFavorited(res.data.favorited));
-    }
-  }, [id, user]);
+    // 从静态JSON读取数据（适配GitHub Pages）
+    fetch('/data/buildings.json')
+      .then(r => r.json())
+      .then((data: any[]) => {
+        const found = data.find(b => b.id === id);
+        setBuilding(found || null);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [id]);
 
   const handleFavorite = async () => {
-    if (!user) { window.location.href = '/login'; return; }
-    const res = await api.buildings.favorite(id);
-    setFavorited(res.data.favorited);
-    showToast(res.data.favorited ? '已收藏，平面图已解锁' : '已取消收藏', 'success');
+    const newFav = !favorited;
+    setFavorited(newFav);
+    showToast(newFav ? '已收藏' : '已取消收藏', 'success');
   };
 
   const handleConsult = async () => {
-    if (!user) { window.location.href = '/login'; return; }
     setShowPhoneModal(true);
   };
 
