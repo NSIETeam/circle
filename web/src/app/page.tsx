@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { parseRequirement, summarizeRequirement } from '../lib/agent-parser';
+import { parseRequirement, summarizeRequirement, type ParsedRequirement } from '../lib/agent-parser';
 import { initSearchEngine, searchBuildings, type BuildingData } from '../lib/client-search';
 import { assetUrl } from '../lib/asset';
 
@@ -51,6 +51,9 @@ export default function HomePage() {
   const [chatInput, setChatInput] = useState('');
   const [chatHistory, setChatHistory] = useState<SalesChat[]>([]);
   const [showChatHistory, setShowChatHistory] = useState(false);
+  // 对话上下文 — 记住上一次解析出的需求，支持追问补全
+  const [lastRequirement, setLastRequirement] = useState<ParsedRequirement | null>(null);
+  const [pendingQuestion, setPendingQuestion] = useState<string | null>(null); // AI追问的问题类型
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
@@ -129,16 +132,73 @@ export default function HomePage() {
     addMessage({ role: 'user', type: 'text', content: query });
     setLoading(true);
 
+    // === 上下文记忆：如果AI正在追问，用户回答简短数字 ===
+    if (pendingQuestion && lastRequirement) {
+      const merged = { ...lastRequirement };
+      let answered = false;
+
+      // 纯数字回答 → 根据追问类型填充
+      const pureNum = query.match(/^(\d+\.?\d*)$/);
+      if (pureNum) {
+        const num = parseFloat(pureNum[1]);
+        if (pendingQuestion === 'area') { merged.min_area = num <= 50 ? num * 10000 : num; answered = true; }
+        else if (pendingQuestion === 'load') { merged.min_load = num; answered = true; }
+        else if (pendingQuestion === 'height') { merged.min_height = num; answered = true; }
+        else if (pendingQuestion === 'power') { merged.min_power = num; answered = true; }
+        else if (pendingQuestion === 'rent') { merged.max_rent = num; answered = true; }
+      } else {
+        // 带文字的回答 → 重新解析，合并到已有需求
+        const newReq = parseRequirement(query);
+        if (newReq.min_area) { merged.min_area = newReq.min_area; answered = true; }
+        if (newReq.max_area) { merged.max_area = newReq.max_area; answered = true; }
+        if (newReq.min_load) { merged.min_load = newReq.min_load; answered = true; }
+        if (newReq.min_height) { merged.min_height = newReq.min_height; answered = true; }
+        if (newReq.min_power) { merged.min_power = newReq.min_power; answered = true; }
+        if (newReq.max_rent) { merged.max_rent = newReq.max_rent; answered = true; }
+        if (newReq.region) { merged.region = newReq.region; answered = true; }
+        if (newReq.industry) { merged.industry = newReq.industry; answered = true; }
+      }
+
+      if (answered) {
+        setPendingQuestion(null);
+        setLastRequirement(merged);
+        const summary = summarizeRequirement(merged);
+        if (summary) addMessage({ role: 'agent', type: 'requirement', requirement: summary });
+
+        // 用合并后的需求重新搜索
+        try {
+          const searchResults = searchBuildings(query, {
+            industry: merged.industry, region: merged.region, min_area: merged.min_area,
+            max_area: merged.max_area, max_rent: merged.max_rent, min_height: merged.min_height,
+            min_load: merged.min_load, min_power: merged.min_power,
+          }, 5);
+          const results = searchResults.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] }));
+          if (results.length > 0) {
+            addMessage({ role: 'agent', type: 'results', buildings: results, content: `找到 ${results.length} 套匹配房源：` });
+          } else {
+            addMessage({ role: 'agent', type: 'text', content: '暂时没有匹配的房源，试试调整条件？' });
+          }
+        } catch {
+          addMessage({ role: 'agent', type: 'text', content: '搜索出了点问题。' });
+        } finally { setLoading(false); }
+        return;
+      }
+    }
+
+    // === 正常解析 ===
     const req = parseRequirement(query);
     const summary = summarizeRequirement(req);
     if (summary) addMessage({ role: 'agent', type: 'requirement', requirement: summary });
+
+    // 保存上下文
+    setLastRequirement(req);
+    setPendingQuestion(null);
 
     try {
       let results: BuildingData[];
       const hasReq = req.industry || req.min_area || req.min_load || req.min_height || req.min_power || req.max_rent || req.region;
 
       if (hasReq) {
-        // 客户端搜索引擎
         const searchResults = searchBuildings(query, {
           industry: req.industry, region: req.region, min_area: req.min_area,
           max_area: req.max_area, max_rent: req.max_rent, min_height: req.min_height,
@@ -146,7 +206,6 @@ export default function HomePage() {
         }, 5);
         results = searchResults.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] }));
       } else {
-        // 纯语义搜索
         const searchResults = searchBuildings(query, undefined, 5);
         results = searchResults.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] }));
       }
@@ -155,6 +214,26 @@ export default function HomePage() {
         addMessage({ role: 'agent', type: 'results', buildings: results, content: `找到 ${results.length} 套匹配房源：` });
       } else {
         addMessage({ role: 'agent', type: 'text', content: '暂时没有匹配的房源。试试换个说法？' });
+      }
+
+      // === 智能追问：检查缺失的关键条件 ===
+      if (hasReq) {
+        const missing: string[] = [];
+        if (!req.min_area) missing.push('area');
+        if (!req.region) missing.push('region');
+
+        if (missing.length > 0 && results.length > 0) {
+          const q = missing[0];
+          setTimeout(() => {
+            if (q === 'area') {
+              addMessage({ role: 'agent', type: 'text', content: '找到一些匹配房源。您需要多大面积？可以直接回复数字，比如"3000"' });
+              setPendingQuestion('area');
+            } else if (q === 'region') {
+              addMessage({ role: 'agent', type: 'text', content: '您有偏好的区域吗？比如"余杭区"、"浦东新区"' });
+              setPendingQuestion('region');
+            }
+          }, 500);
+        }
       }
     } catch {
       addMessage({ role: 'agent', type: 'text', content: '搜索出了点问题，请稍后再试。' });
