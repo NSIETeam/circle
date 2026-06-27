@@ -28,7 +28,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="auth-page">
+    <div className="auth-page" style={{ position: 'relative' }}>
       {/* 返回按钮 */}
       <button
         onClick={() => {

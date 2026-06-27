@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { parseRequirement, summarizeRequirement } from '../lib/agent-parser';
 import { initSearchEngine, searchBuildings, type BuildingData } from '../lib/client-search';
+import { assetUrl } from '../lib/asset';
 
 interface Message {
   id: string;
@@ -57,7 +58,7 @@ export default function HomePage() {
 
   // 初始化客户端搜索引擎
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/data/buildings.json`)
+    fetch(assetUrl('/data/buildings.json'))
       .then(r => r.json())
       .then((data: BuildingData[]) => {
         initSearchEngine(data);
@@ -105,7 +106,7 @@ export default function HomePage() {
     // 保存到历史
     const histItem: SalesChat = {
       buildingId: activeChat.id, buildingName: activeChat.name,
-      buildingImage: activeChat.images?.[0] || '/images/buildings/industrial1.jpg',
+      buildingImage: assetUrl(activeChat.images?.[0] || '/images/buildings/industrial1.jpg'),
       messages: newMsgs,
     };
     setChatHistory(prev => {
@@ -437,7 +438,7 @@ function MessageBubble({ msg, onExpand, onContactSales }: {
 function BuildingCard({ building, expanded, onToggle, onContactSales }: {
   building: Building; expanded: boolean; onToggle: () => void; onContactSales: () => void;
 }) {
-  const img = building.images?.[0] || '/images/buildings/industrial1.jpg';
+  const img = assetUrl(building.images?.[0] || '/images/buildings/industrial1.jpg');
   return (
     <div style={{ background: 'var(--glass-card)', backdropFilter: 'blur(20px) saturate(200%)', WebkitBackdropFilter: 'blur(20px) saturate(200%)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
       {/* 概要 */}
@@ -468,7 +469,7 @@ function BuildingCard({ building, expanded, onToggle, onContactSales }: {
       {expanded && (
         <div style={{ padding: 16, borderTop: '0.5px solid var(--glass-border)', animation: 'expandIn 0.3s cubic-bezier(0.25,0.1,0.25,1)' }}>
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto', marginBottom: 12, scrollbarWidth: 'none' }}>
-            {(building.images || ['/images/buildings/industrial1.jpg']).map((im, i) => <img key={i} src={im} alt="" style={{ width: 180, height: 110, borderRadius: 12, objectFit: 'cover', flexShrink: 0 }} loading="lazy" />)}
+            {(building.images || ['/images/buildings/industrial1.jpg']).map((im, i) => <img key={i} src={assetUrl(im)} alt="" style={{ width: 180, height: 110, borderRadius: 12, objectFit: 'cover', flexShrink: 0 }} loading="lazy" />)}
           </div>
           <div className="info-grid" style={{ marginBottom: 12 }}>
             <div className="info-item"><span className="info-label">面积</span><span className="info-value">{building.total_area?.toLocaleString()}㎡</span></div>
@@ -509,7 +510,7 @@ function SalesChatPanel({ building, messages, input, setInput, onSend, onClose }
       <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.2)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', zIndex: 300, animation: 'fadeIn 0.2s' }} />
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 301, maxHeight: '70vh', display: 'flex', flexDirection: 'column', background: 'var(--glass-sheet)', backdropFilter: 'blur(40px) saturate(180%)', WebkitBackdropFilter: 'blur(40px) saturate(180%)', borderRadius: '20px 20px 0 0', boxShadow: '0 -8px 32px rgba(0,0,0,0.12)', animation: 'slideUpSheet 0.35s cubic-bezier(0.25,0.1,0.25,1)', paddingBottom: 'var(--safe-bottom)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: '0.5px solid var(--glass-border)' }}>
-          <img src={building.images?.[0] || '/images/buildings/industrial1.jpg'} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover' }} />
+          <img src={assetUrl(building.images?.[0] || '/images/buildings/industrial1.jpg')} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover' }} />
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 'var(--text-md)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{building.name}</div>
             <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>{building.region} · 招商顾问在线</div>
