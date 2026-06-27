@@ -5,7 +5,8 @@ const BASE = process.env.NEXT_PUBLIC_BASE_PATH || '';
 export function assetUrl(path: string): string {
   if (!path) return '';
   if (path.startsWith('http') || path.startsWith('data:')) return path;
-  // 确保以 / 开头
+  // 已经有basePath就不重复加
+  if (BASE && path.startsWith(BASE)) return path;
   const p = path.startsWith('/') ? path : `/${path}`;
   return `${BASE}${p}`;
 }

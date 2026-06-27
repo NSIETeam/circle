@@ -81,12 +81,7 @@ function computeTF(tokens: string[]): Map<string, number> {
 }
 
 export function initSearchEngine(data: BuildingData[]): void {
-  // 给图片路径加上 basePath
-  const BASE = process.env.NEXT_PUBLIC_BASE_PATH || '';
-  buildings = data.map(b => ({
-    ...b,
-    images: (b.images || []).map(img => img.startsWith('http') || img.startsWith('data:') ? img : `${BASE}${img.startsWith('/') ? img : '/' + img}`),
-  }));
+  buildings = data;
   const allTokens: string[][] = [];
   const docFreq = new Map<string, number>();
 
