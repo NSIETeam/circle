@@ -1,9 +1,16 @@
-import { NextRequest } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
-// 预生成所有可能的 building ID 路径用于静态导出
+// 预生成所有房源ID的静态路径
 export function generateStaticParams() {
-  // 生成 1-72 的 ID
-  return Array.from({ length: 72 }, (_, i) => ({ id: String(i + 1) }));
+  try {
+    const idsPath = path.join(process.cwd(), 'public', 'data', 'building-ids.json');
+    const ids = JSON.parse(fs.readFileSync(idsPath, 'utf-8'));
+    return ids.map((id: string) => ({ id }));
+  } catch {
+    // 构建时文件不存在则返回空，允许 fallback
+    return [];
+  }
 }
 
 export const dynamicParams = true;
