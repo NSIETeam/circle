@@ -31,13 +31,7 @@ export default function LoginPage() {
     <div className="auth-page" style={{ position: 'relative' }}>
       {/* 返回按钮 */}
       <button
-        onClick={() => {
-          if (window.history.length > 1) {
-            router.back();
-          } else {
-            router.push('/');
-          }
-        }}
+        onClick={() => router.push('/')}
         style={{
           position: 'absolute', top: 'calc(16px + var(--safe-top))', left: 16,
           width: 36, height: 36, borderRadius: '50%', border: 'none',
