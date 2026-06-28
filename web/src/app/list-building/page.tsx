@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useRef, useCallback } from 'react';
 
 export default function ListBuildingPage() {
-  const router = useRouter();
   const [form, setForm] = useState({
     name: '', park_name: '', region: '', industry: '',
     total_area: '', floor_height: '', floor_load: '',
@@ -13,130 +11,174 @@ export default function ListBuildingPage() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [images, setImages] = useState<string[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [docFile, setDocFile] = useState<{ name: string; data: string } | null>(null);
+  const [notes, setNotes] = useState('');
+  const [dragOver, setDragOver] = useState(false);
+  const [dragTarget, setDragTarget] = useState<'images' | 'doc' | null>(null);
+  const fileImgRef = useRef<HTMLInputElement>(null);
+  const fileDocRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (key: string, val: string) => setForm(prev => ({ ...prev, [key]: val }));
 
-  // 图片上传 — 转base64存localStorage（演示用）
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+  // 图片上传
+  const addImages = (files: FileList | null) => {
     if (!files) return;
-    Array.from(files).slice(0, 6 - images.length).forEach(file => {
+    Array.from(files).filter(f => f.type.startsWith('image/')).slice(0, 6 - images.length).forEach(file => {
       const reader = new FileReader();
-      reader.onload = () => {
-        setImages(prev => [...prev, reader.result as string]);
-      };
+      reader.onload = () => setImages(prev => [...prev, reader.result as string]);
       reader.readAsDataURL(file);
     });
-    // 清空input允许重复选择
-    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
+  // 楼书上传 — PDF/Word/PPT/图片
+  const addDoc = (files: FileList | null) => {
+    const file = files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setDocFile({ name: file.name, data: reader.result as string });
+    reader.readAsDataURL(file);
+  };
+
+  // 拖拽处理
+  const handleDrop = (e: React.DragEvent, target: 'images' | 'doc') => {
+    e.preventDefault();
+    setDragOver(false);
+    setDragTarget(null);
+    if (target === 'images') addImages(e.dataTransfer.files);
+    else addDoc(e.dataTransfer.files);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 保存到 localStorage（演示用，后续接API）
-    const buildings = JSON.parse(localStorage.getItem('my_listings') || '[]');
-    buildings.push({ ...form, id: Date.now().toString(), created_at: new Date().toISOString(), status: 'pending', images });
-    localStorage.setItem('my_listings', JSON.stringify(buildings));
+    const listings = JSON.parse(localStorage.getItem('my_listings') || '[]');
+    listings.push({ ...form, id: Date.now().toString(), created_at: new Date().toISOString(), status: 'pending', images, building_pdf: docFile?.data, sales_notes: notes });
+    localStorage.setItem('my_listings', JSON.stringify(listings));
     setSubmitted(true);
   };
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%', minHeight: 44, padding: '12px 16px',
-    border: 'none', borderRadius: 'var(--radius-md)',
-    background: 'var(--fill-tertiary)',
-    fontSize: 'var(--text-md)', color: 'var(--text)', outline: 'none',
-    transition: 'background 0.2s, box-shadow 0.2s',
-  };
-  const labelStyle: React.CSSProperties = {
-    fontSize: 'var(--text-sm)', fontWeight: 'var(--fw-medium)',
-    color: 'var(--text-secondary)', marginBottom: 6, display: 'block',
-  };
+  const inputStyle: React.CSSProperties = { width: '100%', minHeight: 44, padding: '12px 16px', border: 'none', borderRadius: 10, background: '#F5F6FA', fontSize: 14, color: '#333', outline: 'none' };
+  const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: '#666', marginBottom: 6, display: 'block' };
+  const cardStyle: React.CSSProperties = { background: '#fff', borderRadius: 12, padding: 16, marginBottom: 16, border: '1px solid #eee' };
+  const sectionStyle: React.CSSProperties = { fontSize: 14, fontWeight: 700, color: '#333', padding: '12px 0 8px', display: 'flex', alignItems: 'center', gap: 6 };
 
   if (submitted) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, background: 'var(--bg)' }}>
-        <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'rgba(52,199,89,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#34C759" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
-          </svg>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, background: '#F5F6FA' }}>
+        <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'rgba(0,166,224,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="2.5" strokeLinecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
         </div>
         <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>提交成功</h2>
-        <p style={{ color: 'var(--text-muted)', textAlign: 'center', lineHeight: 1.6, marginBottom: 24 }}>
-          您的厂房信息已提交，平台将在1个工作日内审核。<br/>审核通过后将在首页展示。
-        </p>
-        <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} className="btn-primary" style={{ width: '80%' }}>返回首页</button>
+        <p style={{ color: '#999', textAlign: 'center', lineHeight: 1.6, marginBottom: 24 }}>您的厂房信息已提交，平台将在1个工作日内审核。</p>
+        <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ width: '80%', height: 44, borderRadius: 10, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>返回首页</button>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 'var(--safe-top)' }}>
+    <div style={{ minHeight: '100vh', background: '#F5F6FA', fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
       {/* 导航栏 */}
-      <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', borderBottom: '0.5px solid var(--border)', background: 'var(--surface-overlay)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
-        <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ width: 36, height: 36, borderRadius: '50%', border: 'none', background: 'var(--fill-tertiary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, WebkitTapHighlightColor: 'transparent' }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', background: '#fff', borderBottom: '2px solid #00A6E0', position: 'sticky', top: 0, zIndex: 10 }}>
+        <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ width: 36, height: 36, borderRadius: 8, border: 'none', background: '#F5F6FA', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>
         </button>
-        <span style={{ flex: 1, textAlign: 'center', fontSize: 'var(--text-lg)', fontWeight: 600 }}>上架厂房</span>
+        <span style={{ flex: 1, textAlign: 'center', fontSize: 16, fontWeight: 700, color: '#333' }}>上架厂房</span>
         <div style={{ width: 36 }} />
       </div>
 
-      <form onSubmit={handleSubmit} style={{ padding: '16px' }}>
-        <div className="section-header" style={{ padding: '8px 0' }}>厂房图片</div>
-        <div style={{ background: 'var(--card)', borderRadius: 'var(--radius-lg)', padding: 16, marginBottom: 24 }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            {/* 已上传图片 */}
-            {images.map((img, i) => (
-              <div key={i} style={{ position: 'relative', width: 72, height: 72 }}>
-                <img src={img} alt="" style={{ width: '100%', height: '100%', borderRadius: 'var(--radius-md)', objectFit: 'cover' }} />
-                <button type="button" onClick={() => removeImage(i)} style={{
-                  position: 'absolute', top: -6, right: -6,
-                  width: 22, height: 22, borderRadius: '50%', border: 'none',
-                  background: 'rgba(0,0,0,0.6)', color: '#fff', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, lineHeight: 1,
-                }}>×</button>
+      <form onSubmit={handleSubmit} style={{ padding: 16, maxWidth: 600, margin: '0 auto' }}>
+        {/* 1. 厂房图片 — 支持拖拽 */}
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />厂房图片</div>
+        <div style={cardStyle}>
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); setDragTarget('images'); }}
+            onDragLeave={() => { setDragOver(false); setDragTarget(null); }}
+            onDrop={(e) => handleDrop(e, 'images')}
+            onClick={() => fileImgRef.current?.click()}
+            style={{
+              border: dragTarget === 'images' ? '2px dashed #00A6E0' : '2px dashed #ddd',
+              borderRadius: 10, padding: 20, cursor: 'pointer',
+              background: dragTarget === 'images' ? '#E6F7FD' : '#FAFBFC',
+              transition: 'all 0.2s', textAlign: 'center',
+            }}
+          >
+            {images.length === 0 ? (
+              <>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="1.5" style={{ margin: '0 auto 8px', display: 'block' }}><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+                <div style={{ fontSize: 14, color: '#666' }}>点击或拖拽上传图片</div>
+                <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>最多6张，支持JPG/PNG</div>
+              </>
+            ) : (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'flex-start' }}>
+                {images.map((img, i) => (
+                  <div key={i} style={{ position: 'relative', width: 72, height: 72 }}>
+                    <img src={img} alt="" style={{ width: '100%', height: '100%', borderRadius: 8, objectFit: 'cover' }} />
+                    <button type="button" onClick={(e) => { e.stopPropagation(); setImages(prev => prev.filter((_, idx) => idx !== i)); }} style={{ position: 'absolute', top: -6, right: -6, width: 22, height: 22, borderRadius: '50%', border: 'none', background: 'rgba(0,0,0,0.6)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>×</button>
+                  </div>
+                ))}
+                {images.length < 6 && <div style={{ width: 72, height: 72, borderRadius: 8, background: '#F5F6FA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#999' }}>+</div>}
               </div>
-            ))}
-            {/* 上传按钮 */}
-            {images.length < 6 && (
-              <button type="button" onClick={() => fileInputRef.current?.click()} style={{
-                width: 72, height: 72, borderRadius: 'var(--radius-md)', border: 'none',
-                background: 'var(--fill-tertiary)', cursor: 'pointer',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4,
-              }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
-                </svg>
-                <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{images.length}/6</span>
-              </button>
             )}
           </div>
-          <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} style={{ display: 'none' }} />
-          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginTop: 8 }}>最多上传6张，支持 JPG/PNG</p>
+          <input ref={fileImgRef} type="file" accept="image/*" multiple onChange={(e) => addImages(e.target.files)} style={{ display: 'none' }} />
         </div>
 
-        <div className="section-header" style={{ padding: '8px 0' }}>基本信息</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24, background: 'var(--card)', borderRadius: 'var(--radius-lg)', padding: 16 }}>
-          <div>
+        {/* 2. 楼书上传 — 支持拖拽，多格式 */}
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />楼书文档</div>
+        <div style={cardStyle}>
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); setDragTarget('doc'); }}
+            onDragLeave={() => { setDragOver(false); setDragTarget(null); }}
+            onDrop={(e) => handleDrop(e, 'doc')}
+            onClick={() => fileDocRef.current?.click()}
+            style={{
+              border: dragTarget === 'doc' ? '2px dashed #00A6E0' : '2px dashed #ddd',
+              borderRadius: 10, padding: 20, cursor: 'pointer',
+              background: dragTarget === 'doc' ? '#E6F7FD' : '#FAFBFC',
+              transition: 'all 0.2s', textAlign: 'center',
+            }}
+          >
+            {docFile ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center' }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+                <span style={{ fontSize: 14, color: '#333', fontWeight: 600 }}>{docFile.name}</span>
+                <button type="button" onClick={(e) => { e.stopPropagation(); setDocFile(null); }} style={{ width: 24, height: 24, borderRadius: '50%', border: 'none', background: '#F5F6FA', cursor: 'pointer', color: '#999' }}>×</button>
+              </div>
+            ) : (
+              <>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="1.5" style={{ margin: '0 auto 8px', display: 'block' }}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+                <div style={{ fontSize: 14, color: '#666' }}>点击或拖拽上传楼书</div>
+                <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>支持 PDF / Word / PPT，自动解析参数和卖点</div>
+              </>
+            )}
+          </div>
+          <input ref={fileDocRef} type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,image/*" onChange={(e) => addDoc(e.target.files)} style={{ display: 'none' }} />
+        </div>
+
+        {/* 3. 销售笔记 */}
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />销售笔记</div>
+        <div style={cardStyle}>
+          <textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="记录卖点、优势、注意事项，每行一个要点。上传楼书后可自动生成。" style={{ width: '100%', minHeight: 120, padding: 12, border: '1px solid #eee', borderRadius: 10, fontSize: 14, lineHeight: 1.6, outline: 'none', resize: 'vertical', fontFamily: 'inherit', background: '#FAFBFC' }} />
+          <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>提示：每行一个卖点，将自动提取为长图亮点</div>
+        </div>
+
+        {/* 4. 基本信息 */}
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />基本信息</div>
+        <div style={cardStyle}>
+          <div style={{ marginBottom: 14 }}>
             <label style={labelStyle}>厂房名称 *</label>
             <input style={inputStyle} placeholder="如：宏创AI产业园A栋" value={form.name} onChange={e => handleChange('name', e.target.value)} required />
           </div>
-          <div>
+          <div style={{ marginBottom: 14 }}>
             <label style={labelStyle}>所属园区 *</label>
             <input style={inputStyle} placeholder="如：宏创AI产业园" value={form.park_name} onChange={e => handleChange('park_name', e.target.value)} required />
           </div>
-          <div>
+          <div style={{ marginBottom: 14 }}>
             <label style={labelStyle}>所在区域 *</label>
             <select style={inputStyle} value={form.region} onChange={e => handleChange('region', e.target.value)} required>
               <option value="">请选择区域</option>
-              <option>昌平区</option><option>大兴区</option><option>浦东新区</option>
-              <option>松江区</option><option>南山区</option><option>光明区</option>
-              <option>坪山区</option><option>余杭区</option><option>西湖区</option>
-              <option>工业园区</option><option>黄埔区</option>
+              <option>大兴区</option><option>昌平区</option><option>顺义区</option>
+              <option>经开区</option><option>朝阳区</option><option>海淀区</option>
+              <option>丰台区</option><option>通州区</option>
             </select>
           </div>
           <div>
@@ -145,17 +187,19 @@ export default function ListBuildingPage() {
               <option value="">请选择产业</option>
               <option>AI</option><option>生物医药</option><option>智能制造</option>
               <option>集成电路</option><option>新能源</option><option>新材料</option>
+              <option>电子信息</option><option>航空航天</option>
             </select>
           </div>
         </div>
 
-        <div className="section-header" style={{ padding: '8px 0' }}>厂房参数</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24, background: 'var(--card)', borderRadius: 'var(--radius-lg)', padding: 16 }}>
-          <div>
+        {/* 5. 厂房参数 */}
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />厂房参数</div>
+        <div style={cardStyle}>
+          <div style={{ marginBottom: 14 }}>
             <label style={labelStyle}>总面积（㎡）*</label>
             <input type="number" style={inputStyle} placeholder="如：3000" value={form.total_area} onChange={e => handleChange('total_area', e.target.value)} required />
           </div>
-          <div style={{ display: 'flex', gap: 12 }}>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 14 }}>
             <div style={{ flex: 1 }}>
               <label style={labelStyle}>层高（m）</label>
               <input type="number" style={inputStyle} placeholder="如：6" value={form.floor_height} onChange={e => handleChange('floor_height', e.target.value)} />
@@ -165,13 +209,13 @@ export default function ListBuildingPage() {
               <input type="number" style={inputStyle} placeholder="如：5" value={form.floor_load} onChange={e => handleChange('floor_load', e.target.value)} />
             </div>
           </div>
-          <div>
+          <div style={{ marginBottom: 14 }}>
             <label style={labelStyle}>电力（KVA）</label>
             <input type="number" style={inputStyle} placeholder="如：2000" value={form.power_capacity} onChange={e => handleChange('power_capacity', e.target.value)} />
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
             <div style={{ flex: 1 }}>
-              <label style={labelStyle}>最低租金（元/㎡/天）</label>
+              <label style={labelStyle}>最低租金</label>
               <input type="number" step="0.1" style={inputStyle} placeholder="如：1.5" value={form.rent_min} onChange={e => handleChange('rent_min', e.target.value)} required />
             </div>
             <div style={{ flex: 1 }}>
@@ -181,9 +225,10 @@ export default function ListBuildingPage() {
           </div>
         </div>
 
-        <div className="section-header" style={{ padding: '8px 0' }}>联系方式</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24, background: 'var(--card)', borderRadius: 'var(--radius-lg)', padding: 16 }}>
-          <div>
+        {/* 6. 联系方式 */}
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />联系方式</div>
+        <div style={cardStyle}>
+          <div style={{ marginBottom: 14 }}>
             <label style={labelStyle}>联系人 *</label>
             <input style={inputStyle} placeholder="姓名" value={form.contact} onChange={e => handleChange('contact', e.target.value)} required />
           </div>
@@ -193,9 +238,7 @@ export default function ListBuildingPage() {
           </div>
         </div>
 
-        <button type="submit" className="btn-primary" style={{ width: '100%', marginBottom: 40, background: 'linear-gradient(135deg, #007AFF, #4CA6FF)' }}>
-          提交上架
-        </button>
+        <button type="submit" style={{ width: '100%', height: 48, borderRadius: 10, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', marginBottom: 40, marginTop: 8 }}>提交上架</button>
       </form>
     </div>
   );

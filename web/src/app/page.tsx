@@ -1,9 +1,16 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { parseRequirement, summarizeRequirement, type ParsedRequirement } from '../lib/agent-parser';
 import { initSearchEngine, searchBuildings, type BuildingData } from '../lib/client-search';
 import { assetUrl } from '../lib/asset';
+
+// 动态导入地图
+const MapContainer = dynamic(() => import('react-leaflet').then(m => m.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import('react-leaflet').then(m => m.TileLayer), { ssr: false });
+const CircleMarker = dynamic(() => import('react-leaflet').then(m => m.CircleMarker), { ssr: false });
+const Popup = dynamic(() => import('react-leaflet').then(m => m.Popup), { ssr: false });
 
 interface Building extends BuildingData {
   match_score?: number;
@@ -58,9 +65,16 @@ export default function HomePage() {
   const [showCityPicker, setShowCityPicker] = useState(false);
   const [showMapPicker, setShowMapPicker] = useState(false);
   const [pickLocation, setPickLocation] = useState<{ lat: number; lng: number; address: string } | null>(null);
+  const [showMapPanel, setShowMapPanel] = useState(false);
+  const [mapPanelMode, setMapPanelMode] = useState<'nearby' | 'pick' | 'view'>('view');
+  const [isClient, setIsClient] = useState(false);
+  const mapPanelRef = useRef<any>(null);
+  const [mapPanelCenter, setMapPanelCenter] = useState<[number, number]>([39.9, 116.4]);
+  const [mapPanelZoom, setMapPanelZoom] = useState(11);
   const aiRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setIsClient(true);
     fetch(assetUrl('/data/buildings.json'))
       .then(r => r.json())
       .then((data: BuildingData[]) => {
@@ -169,8 +183,10 @@ export default function HomePage() {
 
   useEffect(() => { doFilter(); }, [selIndustry, selArea, selRent, selSort, keyword, selRegion, userLocation, doFilter]);
 
-  // 附近 — 获取GPS定位，按距离排序
+  // 附近 — 获取GPS定位，按距离排序，显示地图
   const handleNearby = () => {
+    setShowMapPanel(true);
+    setMapPanelMode('nearby');
     if (!navigator.geolocation) {
       alert('您的浏览器不支持定位功能');
       setSelRegion('不限');
@@ -180,16 +196,18 @@ export default function HomePage() {
       (pos) => {
         const { latitude: lat, longitude: lng } = pos.coords;
         setUserLocation({ lat, lng });
-        // 按距离排序
+        setMapPanelCenter([lat, lng]);
+        setMapPanelZoom(13);
         const sorted = [...all].map(b => {
           const dist = haversine(lat, lng, b.latitude, b.longitude);
           return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距您约${Math.round(dist)}km` };
-        }).sort((a, b) => (a.match_score || 0) > (b.match_score || 0) ? -1 : 1);
+        }).sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
         setList(sorted);
       },
       () => {
-        alert('定位失败，请检查定位权限设置');
-        setSelRegion('不限');
+        // 定位失败 — 用北京中心
+        setMapPanelCenter([39.9, 116.4]);
+        setMapPanelZoom(11);
       },
       { enableHighAccuracy: true, timeout: 8000 }
     );
@@ -197,18 +215,23 @@ export default function HomePage() {
 
   // 自选定位 — 打开地图选点
   const handleCustomLocation = () => {
-    setShowMapPicker(true);
+    setShowMapPanel(true);
+    setMapPanelMode('pick');
+    setMapPanelCenter([39.9, 116.4]);
+    setMapPanelZoom(11);
   };
 
   // 地图选点确认后
   const handlePickConfirm = (lat: number, lng: number, address: string) => {
     setUserLocation({ lat, lng });
-    setShowMapPicker(false);
+    setMapPanelMode('view');
     const sorted = [...all].map(b => {
       const dist = haversine(lat, lng, b.latitude, b.longitude);
       return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距${address}约${Math.round(dist)}km` };
-    }).sort((a, b) => (a.match_score || 0) > (b.match_score || 0) ? -1 : 1);
+    }).sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
     setList(sorted);
+    setMapPanelCenter([lat, lng]);
+    setMapPanelZoom(12);
   };
 
   // selRegion 变化时触发 doFilter（已合并到 doFilter 的 useEffect 中）
@@ -346,7 +369,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
           <div style={{ background: '#fff', borderRadius: 8, padding: 16, marginBottom: 12 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>区域</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <button onClick={() => { setSelRegion('附近'); handleNearby(); }} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === '附近' ? C.primary : '#F5F5F5', color: selRegion === '附近' ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === '附近' ? 600 : 400, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <button onClick={() => { setSelRegion('附近'); handleNearby(); setShowMapPanel(true); setMapPanelMode('nearby'); }} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === '附近' ? C.primary : '#F5F5F5', color: selRegion === '附近' ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === '附近' ? 600 : 400, display: 'flex', alignItems: 'center', gap: 4 }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2" /></svg>
                 附近
               </button>
@@ -382,6 +405,39 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
 
         {/* 右侧列表区 */}
         <div style={{ flex: 1, minWidth: 0 }}>
+          {/* 地图面板 — 附近/自选定位时显示 */}
+          {showMapPanel && isClient && (
+            <div style={{ background: '#fff', borderRadius: 8, marginBottom: 12, overflow: 'hidden', border: '1px solid #eee' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderBottom: '1px solid #f5f5f5' }}>
+                <span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>
+                  {mapPanelMode === 'pick' ? '在地图上点击选择位置' : mapPanelMode === 'nearby' ? '附近房源' : '房源地图'}
+                </span>
+                <button onClick={() => setShowMapPanel(false)} style={{ width: 26, height: 26, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                </button>
+              </div>
+              <div style={{ height: 300, position: 'relative' }}>
+                <MapContainer center={mapPanelCenter} zoom={mapPanelZoom} style={{ height: '100%', width: '100%' }} zoomControl={true} attributionControl={false} ref={(m: any) => { mapPanelRef.current = m; }}>
+                  <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+                  {userLocation && (
+                    <CircleMarker center={[userLocation.lat, userLocation.lng]} radius={10} pathOptions={{ color: '#00A6E0', fillColor: '#00A6E0', fillOpacity: 0.5 }} />
+                  )}
+                  {list.filter(b => b.latitude && b.longitude).map(b => (
+                    <CircleMarker key={b.id} center={[b.latitude, b.longitude]} radius={b.match_score ? 5 + (b.match_score / 100) * 6 : 5} pathOptions={{ color: b.match_score ? '#00A6E0' : '#999', fillColor: b.match_score ? '#00A6E0' : '#ccc', fillOpacity: 0.7 }} eventHandlers={{ click: () => setSelected(b) }}>
+                      <Popup><div style={{ minWidth: 100 }}><strong>{b.name}</strong><br />{b.region} · {b.total_area}㎡<br />{b.match_reason}</div></Popup>
+                    </CircleMarker>
+                  ))}
+                  {mapPanelMode === 'pick' && <MapClickHandler onPick={(lat, lng) => { setPickLocation({ lat, lng, address: `(${lat.toFixed(4)}, ${lng.toFixed(4)})` }); setMapPanelCenter([lat, lng]); }} />}
+                </MapContainer>
+                {mapPanelMode === 'pick' && pickLocation && (
+                  <button onClick={() => handlePickConfirm(pickLocation.lat, pickLocation.lng, pickLocation.address)} style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', padding: '8px 24px', borderRadius: 8, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,166,224,0.4)' }}>
+                    确认此位置并搜索
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* 排序栏 */}
           <div style={{ background: '#fff', borderRadius: 8, padding: 0, marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #eee' }}>
             <div style={{ display: 'flex' }}>
@@ -453,6 +509,20 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
       {showMapPicker && <MapPicker onConfirm={handlePickConfirm} onClose={() => setShowMapPicker(false)} />}
     </div>
   );
+}
+
+// 地图点击处理器 — 自选定位
+function MapClickHandler({ onPick }: { onPick: (lat: number, lng: number) => void }) {
+  const [mapMods, setMapMods] = useState<any>(null);
+  useEffect(() => {
+    import('react-leaflet').then(mod => setMapMods(mod));
+  }, []);
+  if (!mapMods) return null;
+  const { useMapEvents } = mapMods;
+  useMapEvents({
+    click(e: any) { onPick(e.latlng.lat, e.latlng.lng); },
+  });
+  return null;
 }
 
 // ===== 详情弹窗 =====
