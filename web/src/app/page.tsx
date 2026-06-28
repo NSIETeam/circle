@@ -355,7 +355,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                 自选定位
               </button>
               <div style={{ height: 1, background: '#eee', margin: '4px 0' }} />
-              {['不限', '大兴区', '昌平区', '顺义区', '经开区'].map(r => (
+              {['不限', '大兴区', '昌平区', '顺义区', '经开区', '朝阳区', '海淀区', '丰台区', '通州区'].map(r => (
                 <button key={r} onClick={() => setSelRegion(r)} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === r ? C.primary : '#F5F5F5', color: selRegion === r ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === r ? 600 : 400 }}>{r}</button>
               ))}
             </div>
@@ -402,7 +402,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                     <img src={assetUrl(b.images?.[0] || '/images/buildings/industrial1.jpg')} alt="" style={{ width: '100%', height: 100, objectFit: 'cover' }} />
                     <div style={{ padding: 8 }}>
                       <div style={{ fontSize: 13, fontWeight: 600, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.name}</div>
-                      <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{b.region} · {b.total_area}㎡</div>
+                      <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{b.region} · {b.total_area?.toLocaleString()}㎡</div>
                       <div style={{ fontSize: 14, fontWeight: 700, color: C.price, marginTop: 4 }}>{Number(b.rent_min).toFixed(1)}<span style={{ fontSize: 11, color: C.textMuted, fontWeight: 400 }}>元/㎡/天</span></div>
                     </div>
                   </div>
