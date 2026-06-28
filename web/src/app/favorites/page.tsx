@@ -14,7 +14,7 @@ export default function FavoritesPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login');
+      router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`);
       return;
     }
     if (user) {
@@ -58,7 +58,7 @@ export default function FavoritesPage() {
             <p style={{ marginTop: 16, fontSize: 15, fontWeight: 500 }}>还没有收藏的房源</p>
             <p style={{ marginTop: 8, fontSize: 13 }}>浏览房源时点击星标即可收藏</p>
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.push(process.env.NEXT_PUBLIC_BASE_PATH || '/')}
               className="btn-primary"
               style={{ marginTop: 24, width: '60%' }}
             >
@@ -68,7 +68,7 @@ export default function FavoritesPage() {
         ) : (
           favorites.map(b => (
             <div key={b.id} className="card" style={{ marginBottom: 10, cursor: 'pointer' }}
-              onClick={() => router.push(`/buildings/${b.id}`)}>
+              onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/buildings/${b.id}`)}>
               <div style={{ display: 'flex', gap: 12 }}>
                 <div className="thumb-placeholder">
                   <FactoryIcon size={28} color="var(--primary)" />

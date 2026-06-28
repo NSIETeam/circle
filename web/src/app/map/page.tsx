@@ -122,7 +122,7 @@ export default function MapPage() {
                           {Number(building.rent_min).toFixed(1)}-{Number(building.rent_max).toFixed(1)} 元/㎡/天
                         </div>
                         <button
-                          onClick={() => router.push(`/buildings/${building.id}`)}
+                          onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/buildings/${building.id}`)}
                           className="btn-primary"
                           style={{ width: '100%', padding: '8px', fontSize: 13 }}
                         >

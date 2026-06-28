@@ -21,7 +21,7 @@ export default function ProfilePage() {
             <UserIcon size={32} color="var(--primary)" />
           </div>
           <p style={{ color: 'var(--text-secondary)', marginBottom: 16 }}>登录后查看个人信息</p>
-          <button className="btn-primary" style={{ width: '60%' }} onClick={() => router.push('/login')}>
+          <button className="btn-primary" style={{ width: '60%' }} onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`)}>
             登录 / 注册
           </button>
         </div>
@@ -60,7 +60,7 @@ export default function ProfilePage() {
         borderBottom: '1px solid var(--border)',
       }}>
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.push(process.env.NEXT_PUBLIC_BASE_PATH || '/')}
           style={{
             width: 36, height: 36, borderRadius: 10,
             border: '1px solid var(--border)', background: 'var(--card)',
@@ -119,7 +119,7 @@ export default function ProfilePage() {
             return (
               <div
                 key={item.label}
-                onClick={() => router.push(item.path)}
+                onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${item.path}`)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 12,
                   padding: '14px 16px', cursor: 'pointer',
@@ -147,7 +147,7 @@ export default function ProfilePage() {
               return (
                 <div
                   key={item.label}
-                  onClick={() => router.push(item.path)}
+                  onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${item.path}`)}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 12,
                     padding: '14px 16px', cursor: 'pointer',
@@ -177,7 +177,7 @@ export default function ProfilePage() {
         {user.role === 'admin' && (
           <div className="card" style={{ marginTop: 12, padding: 0, overflow: 'hidden' }}>
             <div
-              onClick={() => router.push('/admin')}
+              onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/admin`)}
               style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer' }}
             >
               <div style={{ width: 32, height: 32, borderRadius: 8, background: '#F3E8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -193,7 +193,7 @@ export default function ProfilePage() {
       {/* 退出登录 */}
       <div style={{ padding: '16px' }}>
         <button
-          onClick={() => { logout(); router.push('/'); }}
+          onClick={() => { logout(); router.push(process.env.NEXT_PUBLIC_BASE_PATH || '/'); }}
           style={{
             width: '100%', padding: '13px', background: 'var(--card)',
             border: '1.5px solid var(--error)', borderRadius: 'var(--radius-md)',
