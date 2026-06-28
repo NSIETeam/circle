@@ -218,8 +218,8 @@ export default function HomePage() {
             AI选址
           </button>
           {/* 登录 */}
-          <a href="/login" style={{ textDecoration: 'none', fontSize: 14, color: C.textSub, flexShrink: 0 }}>登录</a>
-          <a href="/list-building" style={{ textDecoration: 'none', fontSize: 14, color: C.primary, fontWeight: 600, flexShrink: 0, background: C.primaryLight, padding: '6px 14px', borderRadius: 6 }}>发布房源</a>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`} style={{ textDecoration: 'none', fontSize: 14, color: C.textSub, flexShrink: 0 }}>登录</a>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/list-building`} style={{ textDecoration: 'none', fontSize: 14, color: C.primary, fontWeight: 600, flexShrink: 0, background: C.primaryLight, padding: '6px 14px', borderRadius: 6 }}>发布房源</a>
         </div>
 
         {/* 城市下拉 */}
