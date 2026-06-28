@@ -44,6 +44,8 @@ export default function HomePage() {
   const [selArea, setSelArea] = useState('不限');
   const [selRent, setSelRent] = useState('不限');
   const [selSort, setSelSort] = useState('default');
+  const [selRegion, setSelRegion] = useState('不限');
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [selected, setSelected] = useState<Building | null>(null);
   const [showAI, setShowAI] = useState(false);
   const [aiInput, setAiInput] = useState('');
@@ -136,6 +138,66 @@ export default function HomePage() {
 
   useEffect(() => { doFilter(); }, [selIndustry, selArea, selRent, selSort, keyword, doFilter]);
 
+  // 附近 — 获取GPS定位，按距离排序
+  const handleNearby = () => {
+    if (!navigator.geolocation) {
+      alert('您的浏览器不支持定位功能');
+      setSelRegion('不限');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude: lat, longitude: lng } = pos.coords;
+        setUserLocation({ lat, lng });
+        // 按距离排序
+        const sorted = [...all].map(b => {
+          const dist = haversine(lat, lng, b.latitude, b.longitude);
+          return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距您约${Math.round(dist)}km` };
+        }).sort((a, b) => (a.match_score || 0) > (b.match_score || 0) ? -1 : 1);
+        setList(sorted);
+      },
+      () => {
+        alert('定位失败，请检查定位权限设置');
+        setSelRegion('不限');
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  };
+
+  // 自选定位 — 在地图上选点
+  const handleCustomLocation = () => {
+    // 弹出输入框让用户输入地址
+    const address = window.prompt('请输入您想定位的地址（如：余杭区、浦东新区）');
+    if (!address) { setSelRegion('不限'); return; }
+    // 用已知区域匹配
+    const matched = all.filter(b => b.region.includes(address) || b.city?.includes(address));
+    if (matched.length > 0) {
+      const avgLat = matched.reduce((s, b) => s + b.latitude, 0) / matched.length;
+      const avgLng = matched.reduce((s, b) => s + b.longitude, 0) / matched.length;
+      setUserLocation({ lat: avgLat, lng: avgLng });
+      const sorted = matched.map(b => {
+        const dist = haversine(avgLat, avgLng, b.latitude, b.longitude);
+        return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距${address}约${Math.round(dist)}km` };
+      }).sort((a, b) => (a.match_score || 0) > (b.match_score || 0) ? -1 : 1);
+      setList(sorted);
+    } else {
+      alert(`未找到"${address}"附近的房源`);
+      setSelRegion('不限');
+    }
+  };
+
+  // 监听 selRegion 变化
+  useEffect(() => {
+    if (selRegion === '自选定位') handleCustomLocation();
+    else if (selRegion === '附近') { /* handleNearby 已在onClick中调用 */ }
+    else if (selRegion === '不限') { setList(all); setUserLocation(null); }
+    else {
+      // 按城市筛选
+      const filtered = all.filter(b => b.city === selRegion || b.region?.includes(selRegion));
+      setList(filtered);
+    }
+  }, [selRegion]); // eslint-disable-line
+
   // AI对话
   const handleAISend = (text?: string) => {
     const q = (text || aiInput).trim();
@@ -188,6 +250,15 @@ export default function HomePage() {
   };
 
   const cities = ['全国', '杭州', '北京', '上海', '深圳', '广州', '苏州'];
+
+// 计算两点间距离（km）
+function haversine(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
 
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif' }}>
@@ -254,6 +325,24 @@ export default function HomePage() {
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '16px 20px', display: 'flex', gap: 16 }}>
         {/* 左侧筛选栏 — 移动端隐藏，改为顶部横滑 */}
         <div style={{ width: 200, flexShrink: 0, display: 'none' }} className="desktop-filter">
+          {/* 区域筛选 — 含附近+自选定位 */}
+          <div style={{ background: '#fff', borderRadius: 8, padding: 16, marginBottom: 12 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>区域</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <button onClick={() => { setSelRegion('附近'); handleNearby(); }} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === '附近' ? C.primary : '#F5F5F5', color: selRegion === '附近' ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === '附近' ? 600 : 400, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2" /></svg>
+                附近
+              </button>
+              <button onClick={() => setSelRegion('自选定位')} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === '自选定位' ? C.primary : '#F5F5F5', color: selRegion === '自选定位' ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === '自选定位' ? 600 : 400, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                自选定位
+              </button>
+              <div style={{ height: 1, background: '#eee', margin: '4px 0' }} />
+              {['不限', '杭州', '北京', '上海', '深圳', '广州', '苏州'].map(r => (
+                <button key={r} onClick={() => setSelRegion(r)} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === r ? C.primary : '#F5F5F5', color: selRegion === r ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === r ? 600 : 400 }}>{r}</button>
+              ))}
+            </div>
+          </div>
           <div style={{ background: '#fff', borderRadius: 8, padding: 16, marginBottom: 12 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>产业类型</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
