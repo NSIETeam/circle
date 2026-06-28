@@ -95,7 +95,7 @@ export default function HomePage() {
   const doFilter = useCallback(() => {
     let results = [...all];
 
-    // 关键词搜索
+    // 关键词搜索（叠加产业筛选）
     if (keyword.trim()) {
       const req = parseRequirement(keyword);
       const searchResults = searchBuildings(keyword, {
@@ -108,8 +108,12 @@ export default function HomePage() {
       }, 100);
       results = searchResults.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] }));
     } else if (selIndustry !== '全部') {
+      // 无关键词但有产业筛选
       const searchResults = searchBuildings('', { industry: selIndustry }, 100);
       results = searchResults.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] }));
+    } else {
+      // 无搜索无筛选 — 清除匹配分
+      results = all.map(b => ({ ...b, match_score: undefined, match_reason: undefined }));
     }
 
     // 面积筛选
@@ -189,24 +193,33 @@ export default function HomePage() {
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif' }}>
       {/* ===== 顶部导航栏 ===== */}
       <div style={{ background: '#fff', borderBottom: `2px solid ${C.primary}`, position: 'sticky', top: 0, zIndex: 100 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 16, padding: '12px 20px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '10px 20px' }}>
           {/* Logo */}
-          <div style={{ fontSize: 22, fontWeight: 800, color: C.primary, flexShrink: 0, letterSpacing: '-0.02em' }}>园圈</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: C.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"><path d="M3 21h18" /><path d="M5 21V7l8-4v18" /><path d="M19 21V11l-6-4" /></svg>
+            </div>
+            <span style={{ fontSize: 20, fontWeight: 800, color: C.primary, letterSpacing: '-0.02em' }}>园圈</span>
+          </div>
           {/* 城市选择 */}
-          <button onClick={() => setShowCityPicker(!showCityPicker)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'none', border: '1px solid #ddd', borderRadius: 4, padding: '4px 10px', cursor: 'pointer', fontSize: 13, color: C.textSub }}>
+          <button onClick={() => setShowCityPicker(!showCityPicker)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#fff', border: '1px solid #ddd', borderRadius: 6, padding: '6px 12px', cursor: 'pointer', fontSize: 14, color: C.text, fontWeight: 500, flexShrink: 0 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
             {city}
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
           </button>
           {/* 搜索框 */}
-          <div style={{ flex: 1, display: 'flex', maxWidth: 500 }}>
-            <input value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => e.key === 'Enter' && doFilter()} placeholder="搜索园区/厂房/地址/产业" style={{ flex: 1, height: 36, padding: '0 12px', border: `2px solid ${C.primary}`, borderRadius: '4px 0 0 4px', fontSize: 14, outline: 'none', borderRight: 'none' }} />
-            <button onClick={doFilter} style={{ background: C.primary, color: '#fff', border: 'none', borderRadius: '0 4px 4px 0', padding: '0 20px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>搜索</button>
+          <div style={{ flex: 1, display: 'flex', maxWidth: 560 }}>
+            <input value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => e.key === 'Enter' && doFilter()} placeholder="搜索园区/厂房/地址/产业类型" style={{ flex: 1, height: 40, padding: '0 16px', border: `2px solid ${C.primary}`, borderRadius: '6px 0 0 6px', fontSize: 14, outline: 'none', borderRight: 'none' }} />
+            <button onClick={doFilter} style={{ background: C.primary, color: '#fff', border: 'none', borderRadius: '0 6px 6px 0', padding: '0 24px', fontSize: 15, fontWeight: 600, cursor: 'pointer', flexShrink: 0 }}>搜索</button>
           </div>
-          {/* AI助手 */}
-          <button onClick={() => setShowAI(!showAI)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: showAI ? C.primary : 'none', color: showAI ? '#fff' : C.primary, border: `1px solid ${C.primary}`, borderRadius: 4, padding: '6px 14px', cursor: 'pointer', fontSize: 13, fontWeight: 600, flexShrink: 0 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
+          {/* AI选址 */}
+          <button onClick={() => setShowAI(!showAI)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: showAI ? C.primary : '#fff', color: showAI ? '#fff' : C.primary, border: `1px solid ${C.primary}`, borderRadius: 6, padding: '8px 16px', cursor: 'pointer', fontSize: 14, fontWeight: 600, flexShrink: 0 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
             AI选址
           </button>
+          {/* 登录 */}
+          <a href="/login" style={{ textDecoration: 'none', fontSize: 14, color: C.textSub, flexShrink: 0 }}>登录</a>
+          <a href="/list-building" style={{ textDecoration: 'none', fontSize: 14, color: C.primary, fontWeight: 600, flexShrink: 0, background: C.primaryLight, padding: '6px 14px', borderRadius: 6 }}>发布房源</a>
         </div>
 
         {/* 城市下拉 */}
@@ -239,8 +252,8 @@ export default function HomePage() {
 
       {/* ===== 主内容区 ===== */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '16px 20px', display: 'flex', gap: 16 }}>
-        {/* 左侧筛选栏 */}
-        <div style={{ width: 200, flexShrink: 0 }}>
+        {/* 左侧筛选栏 — 移动端隐藏，改为顶部横滑 */}
+        <div style={{ width: 200, flexShrink: 0, display: 'none' }} className="desktop-filter">
           <div style={{ background: '#fff', borderRadius: 8, padding: 16, marginBottom: 12 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>产业类型</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -264,11 +277,11 @@ export default function HomePage() {
         {/* 右侧列表区 */}
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* 排序栏 */}
-          <div style={{ background: '#fff', borderRadius: 8, padding: '10px 16px', marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', gap: 4 }}>
-              {SORT_OPTIONS.map(s => <button key={s.key} onClick={() => setSelSort(s.key)} style={{ padding: '5px 12px', borderRadius: 4, border: 'none', background: selSort === s.key ? C.primary : 'none', color: selSort === s.key ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selSort === s.key ? 600 : 400 }}>{s.label}</button>)}
+          <div style={{ background: '#fff', borderRadius: 8, padding: 0, marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #eee' }}>
+            <div style={{ display: 'flex' }}>
+              {SORT_OPTIONS.map((s, i) => <button key={s.key} onClick={() => setSelSort(s.key)} style={{ padding: '10px 16px', border: 'none', borderRight: i < SORT_OPTIONS.length - 1 ? '1px solid #eee' : 'none', background: selSort === s.key ? C.primaryLight : '#fff', color: selSort === s.key ? C.primary : C.textSub, fontSize: 14, cursor: 'pointer', fontWeight: selSort === s.key ? 600 : 400 }}>{s.label}</button>)}
             </div>
-            <span style={{ fontSize: 13, color: C.textMuted }}>共 {list.length} 套</span>
+            <span style={{ fontSize: 13, color: C.textMuted, padding: '0 16px' }}>共 <strong style={{ color: C.primary, fontSize: 15 }}>{list.length}</strong> 套</span>
           </div>
 
           {/* 列表 */}
@@ -282,10 +295,10 @@ export default function HomePage() {
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 600, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.name}</div>
                   <div style={{ fontSize: 13, color: C.textSub, marginTop: 4 }}>{b.region} · {b.park_name}</div>
-                  <div style={{ fontSize: 13, color: C.textMuted, marginTop: 4 }}>{b.total_area?.toLocaleString()}㎡ | {b.floor_height}m层高 | {b.floor_load}T承重 | {b.power_capacity || '-'}KVA</div>
+                  <div style={{ fontSize: 13, color: C.textMuted, marginTop: 4 }}><strong style={{ color: C.text }}>{b.total_area?.toLocaleString()}</strong>㎡ | <strong style={{ color: C.text }}>{b.floor_height}</strong>m层高 | <strong style={{ color: C.text }}>{b.floor_load}</strong>T承重 | <strong style={{ color: C.text }}>{b.power_capacity || '-'}</strong>KVA</div>
                   <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
-                    {(b.industry_tags || []).slice(0, 4).map(t => <span key={t} style={{ fontSize: 11, color: C.tagFg, background: C.tagBg, padding: '2px 6px', borderRadius: 3 }}>{t}</span>)}
-                    {b.amenities?.slice(0, 2).map(a => <span key={a} style={{ fontSize: 11, color: C.textMuted, background: '#F5F5F5', padding: '2px 6px', borderRadius: 3 }}>{a}</span>)}
+                    {(b.industry_tags || []).slice(0, 4).map(t => <span key={t} style={{ fontSize: 11, color: C.tagFg, background: C.tagBg, padding: '2px 8px', borderRadius: 3, border: 'none' }}>{t}</span>)}
+                    {b.amenities?.slice(0, 2).map(a => <span key={a} style={{ fontSize: 11, color: C.textMuted, background: '#F5F5F5', padding: '2px 8px', borderRadius: 3, border: '1px solid #eee' }}>{a}</span>)}
                   </div>
                 </div>
                 {b.match_reason && <div style={{ fontSize: 12, color: C.primary, marginTop: 4 }}>{b.match_reason}</div>}
@@ -300,6 +313,25 @@ export default function HomePage() {
           ))}
 
           {list.length === 0 && <div style={{ textAlign: 'center', padding: 60, color: C.textMuted, fontSize: 14 }}>暂无匹配房源，试试调整筛选条件</div>}
+
+          {/* 热门推荐 — 填充右侧空间 */}
+          {list.length > 0 && (
+            <div style={{ background: '#fff', borderRadius: 8, marginTop: 16, padding: 16 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 3, height: 16, background: C.primary, borderRadius: 2 }} /> 热门园区推荐
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+                {all.filter(b => b.is_featured).slice(0, 3).map(b => (
+                  <div key={b.id} onClick={() => setSelected(b)} style={{ cursor: 'pointer' }}>
+                    <img src={assetUrl(b.images?.[0] || '/images/buildings/industrial1.jpg')} alt="" style={{ width: '100%', height: 100, borderRadius: 6, objectFit: 'cover' }} />
+                    <div style={{ fontSize: 13, fontWeight: 600, color: C.text, marginTop: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.name}</div>
+                    <div style={{ fontSize: 12, color: C.textMuted }}>{b.region} · {b.total_area}㎡</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: C.price, marginTop: 2 }}>{Number(b.rent_min).toFixed(1)}元起</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

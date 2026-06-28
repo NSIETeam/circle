@@ -806,6 +806,14 @@ body {
   50% { box-shadow: 0 0 20px 4px rgba(0,122,255,0.15); }
 }
 
+/* === Responsive === */
+@media (min-width: 768px) {
+  .desktop-filter { display: block !important; }
+}
+@media (max-width: 767px) {
+  .desktop-filter { display: none !important; }
+}
+
 /* === Scroll momentum === */
 .scroll-touch {
   -webkit-overflow-scrolling: touch;
