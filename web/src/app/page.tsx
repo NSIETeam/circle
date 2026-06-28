@@ -263,13 +263,13 @@ export default function HomePage() {
           <div style={{ background: '#fff', borderRadius: 8, padding: 16, marginBottom: 12 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>面积</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {AREA_OPTIONS.map(a => <button key={a} onClick={() => setSelArea(a)} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: selArea === a ? `1px solid ${C.primary}` : '1px solid transparent', background: selArea === a ? C.primaryLight : 'none', color: selArea === a ? C.primary : C.textSub, fontSize: 13, cursor: 'pointer' }}>{a}</button>)}
+              {AREA_OPTIONS.map(a => <button key={a} onClick={() => setSelArea(a)} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selArea === a ? C.primary : '#F5F5F5', color: selArea === a ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selArea === a ? 600 : 400 }}>{a}</button>)}
             </div>
           </div>
           <div style={{ background: '#fff', borderRadius: 8, padding: 16 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 10 }}>租金（元/㎡/天）</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {RENT_OPTIONS.map(r => <button key={r} onClick={() => setSelRent(r)} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: selRent === r ? `1px solid ${C.primary}` : '1px solid transparent', background: selRent === r ? C.primaryLight : 'none', color: selRent === r ? C.primary : C.textSub, fontSize: 13, cursor: 'pointer' }}>{r}</button>)}
+              {RENT_OPTIONS.map(r => <button key={r} onClick={() => setSelRent(r)} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRent === r ? C.primary : '#F5F5F5', color: selRent === r ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRent === r ? 600 : 400 }}>{r}</button>)}
             </div>
           </div>
         </div>
@@ -281,8 +281,29 @@ export default function HomePage() {
             <div style={{ display: 'flex' }}>
               {SORT_OPTIONS.map((s, i) => <button key={s.key} onClick={() => setSelSort(s.key)} style={{ padding: '10px 16px', border: 'none', borderRight: i < SORT_OPTIONS.length - 1 ? '1px solid #eee' : 'none', background: selSort === s.key ? C.primaryLight : '#fff', color: selSort === s.key ? C.primary : C.textSub, fontSize: 14, cursor: 'pointer', fontWeight: selSort === s.key ? 600 : 400 }}>{s.label}</button>)}
             </div>
-            <span style={{ fontSize: 13, color: C.textMuted, padding: '0 16px' }}>共 <strong style={{ color: C.primary, fontSize: 15 }}>{list.length}</strong> 套</span>
+            <span style={{ fontSize: 13, color: C.textMuted, padding: '0 16px' }}>共 <strong style={{ color: C.primary, fontSize: 15 }}>{list.length}</strong> 处</span>
           </div>
+
+          {/* 热门推荐 — 无筛选时显示 */}
+          {!keyword && selIndustry === '全部' && selArea === '不限' && selRent === '不限' && all.filter(b => b.is_featured).length > 0 && (
+            <div style={{ background: '#fff', borderRadius: 8, marginBottom: 12, padding: 16, border: '1px solid #eee' }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 3, height: 16, background: C.primary, borderRadius: 2, display: 'inline-block' }} /> 热门园区推荐
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+                {all.filter(b => b.is_featured).slice(0, 3).map(b => (
+                  <div key={b.id} onClick={() => setSelected(b)} style={{ cursor: 'pointer', border: '1px solid #f0f0f0', borderRadius: 8, overflow: 'hidden' }}>
+                    <img src={assetUrl(b.images?.[0] || '/images/buildings/industrial1.jpg')} alt="" style={{ width: '100%', height: 100, objectFit: 'cover' }} />
+                    <div style={{ padding: 8 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.name}</div>
+                      <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{b.region} · {b.total_area}㎡</div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: C.price, marginTop: 4 }}>{Number(b.rent_min).toFixed(1)}<span style={{ fontSize: 11, color: C.textMuted, fontWeight: 400 }}>元/㎡/天</span></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* 列表 */}
           {list.map(b => (
@@ -315,23 +336,6 @@ export default function HomePage() {
           {list.length === 0 && <div style={{ textAlign: 'center', padding: 60, color: C.textMuted, fontSize: 14 }}>暂无匹配房源，试试调整筛选条件</div>}
 
           {/* 热门推荐 — 填充右侧空间 */}
-          {list.length > 0 && (
-            <div style={{ background: '#fff', borderRadius: 8, marginTop: 16, padding: 16 }}>
-              <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 3, height: 16, background: C.primary, borderRadius: 2 }} /> 热门园区推荐
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-                {all.filter(b => b.is_featured).slice(0, 3).map(b => (
-                  <div key={b.id} onClick={() => setSelected(b)} style={{ cursor: 'pointer' }}>
-                    <img src={assetUrl(b.images?.[0] || '/images/buildings/industrial1.jpg')} alt="" style={{ width: '100%', height: 100, borderRadius: 6, objectFit: 'cover' }} />
-                    <div style={{ fontSize: 13, fontWeight: 600, color: C.text, marginTop: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.name}</div>
-                    <div style={{ fontSize: 12, color: C.textMuted }}>{b.region} · {b.total_area}㎡</div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: C.price, marginTop: 2 }}>{Number(b.rent_min).toFixed(1)}元起</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
