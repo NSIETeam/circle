@@ -215,6 +215,8 @@ export default function HomePage() {
 
   // 自选定位 — 打开地图选点
   const handleCustomLocation = () => {
+    setPickLocation(null);
+    setUserLocation(null);
     setShowMapPanel(true);
     setMapPanelMode('pick');
     setMapPanelCenter([39.9, 116.4]);
@@ -227,11 +229,17 @@ export default function HomePage() {
     setMapPanelMode('view');
     const sorted = [...all].map(b => {
       const dist = haversine(lat, lng, b.latitude, b.longitude);
-      return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距${address}约${Math.round(dist)}km` };
+      return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距选定位置约${Math.round(dist)}km` };
     }).sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
     setList(sorted);
     setMapPanelCenter([lat, lng]);
     setMapPanelZoom(12);
+  };
+
+  // 地图点击选点
+  const handleMapPick = (lat: number, lng: number) => {
+    setPickLocation({ lat, lng, address: `(${lat.toFixed(4)}, ${lng.toFixed(4)})` });
+    setMapPanelCenter([lat, lng]);
   };
 
   // selRegion 变化时触发 doFilter（已合并到 doFilter 的 useEffect 中）
@@ -419,19 +427,31 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
               <div style={{ height: 300, position: 'relative' }}>
                 <MapContainer center={mapPanelCenter} zoom={mapPanelZoom} style={{ height: '100%', width: '100%' }} zoomControl={true} attributionControl={false} ref={(m: any) => { mapPanelRef.current = m; }}>
                   <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
-                  {userLocation && (
+                  {/* 用户位置（附近模式） */}
+                  {mapPanelMode === 'nearby' && userLocation && (
                     <CircleMarker center={[userLocation.lat, userLocation.lng]} radius={10} pathOptions={{ color: '#00A6E0', fillColor: '#00A6E0', fillOpacity: 0.5 }} />
                   )}
+                  {/* 选点位置（自选模式） */}
+                  {mapPanelMode === 'pick' && pickLocation && (
+                    <CircleMarker center={[pickLocation.lat, pickLocation.lng]} radius={8} pathOptions={{ color: '#FF6B00', fillColor: '#FF6B00', fillOpacity: 0.8 }} />
+                  )}
+                  {/* 房源光点 */}
                   {list.filter(b => b.latitude && b.longitude).map(b => (
                     <CircleMarker key={b.id} center={[b.latitude, b.longitude]} radius={b.match_score ? 5 + (b.match_score / 100) * 6 : 5} pathOptions={{ color: b.match_score ? '#00A6E0' : '#999', fillColor: b.match_score ? '#00A6E0' : '#ccc', fillOpacity: 0.7 }} eventHandlers={{ click: () => setSelected(b) }}>
                       <Popup><div style={{ minWidth: 100 }}><strong>{b.name}</strong><br />{b.region} · {b.total_area}㎡<br />{b.match_reason}</div></Popup>
                     </CircleMarker>
                   ))}
-                  {mapPanelMode === 'pick' && <MapClickHandler onPick={(lat, lng) => { setPickLocation({ lat, lng, address: `(${lat.toFixed(4)}, ${lng.toFixed(4)})` }); setMapPanelCenter([lat, lng]); }} />}
+                  {/* 选点点击处理 */}
+                  {mapPanelMode === 'pick' && <MapClickHandler onPick={handleMapPick} />}
                 </MapContainer>
+                {/* 选点模式提示 */}
+                {mapPanelMode === 'pick' && !pickLocation && (
+                  <div style={{ position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.7)', color: '#fff', padding: '6px 16px', borderRadius: 999, fontSize: 13, pointerEvents: 'none' }}>点击地图选择位置</div>
+                )}
+                {/* 确认按钮 */}
                 {mapPanelMode === 'pick' && pickLocation && (
                   <button onClick={() => handlePickConfirm(pickLocation.lat, pickLocation.lng, pickLocation.address)} style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', padding: '8px 24px', borderRadius: 8, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,166,224,0.4)' }}>
-                    确认此位置并搜索
+                    确认位置 · 搜索附近{all.length}处房源
                   </button>
                 )}
               </div>
