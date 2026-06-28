@@ -10,20 +10,20 @@ interface Building extends BuildingData {
   match_reason?: string;
 }
 
-// 58同城配色
+// 水蓝色主色调
 const C = {
-  primary: '#FF552E',      // 58橙
-  primaryLight: '#FFF0EB', // 浅橙背景
-  primaryDark: '#E84A1F',
-  bg: '#F5F5F5',
+  primary: '#00A6E0',      // 水蓝
+  primaryLight: '#E6F7FD', // 浅水蓝背景
+  primaryDark: '#0088B8',
+  bg: '#F5F6FA',
   card: '#FFFFFF',
   text: '#333333',
   textSub: '#666666',
   textMuted: '#999999',
   border: '#EEEEEE',
-  price: '#FF552E',
-  tagBg: '#FFF0EB',
-  tagFg: '#FF552E',
+  price: '#00A6E0',
+  tagBg: '#E6F7FD',
+  tagFg: '#00A6E0',
 };
 
 const AREA_OPTIONS = ['不限', '500㎡以下', '500-1000㎡', '1000-3000㎡', '3000-5000㎡', '5000㎡以上'];
@@ -54,7 +54,7 @@ export default function HomePage() {
   ]);
   const [lastReq, setLastReq] = useState<ParsedRequirement | null>(null);
   const [pendingQ, setPendingQ] = useState<string | null>(null);
-  const [city, setCity] = useState('全国');
+  const [city, setCity] = useState('北京');
   const [showCityPicker, setShowCityPicker] = useState(false);
   const [showMapPicker, setShowMapPicker] = useState(false);
   const [pickLocation, setPickLocation] = useState<{ lat: number; lng: number; address: string } | null>(null);
@@ -65,9 +65,10 @@ export default function HomePage() {
       .then(r => r.json())
       .then((data: BuildingData[]) => {
         initSearchEngine(data);
-        const mapped = data as Building[];
-        setAll(mapped);
-        setList(mapped);
+        // 聚焦北京：只展示北京区域房源
+        const beijing = data.filter(b => b.city === '北京' || b.region === '大兴区' || b.region === '昌平区' || b.region === '顺义区' || b.region === '经开区') as Building[];
+        setAll(beijing);
+        setList(beijing);
       });
   }, []);
 
@@ -264,7 +265,7 @@ export default function HomePage() {
     setAiMsgs(prev => [...prev, { role: 'agent', text: summary ? `${summary}\n找到 ${mapped.length} 套匹配房源。` : `找到 ${mapped.length} 套房源。` }]);
   };
 
-  const cities = ['全国', '杭州', '北京', '上海', '深圳', '广州', '苏州'];
+  const cities = ['北京'];
 
 // 计算两点间距离（km）
 function haversine(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -325,7 +326,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
           <div ref={aiRef} style={{ flex: 1, overflowY: 'auto', padding: '12px 20px', display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 1200, margin: '0 auto', width: '100%' }}>
             {aiMsgs.map((m, i) => (
               <div key={i} style={{ alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '70%' }}>
-                {m.role === 'agent' && <span style={{ fontSize: 10, fontWeight: 700, color: '#fff', background: `linear-gradient(135deg, ${C.primary}, #FF8C5A)`, padding: '1px 6px', borderRadius: 3, marginBottom: 3, display: 'inline-block' }}>AI</span>}
+                {m.role === 'agent' && <span style={{ fontSize: 10, fontWeight: 700, color: '#fff', background: `linear-gradient(135deg, ${C.primary}, #0088B8)`, padding: '1px 6px', borderRadius: 3, marginBottom: 3, display: 'inline-block' }}>AI</span>}
                 <div style={{ background: m.role === 'user' ? C.primary : '#F5F5F5', color: m.role === 'user' ? '#fff' : C.text, padding: '8px 12px', borderRadius: 8, fontSize: 14, lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>{m.text}</div>
               </div>
             ))}
@@ -354,7 +355,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                 自选定位
               </button>
               <div style={{ height: 1, background: '#eee', margin: '4px 0' }} />
-              {['不限', '杭州', '北京', '上海', '深圳', '广州', '苏州'].map(r => (
+              {['不限', '大兴区', '昌平区', '顺义区', '经开区'].map(r => (
                 <button key={r} onClick={() => setSelRegion(r)} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === r ? C.primary : '#F5F5F5', color: selRegion === r ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === r ? 600 : 400 }}>{r}</button>
               ))}
             </div>
@@ -531,7 +532,7 @@ function SalesChat({ building, onClose }: { building: Building; onClose: () => v
         <div ref={ref} style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
           {msgs.map((m, i) => (
             <div key={i} style={{ alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '80%' }}>
-              {m.role === 'sales' && <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', background: `linear-gradient(135deg, ${C.primary}, #FF8C5A)`, padding: '1px 5px', borderRadius: 3, marginBottom: 2, display: 'inline-block' }}>AI</span>}
+              {m.role === 'sales' && <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', background: `linear-gradient(135deg, ${C.primary}, #0088B8)`, padding: '1px 5px', borderRadius: 3, marginBottom: 2, display: 'inline-block' }}>AI</span>}
               <div style={{ background: m.role === 'user' ? C.primary : '#F5F5F5', color: m.role === 'user' ? '#fff' : '#333', padding: '8px 12px', borderRadius: 8, fontSize: 14, lineHeight: 1.5 }}>{m.text}</div>
             </div>
           ))}
@@ -624,7 +625,7 @@ function MapPicker({ onConfirm, onClose }: { onConfirm: (lat: number, lng: numbe
         {/* 地图 */}
         <div style={{ flex: 1, position: 'relative' }}>
           {isClient && MC && (
-            <MC center={[30.27, 120.15]} zoom={11} style={{ height: '100%', width: '100%' }} zoomControl={true} attributionControl={false} ref={(m: any) => { mapRef.current = m; }}>
+            <MC center={[39.9, 116.4]} zoom={11} style={{ height: '100%', width: '100%' }} zoomControl={true} attributionControl={false} ref={(m: any) => { mapRef.current = m; }}>
               <TL url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
               {marker && <CM center={[marker.lat, marker.lng]} radius={8} pathOptions={{ color: C.primary, fillColor: C.primary, fillOpacity: 0.8 }} />}
               <ClickHandler />

@@ -4,8 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { assetUrl } from '../../lib/asset';
 
 const C = {
-  primary: '#FF552E', primaryLight: '#FFF0EB', bg: '#F5F5F5', card: '#fff',
-  text: '#333', textSub: '#666', textMuted: '#999', border: '#eee', price: '#FF552E',
+  primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F5F5', card: '#fff',
+  text: '#333', textSub: '#666', textMuted: '#999', border: '#eee', price: '#00A6E0',
 };
 
 interface SalesBuilding {
@@ -228,7 +228,7 @@ function ManagePanel({ building, onClose, onUploadPdf, onUploadNotes, onGenerate
           {/* 生成长图 */}
           <button onClick={onGenerate} disabled={!building.building_pdf && !building.sales_notes} style={{
             width: '100%', height: 48, borderRadius: 10, border: 'none',
-            background: (!building.building_pdf && !building.sales_notes) ? '#ccc' : `linear-gradient(135deg, ${C.primary}, #FF8C5A)`,
+            background: (!building.building_pdf && !building.sales_notes) ? '#ccc' : `linear-gradient(135deg, ${C.primary}, #0088B8)`,
             color: '#fff', fontSize: 16, fontWeight: 700, cursor: (!building.building_pdf && !building.sales_notes) ? 'not-allowed' : 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
           }}>
@@ -275,7 +275,7 @@ function LongImagePreview({ data, onClose }: { data: any; onClose: () => void })
         {/* 长图内容 — 可截图分享 */}
         <div id="long-image-content" style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 16px 48px rgba(0,0,0,0.3)' }}>
           {/* 头部渐变 */}
-          <div style={{ background: `linear-gradient(135deg, ${C.primary}, #FF8C5A)`, padding: '24px 20px', color: '#fff', textAlign: 'center' }}>
+          <div style={{ background: `linear-gradient(135deg, ${C.primary}, #0088B8)`, padding: '24px 20px', color: '#fff', textAlign: 'center' }}>
             <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{data.title}</div>
             <div style={{ fontSize: 14, opacity: 0.9 }}>{data.subtitle} · {data.location}</div>
             <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginTop: 10, flexWrap: 'wrap' }}>
