@@ -71,7 +71,7 @@ export default function AssessmentPage() {
           background: 'var(--card)', borderBottom: '1px solid var(--border)',
         }}>
           <button
-            onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/profile`)}
+            onClick={() => { if (window.history.length > 1) router.back(); else router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/profile`); }}
             style={backBtnStyle}
           >
             <ChevronLeftIcon size={18} color="var(--text-secondary)" />
@@ -343,7 +343,7 @@ export default function AssessmentPage() {
         background: 'var(--card)', borderBottom: '1px solid var(--border)',
         position: 'sticky', top: 0, zIndex: 10,
       }}>
-        <button onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/profile`)} style={backBtnStyle}>
+        <button onClick={() => { if (window.history.length > 1) router.back(); else router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/profile`); }} style={backBtnStyle}>
           <ChevronLeftIcon size={18} color="var(--text-secondary)" />
         </button>
         <span style={{ flex: 1, textAlign: 'center', fontWeight: 600, fontSize: 16 }}>
@@ -486,7 +486,7 @@ export default function AssessmentPage() {
         </button>
         <button
           className="btn-primary"
-          onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/profile`)}
+          onClick={() => { if (window.history.length > 1) router.back(); else router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/profile`); }}
           style={{ flex: 1 }}
         >
           完成

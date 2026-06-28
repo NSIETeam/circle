@@ -40,10 +40,10 @@ export default function ProfilePage() {
     : user.role === 'admin' ? '管理员' : '运营方';
 
   const menuItems = [
-    { icon: CalendarIcon, label: '我的带看', path: '/visits' },
-    { icon: ChatIcon, label: '我的消息', path: '/messages' },
+    { icon: CalendarIcon, label: '我的带看', path: '/favorites' },
+    { icon: ChatIcon, label: '我的消息', path: '/favorites' },
     { icon: StarIcon, label: '我的收藏', path: '/favorites' },
-    { icon: ShareIcon, label: '分享记录', path: '/shares' },
+    { icon: ShareIcon, label: '分享记录', path: '/favorites' },
   ];
 
   const toolItems = [
@@ -60,7 +60,7 @@ export default function ProfilePage() {
         borderBottom: '1px solid var(--border)',
       }}>
         <button
-          onClick={() => router.push(process.env.NEXT_PUBLIC_BASE_PATH || '/')}
+          onClick={() => { if (window.history.length > 1) router.back(); else router.push(process.env.NEXT_PUBLIC_BASE_PATH || '/'); }}
           style={{
             width: 36, height: 36, borderRadius: 10,
             border: '1px solid var(--border)', background: 'var(--card)',
@@ -177,7 +177,7 @@ export default function ProfilePage() {
         {user.role === 'admin' && (
           <div className="card" style={{ marginTop: 12, padding: 0, overflow: 'hidden' }}>
             <div
-              onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/admin`)}
+              onClick={() => router.push(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/sales`)}
               style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', cursor: 'pointer' }}
             >
               <div style={{ width: 32, height: 32, borderRadius: 8, background: '#F3E8FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
