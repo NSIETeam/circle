@@ -91,7 +91,7 @@ export default function LoginPage() {
       </form>
 
       <div style={{ textAlign: 'center', marginTop: 20, fontSize: 13, color: 'var(--text-secondary)' }}>
-        还没有账号？ <a href="/register" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>立即注册</a>
+        还没有账号？ <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/register`} style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>立即注册</a>
       </div>
 
       <div style={{ textAlign: 'center', marginTop: 40, fontSize: 11, color: 'var(--text-muted)' }}>

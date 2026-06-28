@@ -30,7 +30,7 @@ export default function RegisterPage() {
   return (
     <div className="auth-page">
       <div style={{ marginBottom: 32 }}>
-        <a href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 14, marginBottom: 24 }}>
+        <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 14, marginBottom: 24 }}>
           <ChevronLeftIcon size={18} color="var(--text-secondary)" />
           返回登录
         </a>

@@ -56,19 +56,20 @@ export default function BuildingDetailPage({ params }: { params: { id: string } 
   const handleShare = async () => {
     if (!user) { window.location.href = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`; return; }
     try {
-      const res = await api.share.create(id);
+      // 静态站：直接复制当前页面链接
+      const url = window.location.href;
       if (navigator.share) {
         await navigator.share({
           title: building?.name || '园圈房源',
           text: `查看 ${building?.name} - ${building?.region}`,
-          url: `${window.location.origin}/share/${res.data.short_code}`,
+          url,
         });
       } else {
-        await navigator.clipboard.writeText(`${window.location.origin}/share/${res.data.short_code}`);
-        showToast('分享链接已复制', 'success');
+        await navigator.clipboard.writeText(url);
+        showToast('链接已复制', 'success');
       }
-    } catch (err) {
-      showToast('分享失败', 'error');
+    } catch {
+      showToast('分享取消', 'error');
     }
   };
 
