@@ -41,7 +41,7 @@ export default function BuildingDetailPage({ params }: { params: { id: string } 
   };
 
   const handleBookVisit = async () => {
-    if (!user) { window.location.href = '/login'; return; }
+    if (!user) { window.location.href = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`; return; }
     try {
       await api.visits.create({
         building_id: id,
@@ -54,7 +54,7 @@ export default function BuildingDetailPage({ params }: { params: { id: string } 
   };
 
   const handleShare = async () => {
-    if (!user) { window.location.href = '/login'; return; }
+    if (!user) { window.location.href = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`; return; }
     try {
       const res = await api.share.create(id);
       if (navigator.share) {
@@ -86,7 +86,7 @@ export default function BuildingDetailPage({ params }: { params: { id: string } 
   if (!building) return (
     <div style={{ padding: 60, textAlign: 'center', color: 'var(--error)' }}>
       <p>房源不存在或加载失败</p>
-      <a href="/" style={{ color: 'var(--primary)', fontSize: 14, marginTop: 12, display: 'inline-block' }}>返回首页</a>
+      <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/`} style={{ color: 'var(--primary)', fontSize: 14, marginTop: 12, display: 'inline-block' }}>返回首页</a>
     </div>
   );
 
@@ -98,7 +98,7 @@ export default function BuildingDetailPage({ params }: { params: { id: string } 
       {/* Hero */}
       <div className="detail-hero">
         <FactoryIcon size={56} color="rgba(255,255,255,0.85)" />
-        <a href="/" className="hero-btn" style={{ left: 16 }}>
+        <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/`} className="hero-btn" style={{ left: 16 }}>
           <ChevronLeftIcon size={20} color="#fff" />
         </a>
         <button onClick={handleShare} className="hero-btn" style={{ right: 16 }}>

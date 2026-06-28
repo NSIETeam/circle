@@ -19,7 +19,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(phone, password);
-      window.location.href = '/';
+      window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/';
     } catch (err) {
       setError((err as Error).message);
     } finally {

@@ -69,7 +69,7 @@ export default function ListBuildingPage() {
         <p style={{ color: 'var(--text-muted)', textAlign: 'center', lineHeight: 1.6, marginBottom: 24 }}>
           您的厂房信息已提交，平台将在1个工作日内审核。<br/>审核通过后将在首页展示。
         </p>
-        <button onClick={() => { window.location.href = '/'; }} className="btn-primary" style={{ width: '80%' }}>返回首页</button>
+        <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} className="btn-primary" style={{ width: '80%' }}>返回首页</button>
       </div>
     );
   }
@@ -78,7 +78,7 @@ export default function ListBuildingPage() {
     <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 'var(--safe-top)' }}>
       {/* 导航栏 */}
       <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', borderBottom: '0.5px solid var(--border)', background: 'var(--surface-overlay)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
-        <button onClick={() => { window.location.href = '/'; }} style={{ width: 36, height: 36, borderRadius: '50%', border: 'none', background: 'var(--fill-tertiary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, WebkitTapHighlightColor: 'transparent' }}>
+        <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ width: 36, height: 36, borderRadius: '50%', border: 'none', background: 'var(--fill-tertiary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, WebkitTapHighlightColor: 'transparent' }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="2" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>
         </button>
         <span style={{ flex: 1, textAlign: 'center', fontSize: 'var(--text-lg)', fontWeight: 600 }}>上架厂房</span>

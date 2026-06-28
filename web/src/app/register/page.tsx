@@ -19,7 +19,7 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await register({ phone, password, name, role });
-      window.location.href = '/';
+      window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/';
     } catch (err) {
       setError((err as Error).message);
     } finally {

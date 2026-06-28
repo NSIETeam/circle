@@ -56,6 +56,8 @@ export default function HomePage() {
   const [pendingQ, setPendingQ] = useState<string | null>(null);
   const [city, setCity] = useState('全国');
   const [showCityPicker, setShowCityPicker] = useState(false);
+  const [showMapPicker, setShowMapPicker] = useState(false);
+  const [pickLocation, setPickLocation] = useState<{ lat: number; lng: number; address: string } | null>(null);
   const aiRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -93,11 +95,23 @@ export default function HomePage() {
     return {};
   };
 
-  // 执行筛选
+  // 执行筛选 — 所有条件叠加约束
   const doFilter = useCallback(() => {
     let results = [...all];
 
-    // 关键词搜索（叠加产业筛选）
+    // 1. 区域筛选（城市/区域）
+    if (selRegion !== '不限' && selRegion !== '附近' && selRegion !== '自选定位') {
+      results = results.filter(b => b.city === selRegion || b.region?.includes(selRegion));
+    }
+    // 附近/自选定位 — 按用户位置距离筛选
+    if ((selRegion === '附近' || selRegion === '自选定位') && userLocation) {
+      results = results.map(b => {
+        const dist = haversine(userLocation.lat, userLocation.lng, b.latitude, b.longitude);
+        return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距您约${Math.round(dist)}km` };
+      }).sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
+    }
+
+    // 2. 关键词搜索（叠加产业筛选）
     if (keyword.trim()) {
       const req = parseRequirement(keyword);
       const searchResults = searchBuildings(keyword, {
@@ -108,35 +122,51 @@ export default function HomePage() {
         min_load: req.min_load,
         min_height: req.min_height,
       }, 100);
-      results = searchResults.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] }));
+      const searchIds = new Set(searchResults.map(r => r.building.id));
+      // 取交集 — 关键词搜索结果和区域筛选结果取交集
+      results = results.filter(b => searchIds.has(b.id));
+      // 合并匹配分
+      const scoreMap = new Map(searchResults.map(r => [r.building.id, { score: r.score, reason: r.reasons[0] }]));
+      results = results.map(b => {
+        const s = scoreMap.get(b.id);
+        return s ? { ...b, match_score: s.score, match_reason: s.reason } : b;
+      });
     } else if (selIndustry !== '全部') {
       // 无关键词但有产业筛选
       const searchResults = searchBuildings('', { industry: selIndustry }, 100);
-      results = searchResults.map(r => ({ ...r.building, match_score: r.score, match_reason: r.reasons[0] }));
-    } else {
+      const searchIds = new Set(searchResults.map(r => r.building.id));
+      results = results.filter(b => searchIds.has(b.id));
+      const scoreMap = new Map(searchResults.map(r => [r.building.id, { score: r.score, reason: r.reasons[0] }]));
+      results = results.map(b => {
+        const s = scoreMap.get(b.id);
+        return s ? { ...b, match_score: s.score, match_reason: s.reason } : b;
+      });
+    } else if (selRegion === '不限') {
       // 无搜索无筛选 — 清除匹配分
-      results = all.map(b => ({ ...b, match_score: undefined, match_reason: undefined }));
+      results = results.map(b => ({ ...b, match_score: undefined, match_reason: undefined }));
     }
 
-    // 面积筛选
+    // 3. 面积筛选
     const areaFilter = parseAreaFilter(selArea);
     if (areaFilter.min) results = results.filter(b => b.total_area >= areaFilter.min!);
     if (areaFilter.max) results = results.filter(b => b.total_area <= areaFilter.max!);
 
-    // 租金筛选
+    // 4. 租金筛选
     const rentFilter = parseRentFilter(selRent);
     if (rentFilter.max) results = results.filter(b => b.rent_min <= rentFilter.max!);
 
-    // 排序
+    // 5. 排序
     if (selSort === 'price_asc') results.sort((a, b) => a.rent_min - b.rent_min);
     else if (selSort === 'price_desc') results.sort((a, b) => b.rent_min - a.rent_min);
     else if (selSort === 'area_desc') results.sort((a, b) => b.total_area - a.total_area);
-    else if (keyword.trim() || selIndustry !== '全部') results.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
+    else if (keyword.trim() || selIndustry !== '全部' || selRegion === '附近' || selRegion === '自选定位') {
+      results.sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
+    }
 
     setList(results);
-  }, [all, keyword, selIndustry, selArea, selRent, selSort]);
+  }, [all, keyword, selIndustry, selArea, selRent, selSort, selRegion, userLocation]);
 
-  useEffect(() => { doFilter(); }, [selIndustry, selArea, selRent, selSort, keyword, doFilter]);
+  useEffect(() => { doFilter(); }, [selIndustry, selArea, selRent, selSort, keyword, selRegion, userLocation, doFilter]);
 
   // 附近 — 获取GPS定位，按距离排序
   const handleNearby = () => {
@@ -164,39 +194,24 @@ export default function HomePage() {
     );
   };
 
-  // 自选定位 — 在地图上选点
+  // 自选定位 — 打开地图选点
   const handleCustomLocation = () => {
-    // 弹出输入框让用户输入地址
-    const address = window.prompt('请输入您想定位的地址（如：余杭区、浦东新区）');
-    if (!address) { setSelRegion('不限'); return; }
-    // 用已知区域匹配
-    const matched = all.filter(b => b.region.includes(address) || b.city?.includes(address));
-    if (matched.length > 0) {
-      const avgLat = matched.reduce((s, b) => s + b.latitude, 0) / matched.length;
-      const avgLng = matched.reduce((s, b) => s + b.longitude, 0) / matched.length;
-      setUserLocation({ lat: avgLat, lng: avgLng });
-      const sorted = matched.map(b => {
-        const dist = haversine(avgLat, avgLng, b.latitude, b.longitude);
-        return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距${address}约${Math.round(dist)}km` };
-      }).sort((a, b) => (a.match_score || 0) > (b.match_score || 0) ? -1 : 1);
-      setList(sorted);
-    } else {
-      alert(`未找到"${address}"附近的房源`);
-      setSelRegion('不限');
-    }
+    setShowMapPicker(true);
   };
 
-  // 监听 selRegion 变化
-  useEffect(() => {
-    if (selRegion === '自选定位') handleCustomLocation();
-    else if (selRegion === '附近') { /* handleNearby 已在onClick中调用 */ }
-    else if (selRegion === '不限') { setList(all); setUserLocation(null); }
-    else {
-      // 按城市筛选
-      const filtered = all.filter(b => b.city === selRegion || b.region?.includes(selRegion));
-      setList(filtered);
-    }
-  }, [selRegion]); // eslint-disable-line
+  // 地图选点确认后
+  const handlePickConfirm = (lat: number, lng: number, address: string) => {
+    setUserLocation({ lat, lng });
+    setShowMapPicker(false);
+    const sorted = [...all].map(b => {
+      const dist = haversine(lat, lng, b.latitude, b.longitude);
+      return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距${address}约${Math.round(dist)}km` };
+    }).sort((a, b) => (a.match_score || 0) > (b.match_score || 0) ? -1 : 1);
+    setList(sorted);
+  };
+
+  // selRegion 变化时触发 doFilter（已合并到 doFilter 的 useEffect 中）
+  // 附近/自选的 GPS 触发在各自 onClick 中处理
 
   // AI对话
   const handleAISend = (text?: string) => {
@@ -334,7 +349,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2" /></svg>
                 附近
               </button>
-              <button onClick={() => setSelRegion('自选定位')} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === '自选定位' ? C.primary : '#F5F5F5', color: selRegion === '自选定位' ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === '自选定位' ? 600 : 400, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <button onClick={() => { setSelRegion('自选定位'); handleCustomLocation(); }} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === '自选定位' ? C.primary : '#F5F5F5', color: selRegion === '自选定位' ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === '自选定位' ? 600 : 400, display: 'flex', alignItems: 'center', gap: 4 }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
                 自选定位
               </button>
@@ -430,7 +445,11 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
       </div>
 
       {/* ===== 详情弹窗 ===== */}
+      {/* 详情弹窗 */}
       {selected && <DetailModal building={selected} onClose={() => setSelected(null)} />}
+
+      {/* 地图选点弹窗 */}
+      {showMapPicker && <MapPicker onConfirm={handlePickConfirm} onClose={() => setShowMapPicker(false)} />}
     </div>
   );
 }
@@ -523,5 +542,108 @@ function SalesChat({ building, onClose }: { building: Building; onClose: () => v
         </div>
       </div>
     </div>
+  );
+}
+
+// ===== 地图选点弹窗 =====
+function MapPicker({ onConfirm, onClose }: { onConfirm: (lat: number, lng: number, address: string) => void; onClose: () => void }) {
+  const [isClient, setIsClient] = useState(false);
+  const [marker, setMarker] = useState<{ lat: number; lng: number } | null>(null);
+  const [address, setAddress] = useState('');
+  const [searchAddr, setSearchAddr] = useState('');
+  const mapRef = useRef<any>(null);
+  const [mapComponents, setMapComponents] = useState<any>({});
+
+  useEffect(() => {
+    setIsClient(true);
+    // 动态导入leaflet组件
+    import('react-leaflet').then(mod => {
+      setMapComponents({
+        MapContainer: mod.MapContainer,
+        TileLayer: mod.TileLayer,
+        CircleMarker: mod.CircleMarker,
+        useMapEvents: mod.useMapEvents,
+      });
+    });
+  }, []);
+
+  // 搜索地址 → 用Nominatim免费API
+  const handleSearchAddr = async () => {
+    if (!searchAddr.trim()) return;
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchAddr)}&limit=1`);
+      const data = await res.json();
+      if (data && data.length > 0) {
+        const { lat, lon, display_name } = data[0];
+        const la = parseFloat(lat), ln = parseFloat(lon);
+        setMarker({ lat: la, lng: ln });
+        setAddress(display_name.split(',').slice(0, 3).join(','));
+        if (mapRef.current) mapRef.current.flyTo([la, ln], 14, { duration: 1 });
+      } else {
+        alert('未找到该地址，请尝试更具体的地址');
+      }
+    } catch {
+      alert('地址搜索失败，请直接在地图上点击选点');
+    }
+  };
+
+  // 点击地图选点
+  const ClickHandler = () => {
+    const { useMapEvents } = mapComponents;
+    if (!useMapEvents) return null;
+    useMapEvents({
+      click(e: any) {
+        setMarker({ lat: e.latlng.lat, lng: e.latlng.lng });
+        setAddress(`(${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)})`);
+      },
+    });
+    return null;
+  };
+
+  const { MapContainer: MC, TileLayer: TL, CircleMarker: CM } = mapComponents;
+
+  return (
+    <>
+      <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 400 }} />
+      <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', zIndex: 401, width: '90%', maxWidth: 560, height: '80vh', background: '#fff', borderRadius: 16, boxShadow: '0 16px 48px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', overflow: 'hidden', animation: 'scaleIn 0.3s ease' }}>
+        {/* 头部 */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 16px', borderBottom: '1px solid #eee' }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+          <span style={{ flex: 1, fontSize: 16, fontWeight: 700, color: '#333' }}>在地图上选择位置</span>
+          <button onClick={onClose} style={{ width: 30, height: 30, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+          </button>
+        </div>
+
+        {/* 地址搜索框 */}
+        <div style={{ display: 'flex', gap: 8, padding: '10px 16px', borderBottom: '1px solid #f5f5f5' }}>
+          <input value={searchAddr} onChange={e => setSearchAddr(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSearchAddr()} placeholder="搜索地址，如：余杭区文一西路" style={{ flex: 1, height: 36, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none' }} />
+          <button onClick={handleSearchAddr} style={{ padding: '0 16px', borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 14, cursor: 'pointer' }}>搜索</button>
+        </div>
+
+        {/* 地图 */}
+        <div style={{ flex: 1, position: 'relative' }}>
+          {isClient && MC && (
+            <MC center={[30.27, 120.15]} zoom={11} style={{ height: '100%', width: '100%' }} zoomControl={true} attributionControl={false} ref={(m: any) => { mapRef.current = m; }}>
+              <TL url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+              {marker && <CM center={[marker.lat, marker.lng]} radius={8} pathOptions={{ color: C.primary, fillColor: C.primary, fillOpacity: 0.8 }} />}
+              <ClickHandler />
+            </MC>
+          )}
+          {!marker && <div style={{ position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.7)', color: '#fff', padding: '6px 16px', borderRadius: 999, fontSize: 13, pointerEvents: 'none' }}>点击地图选择位置</div>}
+        </div>
+
+        {/* 底部 */}
+        <div style={{ padding: '12px 16px', borderTop: '1px solid #eee' }}>
+          {address && <div style={{ fontSize: 13, color: '#666', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+            {address}
+          </div>}
+          <button onClick={() => { if (marker && address) onConfirm(marker.lat, marker.lng, address); }} disabled={!marker} style={{ width: '100%', height: 44, borderRadius: 10, border: 'none', background: marker ? C.primary : '#ccc', color: '#fff', fontSize: 16, fontWeight: 600, cursor: marker ? 'pointer' : 'default' }}>
+            {marker ? '确认位置并搜索附近房源' : '请先在地图上选点'}
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
