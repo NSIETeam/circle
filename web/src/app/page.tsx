@@ -416,17 +416,15 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
           {/* 地图面板 — 附近/自选定位时显示 */}
           {showMapPanel && isClient && (
             <div style={{ background: '#fff', borderRadius: 8, marginBottom: 12, overflow: 'hidden', border: '1px solid #eee' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderBottom: '1px solid #f5f5f5' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderBottom: '1px solid #f5f5f5', position: 'relative', zIndex: 1000, background: '#fff' }}>
                 <span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>
-                  {mapPanelMode === 'pick' ? '在地图上点击选择位置' : mapPanelMode === 'nearby' ? '附近房源' : '房源地图'}
+                  {mapPanelMode === 'pick' ? '🗺️ 在地图上点击选择位置' : mapPanelMode === 'nearby' ? '📍 附近房源' : '房源地图'}
                 </span>
-                <button onClick={() => setShowMapPanel(false)} style={{ width: 26, height: 26, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
-                </button>
+                <button onClick={() => { setShowMapPanel(false); setSelRegion('不限'); }} style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#666', flexShrink: 0 }}>✕</button>
               </div>
               <div style={{ height: 300, position: 'relative' }}>
                 <MapContainer center={mapPanelCenter} zoom={mapPanelZoom} style={{ height: '100%', width: '100%' }} zoomControl={true} attributionControl={false} ref={(m: any) => { mapPanelRef.current = m; }}>
-                  <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+                  <TileLayer url="https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}" subdomains={['1','2','3','4']} />
                   {/* 用户位置（附近模式） */}
                   {mapPanelMode === 'nearby' && userLocation && (
                     <CircleMarker center={[userLocation.lat, userLocation.lng]} radius={10} pathOptions={{ color: '#00A6E0', fillColor: '#00A6E0', fillOpacity: 0.5 }} />
@@ -716,7 +714,7 @@ function MapPicker({ onConfirm, onClose }: { onConfirm: (lat: number, lng: numbe
         <div style={{ flex: 1, position: 'relative' }}>
           {isClient && MC && (
             <MC center={[39.9, 116.4]} zoom={11} style={{ height: '100%', width: '100%' }} zoomControl={true} attributionControl={false} ref={(m: any) => { mapRef.current = m; }}>
-              <TL url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+              <TL url="https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}" subdomains={['1','2','3','4']} />
               {marker && <CM center={[marker.lat, marker.lng]} radius={8} pathOptions={{ color: C.primary, fillColor: C.primary, fillOpacity: 0.8 }} />}
               <ClickHandler />
             </MC>

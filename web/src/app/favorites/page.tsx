@@ -58,7 +58,7 @@ export default function FavoritesPage() {
             <p style={{ marginTop: 16, fontSize: 15, fontWeight: 500 }}>还没有收藏的房源</p>
             <p style={{ marginTop: 8, fontSize: 13 }}>浏览房源时点击星标即可收藏</p>
             <button
-              onClick={() => { if (window.history.length > 1) router.back(); else router.push(process.env.NEXT_PUBLIC_BASE_PATH || '/'); }}
+              onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }}
               className="btn-primary"
               style={{ marginTop: 24, width: '60%' }}
             >

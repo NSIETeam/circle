@@ -60,7 +60,7 @@ export default function ProfilePage() {
         borderBottom: '1px solid var(--border)',
       }}>
         <button
-          onClick={() => { if (window.history.length > 1) router.back(); else router.push(process.env.NEXT_PUBLIC_BASE_PATH || '/'); }}
+          onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }}
           style={{
             width: 36, height: 36, borderRadius: 10,
             border: '1px solid var(--border)', background: 'var(--card)',
@@ -193,7 +193,7 @@ export default function ProfilePage() {
       {/* 退出登录 */}
       <div style={{ padding: '16px' }}>
         <button
-          onClick={() => { logout(); router.push(process.env.NEXT_PUBLIC_BASE_PATH || '/'); }}
+          onClick={() => { logout(); window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }}
           style={{
             width: '100%', padding: '13px', background: 'var(--card)',
             border: '1.5px solid var(--error)', borderRadius: 'var(--radius-md)',
