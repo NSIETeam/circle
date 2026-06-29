@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
+import { moderateContent, sanitizeText } from '../../lib/content-moderator';
 
 export default function ListBuildingPage() {
   const [form, setForm] = useState({
@@ -10,6 +11,7 @@ export default function ListBuildingPage() {
     contact: '', phone: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [auditResult, setAuditResult] = useState<{ status: string; reasons: string[] } | null>(null);
   const [images, setImages] = useState<string[]>([]);
   const [docFile, setDocFile] = useState<{ name: string; data: string } | null>(null);
   const [notes, setNotes] = useState('');
@@ -50,9 +52,23 @@ export default function ListBuildingPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // AI审核
+    const result = moderateContent({
+      name: form.name, description: form.park_name, notes: notes,
+      rent_min: parseFloat(form.rent_min), rent_max: parseFloat(form.rent_max),
+      total_area: parseFloat(form.total_area), industry: form.industry, fileName: docFile?.name,
+    });
+    if (result.status === 'rejected') {
+      setAuditResult(result);
+      return;
+    }
+    // 脱敏笔记中的联系方式
+    const safeNotes = sanitizeText(notes);
+    const status = result.status === 'manual_review' ? 'pending_review' : 'pending';
     const listings = JSON.parse(localStorage.getItem('my_listings') || '[]');
-    listings.push({ ...form, id: Date.now().toString(), created_at: new Date().toISOString(), status: 'pending', images, building_pdf: docFile?.data, sales_notes: notes });
+    listings.push({ ...form, id: Date.now().toString(), created_at: new Date().toISOString(), status, auditResult: result, images, building_pdf: docFile?.data, sales_notes: safeNotes });
     localStorage.setItem('my_listings', JSON.stringify(listings));
+    setAuditResult(result);
     setSubmitted(true);
   };
 
@@ -62,14 +78,28 @@ export default function ListBuildingPage() {
   const sectionStyle: React.CSSProperties = { fontSize: 14, fontWeight: 700, color: '#333', padding: '12px 0 8px', display: 'flex', alignItems: 'center', gap: 6 };
 
   if (submitted) {
+    const isRejected = auditResult?.status === 'rejected';
+    const isManual = auditResult?.status === 'manual_review';
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, background: '#F5F6FA' }}>
-        <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'rgba(0,166,224,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="2.5" strokeLinecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+        <div style={{ width: 72, height: 72, borderRadius: '50%', background: isRejected ? 'rgba(255,59,48,0.1)' : 'rgba(0,166,224,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+          {isRejected ? (
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FF3B30" strokeWidth="2.5" strokeLinecap="round"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
+          ) : (
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="2.5" strokeLinecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+          )}
         </div>
-        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>提交成功</h2>
-        <p style={{ color: '#999', textAlign: 'center', lineHeight: 1.6, marginBottom: 24 }}>您的厂房信息已提交，平台将在1个工作日内审核。</p>
-        <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ width: '80%', height: 44, borderRadius: 10, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>返回首页</button>
+        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{isRejected ? '内容审核未通过' : '提交成功'}</h2>
+        <p style={{ color: '#999', textAlign: 'center', lineHeight: 1.6, marginBottom: 16 }}>
+          {isRejected ? '您提交的内容包含不合规信息：' : isManual ? '内容已提交，AI检测到部分信息需人工确认，平台将在1个工作日内完成审核。' : '您的厂房信息已提交，平台将在1个工作日内审核。'}
+        </p>
+        {auditResult?.reasons.map((r, i) => (
+          <div key={i} style={{ fontSize: 13, color: isRejected ? '#FF3B30' : '#666', background: isRejected ? '#FFF0F0' : '#F8F9FB', padding: '6px 12px', borderRadius: 6, marginBottom: 4, width: '80%' }}>• {r}</div>
+        ))}
+        <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+          {isRejected && <button onClick={() => { setSubmitted(false); setAuditResult(null); }} style={{ padding: '10px 24px', borderRadius: 10, border: '1px solid #ddd', background: '#fff', color: '#666', fontSize: 14, cursor: 'pointer' }}>返回修改</button>}
+          <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ padding: '10px 24px', borderRadius: 10, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{isRejected ? '返回首页' : '完成'}</button>
+        </div>
       </div>
     );
   }

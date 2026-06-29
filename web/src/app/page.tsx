@@ -613,10 +613,63 @@ function MapPickerClickInner({ useMapEvents, onPick }: { useMapEvents: any; onPi
   return null;
 }
 
+// ===== 举报弹窗 =====
+function ReportModal({ building, onClose }: { building: Building; onClose: () => void }) {
+  const [reason, setReason] = useState('');
+  const [detail, setDetail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const reasons = ['虚假信息', '不健康内容', '广告骚扰', '侵权', '其他'];
+
+  const handleSubmit = () => {
+    const reports = JSON.parse(localStorage.getItem('reports') || '[]');
+    reports.push({ buildingId: building.id, buildingName: building.name, reason, detail, created_at: new Date().toISOString() });
+    localStorage.setItem('reports', JSON.stringify(reports));
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ background: '#fff', borderRadius: 12, padding: 32, textAlign: 'center', animation: 'scaleIn 0.25s ease' }}>
+          <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(52,199,89,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#34C759" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>举报已提交</div>
+          <div style={{ fontSize: 13, color: '#999' }}>我们会尽快处理，感谢您的反馈</div>
+          <button onClick={onClose} style={{ marginTop: 16, padding: '8px 24px', borderRadius: 8, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 14, cursor: 'pointer' }}>知道了</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: 380, background: '#fff', borderRadius: 12, overflow: 'hidden', animation: 'scaleIn 0.25s ease' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #eee' }}>
+          <span style={{ fontSize: 16, fontWeight: 700 }}>举报房源</span>
+          <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', fontSize: 14, color: '#666' }}>✕</button>
+        </div>
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, color: '#999', marginBottom: 8 }}>举报对象：{building.name}</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: '#333', marginBottom: 8 }}>选择举报原因</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
+            {reasons.map(r => (
+              <button key={r} onClick={() => setReason(r)} style={{ padding: '6px 14px', borderRadius: 999, border: reason === r ? '1px solid #00A6E0' : '1px solid #ddd', background: reason === r ? '#E6F7FD' : '#fff', color: reason === r ? '#00A6E0' : '#666', fontSize: 13, cursor: 'pointer' }}>{r}</button>
+            ))}
+          </div>
+          <textarea value={detail} onChange={e => setDetail(e.target.value)} placeholder="补充说明（选填）" style={{ width: '100%', minHeight: 70, padding: 10, border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', resize: 'vertical', fontFamily: 'inherit' }} />
+          <button onClick={handleSubmit} disabled={!reason} style={{ width: '100%', height: 44, borderRadius: 8, border: 'none', background: reason ? '#FF3B30' : '#ccc', color: '#fff', fontSize: 15, fontWeight: 600, cursor: reason ? 'pointer' : 'default', marginTop: 12 }}>提交举报</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ===== 详情弹窗 =====
 function DetailModal({ building, onClose }: { building: Building; onClose: () => void }) {
   const [tab, setTab] = useState<'info' | 'params' | 'facilities'>('info');
   const [showChat, setShowChat] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   return (
     <>
       <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 200, animation: 'fadeIn 0.2s' }} />
@@ -650,10 +703,15 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
         </div>
         {/* 底部按钮 */}
         <div style={{ display: 'flex', gap: 10, padding: '12px 20px', borderTop: '1px solid #eee' }}>
-          <button onClick={() => setShowChat(true)} style={{ flex: 1, height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>咨询招商</button>
+          <button onClick={() => setShowChat(true)} style={{ flex: 2, height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>咨询招商</button>
+          <button onClick={() => setShowReport(true)} style={{ flex: 1, height: 44, borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#999', fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
+            举报
+          </button>
         </div>
       </div>
       {showChat && <SalesChat building={building} onClose={() => setShowChat(false)} />}
+      {showReport && <ReportModal building={building} onClose={() => setShowReport(false)} />}
     </>
   );
 }

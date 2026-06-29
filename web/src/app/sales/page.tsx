@@ -37,13 +37,49 @@ export default function SalesPage() {
   const [notesText, setNotesText] = useState('');
   const [generatedImage, setGeneratedImage] = useState<any>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [activeTab, setActiveTab] = useState<'listings' | 'pending' | 'history'>('listings');
+  const [pendingItems, setPendingItems] = useState<any[]>([]);
+  const [historyItems, setHistoryItems] = useState<any[]>([]);
+  const [rejectReason, setRejectReason] = useState('');
+  const [rejectTarget, setRejectTarget] = useState<any>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetch(assetUrl('/data/buildings.json'))
       .then(r => r.json())
       .then(data => setBuildings(data.slice(0, 20)));
+    // 加载待审核和审核记录
+    setPendingItems(JSON.parse(localStorage.getItem('my_listings') || '[]').filter((b: any) => b.status === 'pending' || b.status === 'pending_review'));
+    setHistoryItems(JSON.parse(localStorage.getItem('audit_history') || '[]'));
   }, []);
+
+  // 审核操作
+  const handleApprove = (item: any) => {
+    // 更新状态
+    const listings = JSON.parse(localStorage.getItem('my_listings') || '[]');
+    const updated = listings.map((b: any) => b.id === item.id ? { ...b, status: 'approved', audited_at: new Date().toISOString() } : b);
+    localStorage.setItem('my_listings', JSON.stringify(updated));
+    setPendingItems(updated.filter((b: any) => b.status === 'pending' || b.status === 'pending_review'));
+    // 记录历史
+    const hist = JSON.parse(localStorage.getItem('audit_history') || '[]');
+    hist.unshift({ ...item, status: 'approved', audited_at: new Date().toISOString(), audit_action: '通过上线' });
+    localStorage.setItem('audit_history', JSON.stringify(hist));
+    setHistoryItems(hist);
+  };
+
+  const handleReject = () => {
+    if (!rejectTarget || !rejectReason.trim()) return;
+    const listings = JSON.parse(localStorage.getItem('my_listings') || '[]');
+    const updated = listings.map((b: any) => b.id === rejectTarget.id ? { ...b, status: 'rejected', audited_at: new Date().toISOString(), reject_reason: rejectReason } : b);
+    localStorage.setItem('my_listings', JSON.stringify(updated));
+    setPendingItems(updated.filter((b: any) => b.status === 'pending' || b.status === 'pending_review'));
+    const hist = JSON.parse(localStorage.getItem('audit_history') || '[]');
+    hist.unshift({ ...rejectTarget, status: 'rejected', audited_at: new Date().toISOString(), audit_action: `驳回：${rejectReason}` });
+    localStorage.setItem('audit_history', JSON.stringify(hist));
+    setHistoryItems(hist);
+    setRejectTarget(null);
+    setRejectReason('');
+  };
 
   // 上传楼书 — 支持PDF/Word/PPT/图片，自动解析
   const handleDocUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -228,7 +264,21 @@ export default function SalesPage() {
           ))}
         </div>
 
+        {/* Tab栏 */}
+        <div style={{ display: 'flex', gap: 0, marginBottom: 16, background: '#fff', borderRadius: 8, overflow: 'hidden', border: '1px solid #eee' }}>
+          {[
+            { k: 'listings', l: '我的房源', count: buildings.length },
+            { k: 'pending', l: '待审核', count: pendingItems.length },
+            { k: 'history', l: '审核记录', count: historyItems.length },
+          ].map((t, i) => (
+            <button key={t.k} onClick={() => setActiveTab(t.k as any)} style={{ flex: 1, padding: '10px 0', border: 'none', borderRight: i < 2 ? '1px solid #eee' : 'none', background: activeTab === t.k ? '#E6F7FD' : '#fff', color: activeTab === t.k ? '#00A6E0' : '#666', fontSize: 14, fontWeight: activeTab === t.k ? 600 : 400, cursor: 'pointer' }}>
+              {t.l} {t.count > 0 && <span style={{ fontSize: 12, color: activeTab === t.k ? '#00A6E0' : '#999' }}>({t.count})</span>}
+            </button>
+          ))}
+        </div>
+
         {/* 房源列表 */}
+        {activeTab === 'listings' && (
         <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden' }}>
           <div style={{ padding: '12px 16px', borderBottom: `1px solid ${C.border}`, fontSize: 15, fontWeight: 700, color: C.text }}>我的房源</div>
           {buildings.map(b => (
@@ -249,6 +299,61 @@ export default function SalesPage() {
             </div>
           ))}
         </div>
+        )}
+
+        {/* 待审核列表 */}
+        {activeTab === 'pending' && (
+          <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden' }}>
+            <div style={{ padding: '12px 16px', borderBottom: `1px solid ${C.border}`, fontSize: 15, fontWeight: 700, color: C.text }}>待审核内容 ({pendingItems.length})</div>
+            {pendingItems.length === 0 ? (
+              <div style={{ padding: 40, textAlign: 'center', color: '#999', fontSize: 14 }}>暂无待审核内容</div>
+            ) : pendingItems.map(item => (
+              <div key={item.id} style={{ padding: '12px 16px', borderBottom: '1px solid #f5f5f5' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: '#333' }}>{item.name || '未命名房源'}</div>
+                    <div style={{ fontSize: 12, color: '#999', marginTop: 2 }}>
+                      {item.region || ''} · {item.industry || ''} · 提交于 {new Date(item.created_at).toLocaleString('zh-CN')}
+                    </div>
+                    {item.auditResult && (
+                      <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 6px', borderRadius: 3, background: item.auditResult.riskLevel === 'high' ? '#FFF0F0' : item.auditResult.riskLevel === 'medium' ? '#FFF8E5' : '#EAFBEF', color: item.auditResult.riskLevel === 'high' ? '#FF3B30' : item.auditResult.riskLevel === 'medium' ? '#FF9500' : '#34C759' }}>
+                          AI: {item.auditResult.status === 'approved' ? '通过' : item.auditResult.status === 'manual_review' ? '转人工' : '驳回'}
+                        </span>
+                        {item.auditResult.reasons.map((r: string, i: number) => <span key={i} style={{ fontSize: 10, color: '#999', background: '#F5F5F5', padding: '2px 6px', borderRadius: 3 }}>{r}</span>)}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                  <button onClick={() => handleApprove(item)} style={{ flex: 1, padding: '8px 0', borderRadius: 8, border: 'none', background: '#34C759', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>通过上线</button>
+                  <button onClick={() => setRejectTarget(item)} style={{ flex: 1, padding: '8px 0', borderRadius: 8, border: '1px solid #FF3B30', background: '#fff', color: '#FF3B30', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>驳回</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* 审核记录 */}
+        {activeTab === 'history' && (
+          <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden' }}>
+            <div style={{ padding: '12px 16px', borderBottom: `1px solid ${C.border}`, fontSize: 15, fontWeight: 700, color: C.text }}>审核记录 ({historyItems.length})</div>
+            {historyItems.length === 0 ? (
+              <div style={{ padding: 40, textAlign: 'center', color: '#999', fontSize: 14 }}>暂无审核记录</div>
+            ) : historyItems.map((item, i) => (
+              <div key={i} style={{ padding: '12px 16px', borderBottom: '1px solid #f5f5f5', display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: item.status === 'approved' ? '#EAFBEF' : '#FFF0F0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: 16 }}>{item.status === 'approved' ? '✓' : '✕'}</span>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#333' }}>{item.name || '未命名'}</div>
+                  <div style={{ fontSize: 12, color: item.status === 'approved' ? '#34C759' : '#FF3B30', marginTop: 2 }}>{item.audit_action}</div>
+                </div>
+                <span style={{ fontSize: 11, color: '#999' }}>{new Date(item.audited_at).toLocaleString('zh-CN')}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 管理面板 */}
@@ -274,6 +379,20 @@ export default function SalesPage() {
 
       {/* PDF文件输入 */}
       <input ref={fileRef} type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,image/*" onChange={handleDocUpload} style={{ display: 'none' }} />
+
+      {/* 驳回弹窗 */}
+      {rejectTarget && (
+        <div onClick={() => { setRejectTarget(null); setRejectReason(''); }} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: 400, background: '#fff', borderRadius: 12, padding: 20, animation: 'scaleIn 0.25s ease' }}>
+            <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>驳回原因</div>
+            <textarea value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="请输入驳回原因..." autoFocus style={{ width: '100%', minHeight: 80, padding: 10, border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', resize: 'vertical', fontFamily: 'inherit' }} />
+            <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
+              <button onClick={() => { setRejectTarget(null); setRejectReason(''); }} style={{ flex: 1, height: 40, borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', fontSize: 14, cursor: 'pointer' }}>取消</button>
+              <button onClick={handleReject} disabled={!rejectReason.trim()} style={{ flex: 1, height: 40, borderRadius: 8, border: 'none', background: rejectReason.trim() ? '#FF3B30' : '#ccc', color: '#fff', fontSize: 14, fontWeight: 600, cursor: rejectReason.trim() ? 'pointer' : 'default' }}>确认驳回</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
