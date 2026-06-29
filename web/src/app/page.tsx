@@ -197,20 +197,33 @@ export default function HomePage() {
         const { latitude: lat, longitude: lng } = pos.coords;
         setUserLocation({ lat, lng });
         setMapPanelCenter([lat, lng]);
-        setMapPanelZoom(13);
+        setMapPanelZoom(14);
         const sorted = [...all].map(b => {
           const dist = haversine(lat, lng, b.latitude, b.longitude);
           return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距您约${Math.round(dist)}km` };
         }).sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
         setList(sorted);
       },
-      () => {
-        // 定位失败 — 用北京中心
+      (err) => {
+        // 定位失败 — 提示用户
+        if (err.code === 1) alert('定位权限被拒绝，请在浏览器设置中允许定位');
+        else alert('定位失败，请检查网络后重试');
         setMapPanelCenter([39.9, 116.4]);
         setMapPanelZoom(11);
       },
-      { enableHighAccuracy: true, timeout: 8000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
+  };
+
+  // 回到我的位置
+  const handleBackToMyLocation = () => {
+    if (userLocation) {
+      setMapPanelCenter([userLocation.lat, userLocation.lng]);
+      setMapPanelZoom(14);
+      if (mapPanelRef.current) mapPanelRef.current.flyTo([userLocation.lat, userLocation.lng], 14, { duration: 0.8 });
+    } else {
+      handleNearby();
+    }
   };
 
   // 自选定位 — 打开地图选点
@@ -223,13 +236,15 @@ export default function HomePage() {
     setMapPanelZoom(11);
   };
 
-  // 地图选点确认后
+  // 地图选点确认后 — 计算距离+出行信息
   const handlePickConfirm = (lat: number, lng: number, address: string) => {
     setUserLocation({ lat, lng });
     setMapPanelMode('view');
     const sorted = [...all].map(b => {
       const dist = haversine(lat, lng, b.latitude, b.longitude);
-      return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距选定位置约${Math.round(dist)}km` };
+      const driving = Math.round(dist / 40 * 60); // 40km/h
+      const walking = Math.round(dist / 5 * 60);  // 5km/h
+      return { ...b, match_score: Math.max(1, Math.round(100 - dist / 10)), match_reason: `距选定位置约${Math.round(dist)}km`, commute: { distance: Math.round(dist), driving: `${driving}分钟`, walking: walking > 120 ? '较远' : `${walking}分钟` } };
     }).sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
     setList(sorted);
     setMapPanelCenter([lat, lng]);
@@ -351,20 +366,40 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
         )}
       </div>
 
-      {/* ===== AI对话面板 ===== */}
+      {/* === AI对话独立弹窗 === */}
       {showAI && (
-        <div style={{ background: '#fff', borderBottom: '1px solid #eee', maxHeight: '280px', display: 'flex', flexDirection: 'column' }}>
-          <div ref={aiRef} style={{ flex: 1, overflowY: 'auto', padding: '12px 20px', display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 1200, margin: '0 auto', width: '100%' }}>
-            {aiMsgs.map((m, i) => (
-              <div key={i} style={{ alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '70%' }}>
-                {m.role === 'agent' && <span style={{ fontSize: 10, fontWeight: 700, color: '#fff', background: `linear-gradient(135deg, ${C.primary}, #0088B8)`, padding: '1px 6px', borderRadius: 3, marginBottom: 3, display: 'inline-block' }}>AI</span>}
-                <div style={{ background: m.role === 'user' ? C.primary : '#F5F5F5', color: m.role === 'user' ? '#fff' : C.text, padding: '8px 12px', borderRadius: 8, fontSize: 14, lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>{m.text}</div>
+        <div onClick={() => setShowAI(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 500, animation: 'fadeIn 0.2s' }}>
+          <div onClick={e => e.stopPropagation()} style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '90%', maxWidth: 480, maxHeight: '70vh', background: '#fff', borderRadius: 16, boxShadow: '0 16px 48px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column', overflow: 'hidden', animation: 'scaleIn 0.25s ease' }}>
+            {/* 头部 */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '14px 16px', borderBottom: '1px solid #eee', background: '#fff' }}>
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: 'linear-gradient(135deg, #00A6E0, #0088B8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
               </div>
-            ))}
-          </div>
-          <div style={{ display: 'flex', gap: 8, padding: '8px 20px', borderTop: '1px solid #f5f5f5', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
-            <input value={aiInput} onChange={e => setAiInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAISend()} placeholder="描述您的选址需求..." style={{ flex: 1, height: 34, padding: '0 12px', border: '1px solid #ddd', borderRadius: 4, fontSize: 14, outline: 'none' }} />
-            <button onClick={() => handleAISend()} disabled={!aiInput.trim()} style={{ background: aiInput.trim() ? C.primary : '#ccc', color: '#fff', border: 'none', borderRadius: 4, padding: '0 16px', fontSize: 14, cursor: aiInput.trim() ? 'pointer' : 'default' }}>发送</button>
+              <span style={{ flex: 1, fontSize: 15, fontWeight: 700, color: '#333' }}>AI选址助手</span>
+              <button onClick={() => setShowAI(false)} style={{ width: 30, height: 30, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#666' }}>✕</button>
+            </div>
+            {/* 消息区 */}
+            <div ref={aiRef} style={{ flex: 1, overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {aiMsgs.map((m, i) => (
+                <div key={i} style={{ alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
+                  {m.role === 'agent' && <span style={{ fontSize: 10, fontWeight: 700, color: '#fff', background: 'linear-gradient(135deg, #00A6E0, #0088B8)', padding: '1px 6px', borderRadius: 3, marginBottom: 3, display: 'inline-block' }}>AI</span>}
+                  <div style={{ background: m.role === 'user' ? '#00A6E0' : '#F5F6FA', color: m.role === 'user' ? '#fff' : '#333', padding: '10px 14px', borderRadius: 12, borderBottomRightRadius: m.role === 'user' ? 4 : 12, borderBottomLeftRadius: m.role === 'user' ? 12 : 4, fontSize: 14, lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>{m.text}</div>
+                </div>
+              ))}
+            </div>
+            {/* 快捷词 */}
+            <div style={{ display: 'flex', gap: 6, padding: '8px 16px 0', flexWrap: 'wrap' }}>
+              {['AI产业园 2000平', '生物医药 承重5吨', '智能制造 余杭', '便宜点的大厂房'].map(hint => (
+                <button key={hint} onClick={() => { setAiInput(hint); }} style={{ padding: '4px 10px', borderRadius: 999, border: '1px solid #e0e0e0', background: '#fff', color: '#666', fontSize: 12, cursor: 'pointer' }}>{hint}</button>
+              ))}
+            </div>
+            {/* 输入栏 */}
+            <div style={{ display: 'flex', gap: 8, padding: '12px 16px', borderTop: '1px solid #f5f5f5', marginTop: 4 }}>
+              <input value={aiInput} onChange={e => setAiInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAISend()} placeholder="描述您的选址需求..." style={{ flex: 1, height: 38, padding: '0 14px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none' }} />
+              <button onClick={() => handleAISend()} disabled={!aiInput.trim()} style={{ width: 38, height: 38, borderRadius: 8, border: 'none', background: aiInput.trim() ? '#00A6E0' : '#ccc', color: '#fff', cursor: aiInput.trim() ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -417,9 +452,17 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
           {showMapPanel && isClient && (
             <div style={{ background: '#fff', borderRadius: 8, marginBottom: 12, overflow: 'hidden', border: '1px solid #eee' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderBottom: '1px solid #f5f5f5', position: 'relative', zIndex: 1000, background: '#fff' }}>
-                <span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>
-                  {mapPanelMode === 'pick' ? '🗺️ 在地图上点击选择位置' : mapPanelMode === 'nearby' ? '📍 附近房源' : '房源地图'}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>
+                    {mapPanelMode === 'pick' ? '🗺️ 点击地图选择位置' : mapPanelMode === 'nearby' ? '📍 附近房源' : '房源地图'}
+                  </span>
+                  {mapPanelMode !== 'pick' && (
+                    <button onClick={handleBackToMyLocation} style={{ display: 'flex', alignItems: 'center', gap: 3, padding: '4px 10px', borderRadius: 6, border: '1px solid #00A6E0', background: '#E6F7FD', color: '#00A6E0', fontSize: 12, cursor: 'pointer', fontWeight: 600 }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2" /></svg>
+                      回到我的位置
+                    </button>
+                  )}
+                </div>
                 <button onClick={() => { setShowMapPanel(false); setSelRegion('不限'); }} style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#666', flexShrink: 0 }}>✕</button>
               </div>
               <div style={{ height: 300, position: 'relative' }}>
@@ -503,6 +546,18 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                   </div>
                 </div>
                 {b.match_reason && <div style={{ fontSize: 12, color: C.primary, marginTop: 4 }}>{b.match_reason}</div>}
+                {(b as any).commute && (
+                  <div style={{ display: 'flex', gap: 8, marginTop: 4, fontSize: 11, color: C.textMuted }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2" /><circle cx="6.5" cy="16.5" r="2.5" /><circle cx="16.5" cy="16.5" r="2.5" /></svg>
+                      驾车{(b as any).commute.driving}
+                    </span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#34C759" strokeWidth="2"><circle cx="12" cy="4" r="2" /><path d="M15 22v-4l-3-3-3 3v4" /><path d="M9 8l3 3 3-3" /></svg>
+                      步行{(b as any).commute.walking}
+                    </span>
+                  </div>
+                )}
               </div>
               {/* 价格 */}
               <div style={{ textAlign: 'right', flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 100 }}>
