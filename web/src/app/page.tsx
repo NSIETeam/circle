@@ -590,8 +590,23 @@ function MapClickHandler({ onPick }: { onPick: (lat: number, lng: number) => voi
   useEffect(() => {
     import('react-leaflet').then(mod => setMapMods(mod));
   }, []);
-  if (!mapMods) return null;
-  const { useMapEvents } = mapMods;
+  // 始终调用 useMapEvents（如果模块未加载则空操作）
+  // 使用自定义 Hook 包装避免条件调用
+  if (mapMods) {
+    return <MapClickHandlerInner onPick={onPick} useMapEvents={mapMods.useMapEvents} />;
+  }
+  return null;
+}
+
+function MapClickHandlerInner({ onPick, useMapEvents }: { onPick: (lat: number, lng: number) => void; useMapEvents: any }) {
+  useMapEvents({
+    click(e: any) { onPick(e.latlng.lat, e.latlng.lng); },
+  });
+  return null;
+}
+
+// MapPicker内部点击处理器 — 避免条件性Hooks
+function MapPickerClickInner({ useMapEvents, onPick }: { useMapEvents: any; onPick: (lat: number, lng: number) => void }) {
   useMapEvents({
     click(e: any) { onPick(e.latlng.lat, e.latlng.lng); },
   });
@@ -733,15 +748,9 @@ function MapPicker({ onConfirm, onClose }: { onConfirm: (lat: number, lng: numbe
 
   // 点击地图选点
   const ClickHandler = () => {
-    const { useMapEvents } = mapComponents;
+    const useMapEvents = mapComponents.useMapEvents;
     if (!useMapEvents) return null;
-    useMapEvents({
-      click(e: any) {
-        setMarker({ lat: e.latlng.lat, lng: e.latlng.lng });
-        setAddress(`(${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)})`);
-      },
-    });
-    return null;
+    return <MapPickerClickInner useMapEvents={useMapEvents} onPick={(lat: number, lng: number) => { setMarker({ lat, lng }); setAddress(`(${lat.toFixed(4)}, ${lng.toFixed(4)})`); }} />;
   };
 
   const { MapContainer: MC, TileLayer: TL, CircleMarker: CM } = mapComponents;
