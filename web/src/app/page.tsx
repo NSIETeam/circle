@@ -71,6 +71,8 @@ export default function HomePage() {
   const mapPanelRef = useRef<any>(null);
   const [mapPanelCenter, setMapPanelCenter] = useState<[number, number]>([39.9, 116.4]);
   const [mapPanelZoom, setMapPanelZoom] = useState(11);
+  const [promotions, setPromotions] = useState<any[]>([]);
+  const [showLeadForm, setShowLeadForm] = useState(false);
   const aiRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,6 +86,7 @@ export default function HomePage() {
         setAll(beijing);
         setList(beijing);
       });
+    fetch(assetUrl('/data/promotions.json')).then(r => r.json()).then(setPromotions);
   }, []);
 
   useEffect(() => {
@@ -294,6 +297,10 @@ export default function HomePage() {
         setAiMsgs(prev => [...prev, { role: 'agent', text: '您需要多大面积？可以直接回复数字，比如"3000"' }]);
         setPendingQ('area');
       }, 500);
+    } else {
+      setTimeout(() => {
+        setAiMsgs(prev => [...prev, { role: 'agent', text: `已找到匹配房源！留下联系方式，顾问30分钟内联系您提供1对1服务。` }]);
+      }, 500);
     }
   };
 
@@ -351,6 +358,12 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
             AI选址
           </button>
           {/* 登录 */}
+          {/* 导航链接 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/promotions`} style={{ fontSize: 14, color: C.textSub, textDecoration: 'none', padding: '6px 10px' }}>限时优惠</a>
+            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/cases`} style={{ fontSize: 14, color: C.textSub, textDecoration: 'none', padding: '6px 10px' }}>成功案例</a>
+            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/agent-coop`} style={{ fontSize: 14, color: C.textSub, textDecoration: 'none', padding: '6px 10px' }}>经纪人合作</a>
+          </div>
           <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`} style={{ textDecoration: 'none', fontSize: 14, color: C.textSub, flexShrink: 0 }}>登录</a>
           <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/sales`} style={{ textDecoration: 'none', fontSize: 14, color: C.textSub, flexShrink: 0 }}>销售端</a>
           <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/list-building`} style={{ textDecoration: 'none', fontSize: 14, color: C.primary, fontWeight: 600, flexShrink: 0, background: C.primaryLight, padding: '6px 14px', borderRadius: 6 }}>发布房源</a>
@@ -392,6 +405,12 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
               {['AI产业园 2000平', '生物医药 承重5吨', '智能制造 余杭', '便宜点的大厂房'].map(hint => (
                 <button key={hint} onClick={() => { setAiInput(hint); }} style={{ padding: '4px 10px', borderRadius: 999, border: '1px solid #e0e0e0', background: '#fff', color: '#666', fontSize: 12, cursor: 'pointer' }}>{hint}</button>
               ))}
+            </div>
+            {/* 留资按钮 */}
+            <div style={{ padding: '0 16px 8px' }}>
+              <button onClick={() => { setShowAI(false); setShowLeadForm(true); }} style={{ width: '100%', height: 36, borderRadius: 8, border: 'none', background: '#34C759', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+                提交联系方式 · 获取1对1选址服务
+              </button>
             </div>
             {/* 输入栏 */}
             <div style={{ display: 'flex', gap: 8, padding: '12px 16px', borderTop: '1px solid #f5f5f5', marginTop: 4 }}>
@@ -507,6 +526,44 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
             <span style={{ fontSize: 13, color: C.textMuted, padding: '0 16px' }}>共 <strong style={{ color: C.primary, fontSize: 15 }}>{list.length}</strong> 处</span>
           </div>
 
+          {/* 限时优惠模块 — 无筛选时显示 */}
+          {!keyword && selIndustry === '全部' && selArea === '不限' && selRent === '不限' && (
+            <div style={{ background: '#fff', borderRadius: 8, marginBottom: 12, padding: 16, border: '1px solid #eee' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: C.text, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ width: 3, height: 16, background: '#FF3B30', borderRadius: 2, display: 'inline-block' }} /> 限时招商优惠
+                </div>
+                <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/promotions`} style={{ fontSize: 13, color: C.primary, textDecoration: 'none' }}>查看全部 →</a>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
+                {promotions.slice(0, 3).map(p => (
+                  <a key={p.id} href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/promotions`} style={{ textDecoration: 'none', display: 'flex', gap: 10, background: '#F8F9FB', borderRadius: 8, padding: 10, border: '1px solid #f0f0f0' }}>
+                    <img src={assetUrl(p.image)} alt="" style={{ width: 60, height: 60, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.title}</div>
+                      <div style={{ fontSize: 12, color: '#FF3B30', fontWeight: 600, marginTop: 4 }}>{p.discount}</div>
+                      <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>剩余 {p.remaining} 个名额</div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 空间类型入口 — 无筛选时显示 */}
+          {!keyword && selIndustry === '全部' && selArea === '不限' && selRent === '不限' && (
+            <div style={{ background: '#fff', borderRadius: 8, marginBottom: 12, padding: 16, border: '1px solid #eee' }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 3, height: 16, background: C.primary, borderRadius: 2, display: 'inline-block' }} /> 空间类型
+              </div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {['办公', '厂房', '仓库', '实验室', '机房', '研发空间', '生产车间', '总部基地'].map(t => (
+                  <button key={t} onClick={() => setKeyword(t)} style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #e0e0e0', background: '#fff', color: C.textSub, fontSize: 13, cursor: 'pointer' }}>{t}</button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* 热门推荐 — 无筛选时显示 */}
           {!keyword && selIndustry === '全部' && selArea === '不限' && selRent === '不限' && all.filter(b => b.is_featured).length > 0 && (
             <div style={{ background: '#fff', borderRadius: 8, marginBottom: 12, padding: 16, border: '1px solid #eee' }}>
@@ -577,6 +634,9 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
       {/* ===== 详情弹窗 ===== */}
       {/* 详情弹窗 */}
       {selected && <DetailModal building={selected} onClose={() => setSelected(null)} />}
+
+      {/* 留资弹窗 */}
+      {showLeadForm && <LeadFormModal onClose={() => setShowLeadForm(false)} />}
 
       {/* 地图选点弹窗 */}
       {showMapPicker && <MapPicker onConfirm={handlePickConfirm} onClose={() => setShowMapPicker(false)} />}
@@ -854,5 +914,50 @@ function MapPicker({ onConfirm, onClose }: { onConfirm: (lat: number, lng: numbe
         </div>
       </div>
     </>
+  );
+}
+
+// ===== 留资表单弹窗 =====
+function LeadFormModal({ onClose }: { onClose: () => void }) {
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [company, setCompany] = useState('');
+  const [req, setReq] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const handleSubmit = () => {
+    if (!name.trim() || !phone.trim()) return;
+    const leads = JSON.parse(localStorage.getItem('leads') || '[]');
+    leads.push({ name, phone, company, requirement: req, created_at: new Date().toISOString() });
+    localStorage.setItem('leads', JSON.stringify(leads));
+    setSubmitted(true);
+  };
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 500, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: 400, background: '#fff', borderRadius: 16, overflow: 'hidden', animation: 'scaleIn 0.25s ease' }}>
+        {submitted ? (
+          <div style={{ padding: 32, textAlign: 'center' }}>
+            <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(52,199,89,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#34C759" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg></div>
+            <div style={{ fontSize: 18, fontWeight: 700 }}>提交成功</div>
+            <div style={{ fontSize: 14, color: '#999', marginTop: 4 }}>专业顾问将在30分钟内联系您</div>
+            <button onClick={onClose} style={{ marginTop: 16, padding: '8px 24px', borderRadius: 8, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 14, cursor: 'pointer' }}>完成</button>
+          </div>
+        ) : (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #eee' }}>
+              <span style={{ fontSize: 16, fontWeight: 700 }}>提交选址需求</span>
+              <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', fontSize: 14 }}>✕</button>
+            </div>
+            <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <input value={name} onChange={e => setName(e.target.value)} style={{ height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none' }} placeholder="姓名 *" />
+              <input value={phone} onChange={e => setPhone(e.target.value)} style={{ height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none' }} placeholder="手机号 *" />
+              <input value={company} onChange={e => setCompany(e.target.value)} style={{ height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none' }} placeholder="公司名称（选填）" />
+              <textarea value={req} onChange={e => setReq(e.target.value)} style={{ minHeight: 70, padding: 10, border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', resize: 'vertical', fontFamily: 'inherit' }} placeholder="选址需求，如：生物医药厂房，3000平米，承重5吨" />
+              <button onClick={handleSubmit} disabled={!name.trim() || !phone.trim()} style={{ height: 44, borderRadius: 8, border: 'none', background: (name.trim() && phone.trim()) ? '#00A6E0' : '#ccc', color: '#fff', fontSize: 15, fontWeight: 700, cursor: (name.trim() && phone.trim()) ? 'pointer' : 'default' }}>提交需求</button>
+              <div style={{ fontSize: 11, color: '#999', textAlign: 'center' }}>提交后顾问30分钟内联系您，信息保密</div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 }

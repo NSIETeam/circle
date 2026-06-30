@@ -1,0 +1,80 @@
+[
+  {
+    "id": "case-001",
+    "company": "智芯科技",
+    "industry": "AI",
+    "park": "亦庄经济技术开发区",
+    "space_type": "研发办公",
+    "area": 2000,
+    "story": "入驻园区后获得开发区政策补贴50万元，6个月内团队从30人扩展至80人，完成A轮融资5000万。",
+    "tags": ["专精特新", "高新技术企业", "A轮融资"],
+    "image": "/images/buildings/industrial1.jpg",
+    "growth": "团队扩展2.7倍",
+    "fundraising": "5000万A轮"
+  },
+  {
+    "id": "case-002",
+    "company": "康诺生物",
+    "industry": "生物医药",
+    "park": "中关村生命科学园",
+    "space_type": "GMP厂房",
+    "area": 3500,
+    "story": "入驻GMP标准厂房后，3个月内完成药品注册申报，获得园区公共实验平台支持，节省设备投入约800万。",
+    "tags": ["创新药", "GMP认证", "专精特新"],
+    "image": "/images/buildings/industrial2.jpg",
+    "growth": "研发周期缩短40%",
+    "fundraising": "1.2亿B轮"
+  },
+  {
+    "id": "case-003",
+    "company": "精工智造",
+    "industry": "智能制造",
+    "park": "京南智能制造基地",
+    "space_type": "生产车间",
+    "area": 5000,
+    "story": "从500㎡起步扩租至5000㎡，园区行车和卸货平台满足大型设备进出，年产值增长300%，获评瞪羚企业。",
+    "tags": ["瞪羚企业", "产值增长", "扩租"],
+    "image": "/images/buildings/industrial3.jpg",
+    "growth": "产值增长300%",
+    "fundraising": "未融资"
+  },
+  {
+    "id": "case-004",
+    "company": "芯辰微电子",
+    "industry": "集成电路",
+    "park": "未来科学城创新基地",
+    "space_type": "洁净室",
+    "area": 1500,
+    "story": "入驻园区洁净室后完成芯片流片，获得高新区研发补贴120万，与园区内上下游企业形成协同效应。",
+    "tags": ["高新技术企业", "流片成功", "产业协同"],
+    "image": "/images/buildings/industrial4.jpg",
+    "growth": "产品上市",
+    "fundraising": "3000万天使轮"
+  },
+  {
+    "id": "case-005",
+    "company": "绿能动力",
+    "industry": "新能源",
+    "park": "亦庄经济技术开发区",
+    "space_type": "生产车间+仓库",
+    "area": 8000,
+    "story": "入驻后享受大功率配电和危化品仓库资质，完成动力电池产线建设，6个月实现量产，获得订单2亿元。",
+    "tags": ["量产", "大额订单", "专精特新"],
+    "image": "/images/buildings/industrial5.jpg",
+    "growth": "6个月量产",
+    "fundraising": "2亿C轮"
+  },
+  {
+    "id": "case-006",
+    "company": "云算科技",
+    "industry": "AI",
+    "park": "未来科学城创新基地",
+    "space_type": "数据中心",
+    "area": 3000,
+    "story": "入驻双回路供电数据中心，算力规模扩大10倍，服务客户超200家，获评独角兽企业。",
+    "tags": ["独角兽", "算力10倍", "双回路供电"],
+    "image": "/images/buildings/industrial6.jpg",
+    "growth": "算力扩大10倍",
+    "fundraising": "5亿D轮"
+  }
+]
