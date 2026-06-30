@@ -447,7 +447,7 @@ export default function SalesPage() {
             ) : historyItems.map((item, i) => (
               <div key={i} style={{ padding: '12px 16px', borderBottom: '1px solid #f5f5f5', display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 32, height: 32, borderRadius: '50%', background: item.status === 'approved' ? '#EAFBEF' : '#FFF0F0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: 16 }}>{item.status === 'approved' ? '✓' : '✕'}</span>
+                  <span style={{ fontSize: 16 }}>{item.status === 'approved' ? 'V' : 'X'}</span>
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#333' }}>{item.name || '未命名'}</div>
@@ -504,7 +504,7 @@ export default function SalesPage() {
           <div onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: 500, maxHeight: '80vh', background: '#fff', borderRadius: 12, overflow: 'hidden', display: 'flex', flexDirection: 'column', animation: 'scaleIn 0.25s ease' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #eee' }}>
               <span style={{ fontSize: 16, fontWeight: 700 }}>语音录入 · AI自动拆分</span>
-              <button onClick={() => setShowVoiceInput(false)} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', fontSize: 14 }}>✕</button>
+              <button onClick={() => setShowVoiceInput(false)} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', fontSize: 14 }}>X</button>
             </div>
             <div style={{ padding: 16, flex: 1, overflowY: 'auto' }}>
               {/* 语音按钮 */}
@@ -571,7 +571,7 @@ function ManagePanel({ building, onClose, onUploadDoc, onUploadNotes, onGenerate
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={building.building_pdf ? '#00A6E0' : '#ccc'} strokeWidth="1.5" style={{ margin: '0 auto 8px', display: 'block' }}>
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
             </svg>
-            <div style={{ fontSize: 14, fontWeight: 600, color: building.building_pdf ? '#00A6E0' : '#333' }}>{building.building_pdf ? '楼书已上传 ✓ 自动解析完成' : '上传楼书'}</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: building.building_pdf ? '#00A6E0' : '#333' }}>{building.building_pdf ? '楼书已上传 自动解析完成' : '上传楼书'}</div>
             <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>支持 PDF / Word / PPT / 图片，自动提取参数和卖点</div>
             {building.sales_long_image?.highlights?.length > 0 && (
               <div style={{ marginTop: 10, background: '#E6F7FD', borderRadius: 8, padding: 10, textAlign: 'left' }}>
@@ -600,7 +600,7 @@ function ManagePanel({ building, onClose, onUploadDoc, onUploadNotes, onGenerate
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={building.sales_notes ? '#34C759' : '#ccc'} strokeWidth="1.5" style={{ margin: '0 auto 8px', display: 'block' }}>
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
-            <div style={{ fontSize: 14, fontWeight: 600, color: building.sales_notes ? '#34C759' : '#333' }}>{building.sales_notes ? '笔记已填写 ✓' : '填写销售笔记'}</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: building.sales_notes ? '#34C759' : '#333' }}>{building.sales_notes ? '笔记已填写' : '填写销售笔记'}</div>
             <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>支持文字输入 / 语音录入 / 拍照上传</div>
             <button onClick={onUploadNotes} style={{ marginTop: 10, padding: '8px 20px', borderRadius: 8, border: '1px solid #34C759', background: building.sales_notes ? '#fff' : '#34C759', color: building.sales_notes ? '#34C759' : '#fff', fontSize: 14, cursor: 'pointer' }}>{building.sales_notes ? '编辑笔记' : '开始填写'}</button>
             {building.sales_notes && <div style={{ marginTop: 8, fontSize: 12, color: '#666', textAlign: 'left', background: '#F8F9FB', padding: 10, borderRadius: 6, maxHeight: 80, overflow: 'hidden' }}>{building.sales_notes.slice(0, 100)}...</div>}

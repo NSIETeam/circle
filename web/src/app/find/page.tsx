@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { parseRequirement, summarizeRequirement, type ParsedRequirement } from '../../lib/agent-parser';
 import { initSearchEngine, searchBuildings, type BuildingData } from '../../lib/client-search';
 import { assetUrl } from '../../lib/asset';
+import { isAgent, canSeeCommission, getRole, setRole, getAgentInfo, generateAgentLink, parseReferral } from '../../lib/role';
 
 // 动态导入地图
 const MapContainer = dynamic(() => import('react-leaflet').then(m => m.MapContainer), { ssr: false });
@@ -389,7 +390,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
               </div>
               <span style={{ flex: 1, fontSize: 15, fontWeight: 700, color: '#333' }}>AI选址助手</span>
-              <button onClick={() => setShowAI(false)} style={{ width: 30, height: 30, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#666' }}>✕</button>
+              <button onClick={() => setShowAI(false)} style={{ width: 30, height: 30, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#666' }}>X</button>
             </div>
             {/* 消息区 */}
             <div ref={aiRef} style={{ flex: 1, overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -473,7 +474,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderBottom: '1px solid #f5f5f5', position: 'relative', zIndex: 1000, background: '#fff' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>
-                    {mapPanelMode === 'pick' ? '🗺️ 点击地图选择位置' : mapPanelMode === 'nearby' ? '📍 附近房源' : '房源地图'}
+                    {mapPanelMode === 'pick' ? '点击地图选择位置' : mapPanelMode === 'nearby' ? '附近房源' : '房源地图'}
                   </span>
                   {mapPanelMode !== 'pick' && (
                     <button onClick={handleBackToMyLocation} style={{ display: 'flex', alignItems: 'center', gap: 3, padding: '4px 10px', borderRadius: 6, border: '1px solid #00A6E0', background: '#E6F7FD', color: '#00A6E0', fontSize: 12, cursor: 'pointer', fontWeight: 600 }}>
@@ -482,7 +483,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                     </button>
                   )}
                 </div>
-                <button onClick={() => { setShowMapPanel(false); setSelRegion('不限'); }} style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#666', flexShrink: 0 }}>✕</button>
+                <button onClick={() => { setShowMapPanel(false); setSelRegion('不限'); }} style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, color: '#666', flexShrink: 0 }}>X</button>
               </div>
               <div style={{ height: 300, position: 'relative' }}>
                 <MapContainer center={mapPanelCenter} zoom={mapPanelZoom} style={{ height: '100%', width: '100%' }} zoomControl={true} attributionControl={false} ref={(m: any) => { mapPanelRef.current = m; }}>
@@ -603,6 +604,11 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                   </div>
                 </div>
                 {b.match_reason && <div style={{ fontSize: 12, color: C.primary, marginTop: 4 }}>{b.match_reason}</div>}
+                {/* 主推楼型 + 佣金（经纪人可见） */}
+                <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
+                  {(b as any).main_type && <span style={{ fontSize: 11, color: C.textSub, background: '#F0F2F5', padding: '2px 6px', borderRadius: 3 }}>{(b as any).main_type}</span>}
+                  {canSeeCommission() && (b as any).commission && <span style={{ fontSize: 11, color: '#fff', background: '#FF6B00', padding: '2px 6px', borderRadius: 3, fontWeight: 700 }}>佣金{(b as any).commission}万</span>}
+                </div>
                 {(b as any).commute && (
                   <div style={{ display: 'flex', gap: 8, marginTop: 4, fontSize: 11, color: C.textMuted }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -707,7 +713,7 @@ function ReportModal({ building, onClose }: { building: Building; onClose: () =>
       <div onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: 380, background: '#fff', borderRadius: 12, overflow: 'hidden', animation: 'scaleIn 0.25s ease' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #eee' }}>
           <span style={{ fontSize: 16, fontWeight: 700 }}>举报房源</span>
-          <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', fontSize: 14, color: '#666' }}>✕</button>
+          <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', fontSize: 14, color: '#666' }}>X</button>
         </div>
         <div style={{ padding: 16 }}>
           <div style={{ fontSize: 13, color: '#999', marginBottom: 8 }}>举报对象：{building.name}</div>
@@ -727,7 +733,7 @@ function ReportModal({ building, onClose }: { building: Building; onClose: () =>
 
 // ===== 详情弹窗 =====
 function DetailModal({ building, onClose }: { building: Building; onClose: () => void }) {
-  const [tab, setTab] = useState<'info' | 'params' | 'facilities'>('info');
+  const [tab, setTab] = useState<'info' | 'params' | 'facilities' | 'policy' | 'compare'>('info');
   const [showChat, setShowChat] = useState(false);
   const [showReport, setShowReport] = useState(false);
   return (
@@ -751,7 +757,7 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
         </div>
         {/* Tab */}
         <div style={{ display: 'flex', borderBottom: '1px solid #eee' }}>
-          {[{ k: 'info', l: '基本信息' }, { k: 'params', l: '空间参数' }, { k: 'facilities', l: '配套设施' }].map(t => (
+          {[{ k: 'info', l: '基本信息' }, { k: 'params', l: '空间参数' }, { k: 'facilities', l: '配套设施' }, { k: 'policy', l: '政策&周边' }, { k: 'compare', l: '附近对比' }].map(t => (
             <button key={t.k} onClick={() => setTab(t.k as any)} style={{ flex: 1, padding: '10px', border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 14, fontWeight: tab === t.k ? 600 : 400, color: tab === t.k ? C.primary : '#999', borderBottom: tab === t.k ? `2px solid ${C.primary}` : '2px solid transparent' }}>{t.l}</button>
           ))}
         </div>
@@ -760,10 +766,41 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
           {tab === 'info' && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>{[['区域', building.region], ['面积', `${building.total_area?.toLocaleString()}㎡`], ['评分', `${building.park_rating || '-'}/5`], ['入驻', `${building.tenant_count}家`], ['租金', `${Number(building.rent_min).toFixed(1)}~${Number(building.rent_max).toFixed(1)}元`], ['产业', (building.industry_tags || []).join('、') || '-']].map(([l, v]) => <div key={l}><div style={{ fontSize: 12, color: '#999' }}>{l}</div><div style={{ fontSize: 15, fontWeight: 600, color: '#333', marginTop: 2 }}>{v}</div></div>)}{building.match_reason && <div style={{ gridColumn: '1/3', padding: 10, background: C.primaryLight, borderRadius: 6, fontSize: 13, color: C.primary }}>{building.match_reason}</div>}</div>}
           {tab === 'params' && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>{[['层高', `${building.floor_height}m`], ['承重', `${building.floor_load}T/㎡`], ['电力', `${building.power_capacity || '-'}KVA`], ['面积', `${building.total_area?.toLocaleString()}㎡`], ['租金', `${Number(building.rent_min).toFixed(1)}~${Number(building.rent_max).toFixed(1)}元`], ['园区', building.park_name]].map(([l, v]) => <div key={l} style={{ background: '#F8F9FB', borderRadius: 8, padding: 12 }}><div style={{ fontSize: 12, color: '#999' }}>{l}</div><div style={{ fontSize: 16, fontWeight: 700, color: '#333', marginTop: 4 }}>{v}</div></div>)}</div>}
           {tab === 'facilities' && <div>{building.amenities?.length ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{building.amenities.map((a, i) => <span key={i} style={{ fontSize: 13, color: '#333', background: '#F5F5F5', padding: '6px 14px', borderRadius: 999 }}>{a}</span>)}</div> : <div style={{ color: '#999', textAlign: 'center', padding: 20 }}>暂无配套信息</div>}</div>}
+        {/* 政策&周边 */}
+        {tab === 'policy' && (
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#333', marginBottom: 10 }}>入驻政策</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
+              {((building as any).policy || []).map((p: string, i: number) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 10, background: '#F8F9FB', borderRadius: 8 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+                  <span style={{ fontSize: 14, color: '#333' }}>{p}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#333', marginBottom: 10 }}>周边配套</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {((building as any).surrounding || []).map((s: string, i: number) => (
+                <span key={i} style={{ fontSize: 13, color: '#666', background: '#F5F5F5', padding: '6px 14px', borderRadius: 999 }}>{s}</span>
+              ))}
+            </div>
+            {/* 佣金信息 — 仅经纪人可见 */}
+            {canSeeCommission() && (building as any).commission && (
+              <div style={{ marginTop: 20, padding: 12, background: '#FFF8E5', borderRadius: 8, border: '1px solid #FFE0B2' }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#FF6B00' }}>佣金信息（仅经纪人可见）</div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: '#FF6B00', marginTop: 4 }}>{(building as any).commission}万元</div>
+                <div style={{ fontSize: 12, color: '#999' }}>{(building as any).commission_rate || '1个月租金'}</div>
+              </div>
+            )}
+          </div>
+        )}
+        {/* 附近对比 */}
+        {tab === 'compare' && <NearbyCompare building={building} />}
         </div>
         {/* 底部按钮 */}
         <div style={{ display: 'flex', gap: 10, padding: '12px 20px', borderTop: '1px solid #eee' }}>
           <button onClick={() => setShowChat(true)} style={{ flex: 2, height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>咨询招商</button>
+          {canSeeCommission() && <button onClick={() => { const link = generateAgentLink(building.id); navigator.clipboard.writeText(link); alert('专属链接已复制，分享给客户即可锁定归属'); }} style={{ flex: 1, height: 44, borderRadius: 8, border: 'none', background: '#FF6B00', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>分享赚佣金</button>}
           <button onClick={() => setShowReport(true)} style={{ flex: 1, height: 44, borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#999', fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
             举报
@@ -945,7 +982,7 @@ function LeadFormModal({ onClose }: { onClose: () => void }) {
           <>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #eee' }}>
               <span style={{ fontSize: 16, fontWeight: 700 }}>提交选址需求</span>
-              <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', fontSize: 14 }}>✕</button>
+              <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', fontSize: 14 }}>X</button>
             </div>
             <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
               <input value={name} onChange={e => setName(e.target.value)} style={{ height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none' }} placeholder="姓名 *" />
@@ -958,6 +995,84 @@ function LeadFormModal({ onClose }: { onClose: () => void }) {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+// ===== 附近产业园对比 =====
+function NearbyCompare({ building }: { building: any }) {
+  const [nearby, setNearby] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(assetUrl('/data/buildings.json'))
+      .then(r => r.json())
+      .then(data => {
+        const others = data.filter((b: any) => b.id !== building.id);
+        // 找距离最近的5个
+        const withDist = others.map((b: any) => {
+          const dist = Math.sqrt(Math.pow((b.latitude - building.latitude) * 111, 2) + Math.pow((b.longitude - building.longitude) * 111, 2));
+          return { ...b, distance: Math.round(dist) };
+        }).sort((a: any, b: any) => a.distance - b.distance).slice(0, 5);
+        setNearby(withDist);
+        setLoading(false);
+      });
+  }, [building.id]);
+
+  if (loading) return <div style={{ padding: 20, textAlign: 'center', color: '#999', fontSize: 14 }}>加载中...</div>;
+  if (nearby.length === 0) return <div style={{ padding: 20, textAlign: 'center', color: '#999', fontSize: 14 }}>暂无附近园区数据</div>;
+
+  return (
+    <div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: '#333', marginBottom: 12 }}>附近产业园性价比对比</div>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+          <thead>
+            <tr style={{ background: '#F8F9FB' }}>
+              <th style={{ padding: '8px 10px', textAlign: 'left', fontWeight: 600, color: '#666', borderBottom: '1px solid #eee' }}>园区</th>
+              <th style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 600, color: '#666', borderBottom: '1px solid #eee' }}>距离</th>
+              <th style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 600, color: '#666', borderBottom: '1px solid #eee' }}>面积</th>
+              <th style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 600, color: '#666', borderBottom: '1px solid #eee' }}>租金</th>
+              <th style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 600, color: '#666', borderBottom: '1px solid #eee' }}>层高</th>
+              <th style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 600, color: '#666', borderBottom: '1px solid #eee' }}>承重</th>
+              <th style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 600, color: '#666', borderBottom: '1px solid #eee' }}>评分</th>
+              <th style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 600, color: '#666', borderBottom: '1px solid #eee' }}>性价比</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* 当前楼盘 */}
+            <tr style={{ background: '#E6F7FD' }}>
+              <td style={{ padding: '8px 10px', fontWeight: 700, color: '#00A6E0', borderBottom: '1px solid #eee' }}>{building.name}（当前）</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#666', borderBottom: '1px solid #eee' }}>—</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#666', borderBottom: '1px solid #eee' }}>{building.total_area?.toLocaleString()}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#FF6B00', fontWeight: 700, borderBottom: '1px solid #eee' }}>{Number(building.rent_min).toFixed(1)}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#666', borderBottom: '1px solid #eee' }}>{building.floor_height}m</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#666', borderBottom: '1px solid #eee' }}>{building.floor_load}T</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#666', borderBottom: '1px solid #eee' }}>{building.park_rating || '-'}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 700, color: '#00A6E0', borderBottom: '1px solid #eee' }}>基准</td>
+            </tr>
+            {/* 附近楼盘 */}
+            {nearby.map((b, i) => {
+              // 性价比计算：租金越低+配套越多+评分越高 = 越好
+              const valueScore = Math.round(100 - b.rent_min * 15 + (b.amenities?.length || 0) * 2 + (b.park_rating || 3) * 3);
+              const isBetter = valueScore > Math.round(100 - building.rent_min * 15 + (building.amenities?.length || 0) * 2 + (building.park_rating || 3) * 3);
+              return (
+                <tr key={b.id}>
+                  <td style={{ padding: '8px 10px', color: '#333', borderBottom: '1px solid #f5f5f5' }}>{b.name}</td>
+                  <td style={{ padding: '8px 10px', textAlign: 'center', color: '#999', borderBottom: '1px solid #f5f5f5' }}>{b.distance}km</td>
+                  <td style={{ padding: '8px 10px', textAlign: 'center', color: '#666', borderBottom: '1px solid #f5f5f5' }}>{b.total_area?.toLocaleString()}</td>
+                  <td style={{ padding: '8px 10px', textAlign: 'center', color: b.rent_min < building.rent_min ? '#34C759' : '#FF3B30', fontWeight: 600, borderBottom: '1px solid #f5f5f5' }}>{Number(b.rent_min).toFixed(1)}</td>
+                  <td style={{ padding: '8px 10px', textAlign: 'center', color: '#666', borderBottom: '1px solid #f5f5f5' }}>{b.floor_height}m</td>
+                  <td style={{ padding: '8px 10px', textAlign: 'center', color: '#666', borderBottom: '1px solid #f5f5f5' }}>{b.floor_load}T</td>
+                  <td style={{ padding: '8px 10px', textAlign: 'center', color: '#666', borderBottom: '1px solid #f5f5f5' }}>{b.park_rating || '-'}</td>
+                  <td style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 700, color: isBetter ? '#34C759' : '#999', borderBottom: '1px solid #f5f5f5' }}>{isBetter ? '更优' : '相近'}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ marginTop: 12, fontSize: 12, color: '#999' }}>绿色租金=比当前更便宜，绿色性价比=综合更优</div>
     </div>
   );
 }

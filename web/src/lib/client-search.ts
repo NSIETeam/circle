@@ -23,6 +23,12 @@ export interface BuildingData {
   amenities: string[];
   latitude: number;
   longitude: number;
+  // 会议纪要新增字段
+  commission?: number;        // 佣金（万元）
+  commission_rate?: string;   // 佣金费率
+  policy?: string[];          // 入驻政策
+  surrounding?: string[];     // 周边设施
+  main_type?: string;         // 主推楼型
 }
 
 const DICT = new Set<string>([

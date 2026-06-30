@@ -1,33 +1,34 @@
 'use client';
 
 import React, { useState } from 'react';
+import { SvgIcon } from '../lib/icons';
 
 const C = { primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F6FA', text: '#333', textSub: '#666', textMuted: '#999' };
 
 const FEATURES = [
-  { icon: '🏢', label: 'AI选址', desc: '智能匹配厂房', path: '/find' },
-  { icon: '🏷️', label: '限时优惠', desc: '特价免租房源', path: '/promotions' },
-  { icon: '📊', label: '成功案例', desc: '入驻企业故事', path: '/cases' },
-  { icon: '👥', label: '经纪人合作', desc: '优先获客线索', path: '/agent-coop' },
-  { icon: '🏢', label: '发布房源', desc: '上架产业园', path: '/list-building' },
-  { icon: '🔧', label: '销售端', desc: '管理房源线索', path: '/sales' },
-  { icon: '📋', label: 'AI诊断', desc: '企业成熟度评估', path: '/assessment' },
-  { icon: '🗺️', label: '地图找房', desc: '地图选点定位', path: '/find' },
+  { icon: 'ai', label: 'AI选址', desc: '智能匹配厂房', path: '/find' },
+  { icon: 'tag', label: '限时优惠', desc: '特价免租房源', path: '/promotions' },
+  { icon: 'chart', label: '成功案例', desc: '入驻企业故事', path: '/cases' },
+  { icon: 'users', label: '经纪人合作', desc: '优先获客线索', path: '/agent-coop' },
+  { icon: 'building', label: '发布房源', desc: '上架产业园', path: '/list-building' },
+  { icon: 'wrench', label: '销售端', desc: '管理房源线索', path: '/sales' },
+  { icon: 'clipboard', label: 'AI诊断', desc: '企业成熟度评估', path: '/assessment' },
+  { icon: 'map', label: '地图找房', desc: '地图选点定位', path: '/find' },
 ];
 
 const SERVICES = [
-  { icon: '🍱', label: '订餐', desc: '园区食堂+外卖' },
-  { icon: '🖨️', label: '文印', desc: '打印复印装订' },
-  { icon: '⚖️', label: '法务', desc: '合同审查咨询' },
-  { icon: '🔨', label: '装修', desc: '厂房办公装修' },
-  { icon: '📎', label: '办公用品', desc: '采购配送' },
-  { icon: '🚚', label: '物流', desc: '货运仓储' },
-  { icon: '💼', label: '工商注册', desc: '公司注册变更' },
-  { icon: '💰', label: '财税', desc: '代理记账报税' },
-  { icon: '🧪', label: '检测认证', desc: '环评消防认证' },
-  { icon: '📡', label: '网络宽带', desc: '企业专线接入' },
-  { icon: '🔋', label: '电力增容', desc: '配电改造' },
-  { icon: '🅿️', label: '停车', desc: '月卡临停' },
+  { icon: 'food', label: '订餐', desc: '园区食堂+外卖' },
+  { icon: 'print', label: '文印', desc: '打印复印装订' },
+  { icon: 'law', label: '法务', desc: '合同审查咨询' },
+  { icon: 'hammer', label: '装修', desc: '厂房办公装修' },
+  { icon: 'clip', label: '办公用品', desc: '采购配送' },
+  { icon: 'truck', label: '物流', desc: '货运仓储' },
+  { icon: 'briefcase', label: '工商注册', desc: '公司注册变更' },
+  { icon: 'money', label: '财税', desc: '代理记账报税' },
+  { icon: 'flask', label: '检测认证', desc: '环评消防认证' },
+  { icon: 'wifi', label: '网络宽带', desc: '企业专线接入' },
+  { icon: 'battery', label: '电力增容', desc: '配电改造' },
+  { icon: 'car', label: '停车', desc: '月卡临停' },
 ];
 
 export default function HomePage() {
@@ -76,7 +77,7 @@ export default function HomePage() {
           {FEATURES.map(f => (
             <button key={f.label} onClick={() => go(f.path)} style={{ background: '#fff', borderRadius: 12, padding: 20, border: '1px solid #f0f0f0', cursor: 'pointer', textAlign: 'left', transition: 'box-shadow 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,166,224,0.1)'} onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}>
-              <div style={{ fontSize: 28, marginBottom: 8 }}>{f.icon}</div>
+              <div style={{ marginBottom: 8 }}><SvgIcon name={f.icon} size={28} /></div>
               <div style={{ fontSize: 15, fontWeight: 700, color: C.text }}>{f.label}</div>
               <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{f.desc}</div>
             </button>
@@ -90,7 +91,7 @@ export default function HomePage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 10 }}>
           {SERVICES.map(s => (
             <div key={s.label} style={{ background: '#fff', borderRadius: 10, padding: 16, border: '1px solid #f0f0f0', textAlign: 'center' }}>
-              <div style={{ fontSize: 24, marginBottom: 6 }}>{s.icon}</div>
+              <div style={{ marginBottom: 6 }}><SvgIcon name={s.icon} size={24} /></div>
               <div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{s.label}</div>
               <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{s.desc}</div>
             </div>

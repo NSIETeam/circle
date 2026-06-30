@@ -4,6 +4,15 @@ import React from 'react';
 
 const C = { primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F6FA', text: '#333', textSub: '#666', textMuted: '#999' };
 
+const ICON_PATHS: Record<string, string> = {
+  target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  building: '<path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/>',
+  clipboard: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/>',
+  chart: '<path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="5"/><rect x="12" y="9" width="3" height="9"/><rect x="17" y="5" width="3" height="13"/>',
+  tag: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+  users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',
+};
+
 export default function AgentCoopPage() {
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
@@ -24,15 +33,17 @@ export default function AgentCoopPage() {
         <div style={{ fontSize: 18, fontWeight: 700, color: C.text, marginBottom: 16 }}>主理经纪人权益</div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12, marginBottom: 32 }}>
           {[
-            { icon: '🎯', title: '园区线索优先分配', desc: '平台企业客户线索优先分发给园区主理经纪人' },
-            { icon: '⭐', title: '园区详情页优先展示', desc: '头像和联系方式在园区详情页置顶展示' },
-            { icon: '📝', title: '房源维护权限', desc: '可更新园区房源状态、价格和图片' },
-            { icon: '❓', title: '园区问答维护', desc: '可回答客户关于园区的常见问题' },
-            { icon: '📊', title: '案例发布权限', desc: '可发布带看和成交案例，提升专业形象' },
-            { icon: '✅', title: '平台认证标识', desc: '获得园圈平台认证经纪人标识' },
+            { icon: 'target', title: '园区线索优先分配', desc: '平台企业客户线索优先分发给园区主理经纪人' },
+            { icon: 'building', title: '房源维护权限', desc: '可更新园区房源状态、价格和图片' },
+            { icon: 'clipboard', title: '园区问答维护', desc: '可回答客户关于园区的常见问题' },
+            { icon: 'chart', title: '案例发布权限', desc: '可发布带看和成交案例，提升专业形象' },
+            { icon: 'tag', title: '平台认证标识', desc: '获得园圈平台认证经纪人标识' },
+            { icon: 'users', title: '优惠活动优先权', desc: '参与限时优惠活动，获取更多客户咨询' },
           ].map((b, i) => (
             <div key={i} style={{ background: '#fff', borderRadius: 10, padding: 16, border: '1px solid #f0f0f0' }}>
-              <div style={{ fontSize: 24, marginBottom: 8 }}>{b.icon}</div>
+              <div style={{ width: 40, height: 40, borderRadius: 8, background: '#E6F7FD', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: ICON_PATHS[b.icon] || '' }} />
+              </div>
               <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 4 }}>{b.title}</div>
               <div style={{ fontSize: 13, color: C.textSub, lineHeight: 1.5 }}>{b.desc}</div>
             </div>
