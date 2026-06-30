@@ -474,7 +474,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                   )}
                   {/* 选点位置（自选模式） */}
                   {mapPanelMode === 'pick' && pickLocation && (
-                    <CircleMarker center={[pickLocation.lat, pickLocation.lng]} radius={8} pathOptions={{ color: '#FF6B00', fillColor: '#FF6B00', fillOpacity: 0.8 }} />
+                    <CircleMarker center={[pickLocation.lat, pickLocation.lng]} radius={8} pathOptions={{ color: '#00A6E0', fillColor: '#00A6E0', fillOpacity: 0.8 }} />
                   )}
                   {/* 房源光点 */}
                   {list.filter(b => b.latitude && b.longitude).map(b => (
@@ -805,11 +805,9 @@ function MapPicker({ onConfirm, onClose }: { onConfirm: (lat: number, lng: numbe
   };
 
   // 点击地图选点
-  const ClickHandler = () => {
-    const useMapEvents = mapComponents.useMapEvents;
-    if (!useMapEvents) return null;
-    return <MapPickerClickInner useMapEvents={useMapEvents} onPick={(lat: number, lng: number) => { setMarker({ lat, lng }); setAddress(`(${lat.toFixed(4)}, ${lng.toFixed(4)})`); }} />;
-  };
+  const ClickHandler = mapComponents.useMapEvents
+    ? () => <MapPickerClickInner useMapEvents={mapComponents.useMapEvents} onPick={(lat: number, lng: number) => { setMarker({ lat, lng }); setAddress(`(${lat.toFixed(4)}, ${lng.toFixed(4)})`); }} />
+    : () => null;
 
   const { MapContainer: MC, TileLayer: TL, CircleMarker: CM } = mapComponents;
 

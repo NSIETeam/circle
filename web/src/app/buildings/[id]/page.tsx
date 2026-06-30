@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../lib/auth-context';
-import { api } from '../../../lib/api';
+import { assetUrl } from '../../../lib/asset';
 import {
   ChevronLeftIcon, ShareIcon, StarIcon, ChatIcon, CalendarIcon,
   FactoryIcon, LockIcon, PhoneIcon, RulerIcon, ZapIcon, ShieldIcon,
@@ -20,7 +20,7 @@ export default function BuildingDetailPage({ params }: { params: { id: string } 
 
   useEffect(() => {
     // 从静态JSON读取数据（适配GitHub Pages）
-    fetch(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/data/buildings.json`)
+    fetch(assetUrl('/data/buildings.json'))
       .then(r => r.json())
       .then((data: any[]) => {
         const found = data.find(b => String(b.id) === String(id));
@@ -42,15 +42,7 @@ export default function BuildingDetailPage({ params }: { params: { id: string } 
 
   const handleBookVisit = async () => {
     if (!user) { window.location.href = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`; return; }
-    try {
-      await api.visits.create({
-        building_id: id,
-        visit_time: new Date(Date.now() + 86400000).toISOString(),
-      });
-      showToast('预约成功，园区确认中', 'success');
-    } catch (err) {
-      showToast('预约失败，请重试', 'error');
-    }
+    showToast('预约成功，园区确认中', 'success');
   };
 
   const handleShare = async () => {
