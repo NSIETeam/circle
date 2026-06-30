@@ -2,11 +2,17 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { assetUrl } from '../../lib/asset';
+import { extractRequirement, hasApiKey } from '../../lib/deepseek';
 
 const C = {
   primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F5F5', card: '#fff',
   text: '#333', textSub: '#666', textMuted: '#999', border: '#eee', price: '#00A6E0',
 };
+
+function fieldLabel(key: string): string {
+  const map: Record<string, string> = { industry: '产业', area: '面积(㎡)', load: '承重(T)', height: '层高(m)', power: '电力(KVA)', rent_min: '最低租金', rent_max: '最高租金', region: '区域', space_type: '空间类型', special: '特殊需求' };
+  return map[key] || key;
+}
 
 interface SalesBuilding {
   id: string;
@@ -42,6 +48,11 @@ export default function SalesPage() {
   const [historyItems, setHistoryItems] = useState<any[]>([]);
   const [rejectReason, setRejectReason] = useState('');
   const [rejectTarget, setRejectTarget] = useState<any>(null);
+  const [showVoiceInput, setShowVoiceInput] = useState(false);
+  const [voiceText, setVoiceText] = useState('');
+  const [parsing, setParsing] = useState(false);
+  const [parsedResult, setParsedResult] = useState<any>(null);
+  const recognitionRef = useRef<any>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -79,6 +90,99 @@ export default function SalesPage() {
     setHistoryItems(hist);
     setRejectTarget(null);
     setRejectReason('');
+  };
+
+  // 语音录入
+  const handleVoiceStart = () => {
+    if (!('webkitSpeechRecognition' in window)) {
+      // 不支持语音 → 手动输入
+      setShowVoiceInput(true);
+      return;
+    }
+    const rec = new (window as any).webkitSpeechRecognition();
+    rec.lang = 'zh-CN'; rec.continuous = true; rec.interimResults = true;
+    rec.onresult = (e: any) => {
+      let text = '';
+      for (let i = 0; i < e.results.length; i++) text += e.results[i][0].transcript;
+      setVoiceText(text);
+    };
+    rec.onend = () => setShowVoiceInput(true);
+    recognitionRef.current = rec;
+    rec.start();
+  };
+
+  // DeepSeek自动拆分语音文本 → 生成楼盘信息
+  const handleParseVoice = async () => {
+    if (!voiceText.trim()) return;
+    setParsing(true);
+    try {
+      // 优先用DeepSeek提取，降级用本地解析
+      let result: any = null;
+      if (hasApiKey()) {
+        result = await extractRequirement(voiceText);
+      }
+      if (!result || Object.keys(result).length === 0) {
+        // 本地降级解析
+        result = localParse(voiceText);
+      }
+      setParsedResult(result);
+    } catch {
+      setParsedResult(localParse(voiceText));
+    } finally {
+      setParsing(false);
+    }
+  };
+
+  // 本地降级解析
+  const localParse = (text: string): any => {
+    const result: any = { special: [] };
+    const industries = ['AI', '生物医药', '智能制造', '集成电路', '新能源', '新材料', '电子信息', '航空航天'];
+    const found = industries.find(ind => text.includes(ind));
+    if (found) result.industry = found;
+    const areaMatch = text.match(/(\d+\.?\d*)\s*万?\s*(?:平|㎡|平米|平方)/);
+    if (areaMatch) result.area = text.includes('万') ? parseFloat(areaMatch[1]) * 10000 : parseFloat(areaMatch[1]);
+    const loadMatch = text.match(/(?:承重|荷载)[^\d]*?(\d+\.?\d*)\s*(?:吨|t|T)/);
+    if (loadMatch) result.load = parseFloat(loadMatch[1]);
+    const heightMatch = text.match(/(?:层高|净高)[^\d]*?(\d+\.?\d*)\s*(?:米|m)/);
+    if (heightMatch) result.height = parseFloat(heightMatch[1]);
+    const powerMatch = text.match(/(\d+\.?\d*)\s*(?:kva|KVA|kw|KW)/i);
+    if (powerMatch) result.power = parseFloat(powerMatch[1]);
+    const rentMatch = text.match(/(\d+\.?\d*)\s*[-~]\s*(\d+\.?\d*)\s*元/);
+    if (rentMatch) { result.rent_min = parseFloat(rentMatch[1]); result.rent_max = parseFloat(rentMatch[2]); }
+    const regions = ['大兴区', '昌平区', '顺义区', '经开区', '朝阳区', '海淀区', '丰台区', '通州区'];
+    const region = regions.find(r => text.includes(r));
+    if (region) result.region = region;
+    if (text.includes('注册')) result.special.push('需注册地');
+    if (text.includes('洁净') || text.includes('GMP')) result.special.push('需洁净室');
+    if (text.includes('排污') || text.includes('环评')) result.special.push('需环评');
+    if (text.includes('独栋')) result.special.push('需独栋');
+    if (text.includes('行车') || text.includes('天车')) result.special.push('需行车');
+    return result;
+  };
+
+  // 应用解析结果到选中房源
+  const applyParsedToBuilding = () => {
+    if (!selected || !parsedResult) return;
+    const updated = buildings.map(b => {
+      if (b.id !== selected.id) return b;
+      const newB = { ...b };
+      if (parsedResult.area) newB.total_area = parsedResult.area;
+      if (parsedResult.height) newB.floor_height = parsedResult.height;
+      if (parsedResult.load) newB.floor_load = parsedResult.load;
+      if (parsedResult.power) newB.power_capacity = parsedResult.power;
+      if (parsedResult.rent_min) newB.rent_min = parsedResult.rent_min;
+      if (parsedResult.rent_max) newB.rent_max = parsedResult.rent_max;
+      if (parsedResult.industry && !newB.industry_tags?.includes(parsedResult.industry)) {
+        newB.industry_tags = [...(newB.industry_tags || []), parsedResult.industry];
+      }
+      return newB;
+    });
+    setBuildings(updated);
+    const newSel = updated.find(b => b.id === selected.id);
+    if (newSel) setSelected(newSel);
+    setShowVoiceInput(false);
+    setVoiceText('');
+    setParsedResult(null);
   };
 
   // 上传楼书 — 支持PDF/Word/PPT/图片，自动解析
@@ -364,6 +468,7 @@ export default function SalesPage() {
           onUploadDoc={() => { setUploadType('pdf'); setShowUpload(true); fileRef.current?.click(); }}
           onUploadNotes={() => { setUploadType('notes'); setNotesText(selected.sales_notes || ''); setShowUpload(true); }}
           onGenerate={() => generateLongImage(selected)}
+          onVoiceInput={() => { setShowVoiceInput(true); setVoiceText(''); setParsedResult(null); handleVoiceStart(); }}
         />
       )}
 
@@ -393,14 +498,57 @@ export default function SalesPage() {
           </div>
         </div>
       )}
+      {/* 语音录入弹窗 */}
+      {showVoiceInput && (
+        <div onClick={() => setShowVoiceInput(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: 500, maxHeight: '80vh', background: '#fff', borderRadius: 12, overflow: 'hidden', display: 'flex', flexDirection: 'column', animation: 'scaleIn 0.25s ease' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #eee' }}>
+              <span style={{ fontSize: 16, fontWeight: 700 }}>语音录入 · AI自动拆分</span>
+              <button onClick={() => setShowVoiceInput(false)} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', fontSize: 14 }}>✕</button>
+            </div>
+            <div style={{ padding: 16, flex: 1, overflowY: 'auto' }}>
+              {/* 语音按钮 */}
+              <div style={{ textAlign: 'center', marginBottom: 16 }}>
+                <button onClick={handleVoiceStart} style={{ width: 64, height: 64, borderRadius: '50%', border: 'none', background: '#00A6E0', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
+                </button>
+                <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>点击说话，描述楼盘信息</div>
+              </div>
+              {/* 识别文本 */}
+              <textarea value={voiceText} onChange={e => setVoiceText(e.target.value)} placeholder="语音识别文本会显示在这里，也可以手动编辑..." style={{ width: '100%', minHeight: 100, padding: 10, border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', resize: 'vertical', fontFamily: 'inherit', marginBottom: 12 }} />
+              {/* 解析按钮 */}
+              <button onClick={handleParseVoice} disabled={!voiceText.trim() || parsing} style={{ width: '100%', height: 40, borderRadius: 8, border: 'none', background: voiceText.trim() && !parsing ? '#00A6E0' : '#ccc', color: '#fff', fontSize: 14, fontWeight: 600, cursor: voiceText.trim() && !parsing ? 'pointer' : 'default' }}>
+                {parsing ? 'AI解析中...' : hasApiKey() ? 'DeepSeek智能解析' : '本地规则解析'}
+              </button>
+              {/* 解析结果 */}
+              {parsedResult && (
+                <div style={{ marginTop: 12, background: '#E6F7FD', borderRadius: 8, padding: 12 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#00A6E0', marginBottom: 8 }}>AI解析结果：</div>
+                  {Object.entries(parsedResult).map(([k, v]: [string, any]) => (
+                    <div key={k} style={{ display: 'flex', gap: 8, fontSize: 13, marginBottom: 4 }}>
+                      <span style={{ color: '#666', minWidth: 70 }}>{fieldLabel(k)}:</span>
+                      <span style={{ color: '#333', fontWeight: 600 }}>{Array.isArray(v) ? v.join('、') : String(v)}</span>
+                    </div>
+                  ))}
+                  <button onClick={applyParsedToBuilding} style={{ width: '100%', height: 38, borderRadius: 8, border: 'none', background: '#34C759', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer', marginTop: 10 }}>应用到此房源</button>
+                </div>
+              )}
+              {/* 提示 */}
+              <div style={{ marginTop: 12, fontSize: 12, color: '#999', textAlign: 'center' }}>
+                示例："这个厂房在大兴区，做生物医药的，面积3000平米，层高6米，承重5吨，电力2000KVA，租金1.5到2块，需要GMP车间和排污"
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 // ===== 管理面板 =====
-function ManagePanel({ building, onClose, onUploadDoc, onUploadNotes, onGenerate }: {
+function ManagePanel({ building, onClose, onUploadDoc, onUploadNotes, onGenerate, onVoiceInput }: {
   building: SalesBuilding; onClose: () => void;
-  onUploadDoc: () => void; onUploadNotes: () => void; onGenerate: () => void;
+  onUploadDoc: () => void; onUploadNotes: () => void; onGenerate: () => void; onVoiceInput: () => void;
 }) {
   return (
     <>
@@ -434,6 +582,17 @@ function ManagePanel({ building, onClose, onUploadDoc, onUploadNotes, onGenerate
               </div>
             )}
             <button onClick={onUploadDoc} style={{ marginTop: 10, padding: '8px 20px', borderRadius: 8, border: '1px solid #00A6E0', background: building.building_pdf ? '#fff' : '#00A6E0', color: building.building_pdf ? '#00A6E0' : '#fff', fontSize: 14, cursor: 'pointer' }}>{building.building_pdf ? '重新上传' : '选择文件'}</button>
+          </div>
+
+          {/* 语音录入 — DeepSeek自动拆分 */}
+          <div style={{ border: '1px dashed #00A6E0', borderRadius: 10, padding: 20, textAlign: 'center', background: '#E6F7FD' }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="1.5" style={{ margin: '0 auto 8px', display: 'block' }}><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>
+            <div style={{ fontSize: 14, fontWeight: 600, color: '#00A6E0' }}>语音录入 · AI自动拆分</div>
+            <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>说一段话描述楼盘，DeepSeek自动提取参数</div>
+            <button onClick={onVoiceInput} style={{ marginTop: 10, padding: '8px 20px', borderRadius: 8, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, margin: '10px auto 0' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
+              开始语音录入
+            </button>
           </div>
 
           {/* 销售笔记 — 文字/语音/图片 */}

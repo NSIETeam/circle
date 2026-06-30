@@ -218,3 +218,75 @@ export function getBuildingById(id: string): BuildingData | undefined {
 export function getAllBuildings(): BuildingData[] {
   return buildings;
 }
+
+/**
+ * 性价比推荐算法
+ * 当多个楼盘地理位置相近且基本参数类似时，推荐综合性价比最高的
+ */
+export function recommendBestValue(candidates: BuildingData[], topK = 5): { building: BuildingData; score: number; reason: string }[] {
+  if (candidates.length === 0) return [];
+
+  const scored = candidates.map(b => {
+    let score = 50;
+    const reasons: string[] = [];
+
+    // 1. 租金性价比（越低越好，但不能太离谱）
+    const rentAvg = (b.rent_min + b.rent_max) / 2;
+    if (rentAvg <= 1.0) { score += 15; reasons.push('租金优势明显'); }
+    else if (rentAvg <= 1.5) { score += 10; reasons.push('租金合理'); }
+    else if (rentAvg <= 2.0) { score += 5; }
+    else { score -= 5; }
+
+    // 2. 配套设施完善度
+    const amenityCount = (b.amenities || []).length;
+    if (amenityCount >= 8) { score += 12; reasons.push(`配套完善(${amenityCount}项)`); }
+    else if (amenityCount >= 5) { score += 8; }
+    else if (amenityCount >= 3) { score += 4; }
+
+    // 3. 园区评分
+    const rating = b.park_rating || 3;
+    if (rating >= 4.5) { score += 10; reasons.push(`园区评分${rating}优秀`); }
+    else if (rating >= 4.0) { score += 6; }
+    else if (rating >= 3.5) { score += 3; }
+
+    // 4. 空间灵活性（面积大可分割）
+    if (b.total_area >= 5000) { score += 8; reasons.push('面积大可灵活分割'); }
+    else if (b.total_area >= 2000) { score += 4; }
+
+    // 5. 硬件参数（层高/承重/电力综合）
+    let hardwareScore = 0;
+    if (b.floor_height >= 6) hardwareScore += 3;
+    if (b.floor_load >= 3) hardwareScore += 3;
+    if (b.power_capacity >= 2000) hardwareScore += 3;
+    score += hardwareScore;
+    if (hardwareScore === 9) reasons.push('硬件参数全面优秀');
+
+    // 6. 入驻企业数（生态成熟度）
+    if (b.tenant_count >= 200) { score += 6; reasons.push(`入驻${b.tenant_count}家，生态成熟`); }
+    else if (b.tenant_count >= 100) { score += 3; }
+
+    // 7. 推荐房源加分
+    if (b.is_featured) { score += 4; reasons.push('平台精选房源'); }
+
+    score = Math.max(1, Math.min(100, Math.round(score)));
+    return { building: b, score, reason: reasons.join('；') || '综合条件均衡' };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, topK);
+}
+
+/**
+ * 找到地理位置相近的楼盘并推荐性价比最高的
+ */
+export function findNearbyBest(b: BuildingData[], target: BuildingData, radius = 20): BuildingData[] {
+  const nearby = b.filter(item => {
+    if (item.id === target.id) return false;
+    const dist = Math.sqrt(
+      Math.pow((item.latitude - target.latitude) * 111, 2) +
+      Math.pow((item.longitude - target.longitude) * 111, 2)
+    );
+    return dist <= radius;
+  });
+  return nearby;
+}
