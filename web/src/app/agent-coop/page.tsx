@@ -2,16 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { assetUrl } from '../../lib/asset';
-import { isAgent, getAgentInfo, setAgentInfo, generateAgentLink, generateShareCard } from '../../lib/role';
+import { useRole, agentLink as genLink, shareCard as genCard } from '../../lib/role-context';
 
 const C = { primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F6FA', text: '#333', textSub: '#666', textMuted: '#999', orange: '#FF6B00' };
 
 export default function AgentCoopPage() {
+  const { isAgent, setRole, agentInfo, setAgentInfo } = useRole();
   const [buildings, setBuildings] = useState<any[]>([]);
   const [filtered, setFiltered] = useState<any[]>([]);
   const [selIndustry, setSelIndustry] = useState('');
   const [selSort, setSelSort] = useState<'commission' | 'price' | 'rating'>('commission');
-  const [showLogin, setShowLogin] = useState(!isAgent());
+  const [showLogin, setShowLogin] = useState(!isAgent);
   const [loginName, setLoginName] = useState('');
   const [loginPhone, setLoginPhone] = useState('');
   const [compareTarget, setCompareTarget] = useState<any>(null);
@@ -40,7 +41,8 @@ export default function AgentCoopPage() {
 
   const handleLogin = () => {
     if (!loginName.trim() || !loginPhone.trim()) return;
-    setAgentInfo({ name: loginName, phone: loginPhone, agency: '', verified: false, agentId: 'agt_' + Date.now() });
+    setAgentInfo({ name: loginName, phone: loginPhone, agentId: 'agt_' + Date.now() });
+    setRole('agent');
     setShowLogin(false);
   };
 
@@ -64,7 +66,7 @@ export default function AgentCoopPage() {
               <a href={`${bp}/`} style={{ fontSize: 18, fontWeight: 800, color: C.primary, textDecoration: 'none' }}>园圈</a>
               <span style={{ fontSize: 14, color: C.textMuted }}>| 经纪端</span>
               <div style={{ flex: 1 }} />
-              <span style={{ fontSize: 13, color: C.textSub }}>{getAgentInfo()?.name || '经纪人'}</span>
+              <span style={{ fontSize: 13, color: C.textSub }}>{agentInfo?.name || '经纪人'}</span>
             </div>
           </div>
 
@@ -152,7 +154,7 @@ export default function AgentCoopPage() {
                           {compareTarget?.id === b.id ? '收起对比' : `附近${nearby.length}处对比`}
                         </button>
                       )}
-                      <button onClick={() => { const card = generateShareCard(b.id, b.name, b.region, `${Number(b.rent_min).toFixed(1)}`); if (navigator.share) { navigator.share({ title: '园圈产业园推荐', text: card }); } else { navigator.clipboard.writeText(card); alert('推荐卡片已复制'); } }} style={{ padding: '5px 12px', borderRadius: 6, border: 'none', background: C.orange, color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>分享推荐</button>
+                      <button onClick={() => { const card = genCard(b.id, b.name, b.region, `${Number(b.rent_min).toFixed(1)}`, agentInfo?.name || ''); navigator.clipboard.writeText(card); alert('推荐卡片已复制'); }} style={{ padding: '5px 12px', borderRadius: 6, border: 'none', background: C.orange, color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>分享推荐</button>
                     </div>
 
                     {/* 附近对比表 */}

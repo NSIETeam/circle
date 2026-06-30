@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { parseRequirement, summarizeRequirement, type ParsedRequirement } from '../../lib/agent-parser';
 import { initSearchEngine, searchBuildings, type BuildingData } from '../../lib/client-search';
 import { assetUrl } from '../../lib/asset';
-import { isAgent, canSeeCommission, getRole, setRole, getAgentInfo, generateAgentLink, parseReferral, getReferralLock, getReferralInfo, generateShareCard } from '../../lib/role';
+import { useRole, agentLink as genLink, shareCard as genCard } from '../../lib/role-context';
 
 // 动态导入地图
 const MapContainer = dynamic(() => import('react-leaflet').then(m => m.MapContainer), { ssr: false });
@@ -45,6 +45,7 @@ const SORT_OPTIONS = [
 const INDUSTRIES = ['全部', 'AI', '生物医药', '智能制造', '新能源', '集成电路', '新材料', '电子信息'];
 
 export default function HomePage() {
+  const { isAgent, canSeeCommission, agentInfo, referralLock } = useRole();
   const [all, setAll] = useState<Building[]>([]);
   const [list, setList] = useState<Building[]>([]);
   const [keyword, setKeyword] = useState('');
@@ -607,7 +608,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                 {/* 主推楼型 + 佣金（经纪人可见） */}
                 <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
                   {(b as any).main_type && <span style={{ fontSize: 11, color: C.textSub, background: '#F0F2F5', padding: '2px 6px', borderRadius: 3 }}>{(b as any).main_type}</span>}
-                  {canSeeCommission() && (b as any).commission && <span style={{ fontSize: 11, color: '#fff', background: '#FF6B00', padding: '2px 6px', borderRadius: 3, fontWeight: 700 }}>佣金{(b as any).commission}万</span>}
+                  {canSeeCommission && (b as any).commission && <span style={{ fontSize: 11, color: '#fff', background: '#FF6B00', padding: '2px 6px', borderRadius: 3, fontWeight: 700 }}>佣金{(b as any).commission}万</span>}
                 </div>
                 {(b as any).commute && (
                   <div style={{ display: 'flex', gap: 8, marginTop: 4, fontSize: 11, color: C.textMuted }}>
@@ -733,6 +734,7 @@ function ReportModal({ building, onClose }: { building: Building; onClose: () =>
 
 // ===== 详情弹窗 =====
 function DetailModal({ building, onClose }: { building: Building; onClose: () => void }) {
+  const { canSeeCommission, referralLock, agentInfo } = useRole();
   const [tab, setTab] = useState<'info' | 'params' | 'facilities' | 'policy' | 'compare'>('info');
   const [showChat, setShowChat] = useState(false);
   const [showReport, setShowReport] = useState(false);
@@ -747,11 +749,11 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
         {/* 标题 */}
         <div style={{ padding: '16px 20px 8px', borderBottom: '1px solid #eee' }}>
           {/* 经纪人推荐标签 */}
-          {getReferralLock() && (
+          {referralLock && (
             <div style={{ marginBottom: 8, padding: '8px 12px', background: '#EAFBEF', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, border: '1px solid #D4EDDA' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34C759" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5z" /></svg>
               <span style={{ color: '#34C759', fontWeight: 600 }}>已锁定归属</span>
-              <span style={{ color: '#999' }}>| {getReferralInfo()}</span>
+              <span style={{ color: '#999' }}>| 保护期{Math.ceil((new Date(referralLock.expiresAt).getTime()-Date.now())/86400000)}天</span>
             </div>
           )}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -793,7 +795,7 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
               ))}
             </div>
             {/* 佣金信息 — 仅经纪人可见 */}
-            {canSeeCommission() && (building as any).commission && (
+            {canSeeCommission && (building as any).commission && (
               <div style={{ marginTop: 20, padding: 12, background: '#FFF8E5', borderRadius: 8, border: '1px solid #FFE0B2' }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: '#FF6B00' }}>佣金信息（仅经纪人可见）</div>
                 <div style={{ fontSize: 20, fontWeight: 800, color: '#FF6B00', marginTop: 4 }}>{(building as any).commission}万元</div>
@@ -808,7 +810,7 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
         {/* 底部按钮 */}
         <div style={{ display: 'flex', gap: 10, padding: '12px 20px', borderTop: '1px solid #eee' }}>
           <button onClick={() => setShowChat(true)} style={{ flex: 2, height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>咨询招商</button>
-          {canSeeCommission() && <button onClick={() => { const card = generateShareCard(building.id, building.name, building.region, `${Number(building.rent_min).toFixed(1)}`); if (navigator.share) { navigator.share({ title: '园圈产业园推荐', text: card }); } else { navigator.clipboard.writeText(card); alert('推荐卡片已复制，可粘贴到微信发送给客户'); } }} style={{ flex: 1, height: 44, borderRadius: 8, border: 'none', background: '#FF6B00', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>分享推荐</button>}
+          {canSeeCommission && <button onClick={() => { const card = genCard(building.id, building.name, building.region, `${Number(building.rent_min).toFixed(1)}`, agentInfo?.name || ''); if (navigator.share) { navigator.share({ title: '园圈产业园推荐', text: card }); } else { navigator.clipboard.writeText(card); alert('推荐卡片已复制'); } }} style={{ flex: 1, height: 44, borderRadius: 8, border: 'none', background: '#FF6B00', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>分享推荐</button>}
           <button onClick={() => setShowReport(true)} style={{ flex: 1, height: 44, borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#999', fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
             举报
