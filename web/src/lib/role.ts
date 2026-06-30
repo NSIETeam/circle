@@ -58,7 +58,7 @@ export function generateAgentLink(buildingId: string): string {
   return `${window.location.origin}${base}/find?ref=${code}&agent=${agent.agentId}&bid=${buildingId}`;
 }
 
-// 客户归属锁定 — 从URL参数解析
+// 客户归属锁定 — 从URL参数解析，锁定30天保护期
 export function parseReferral(): { agentId: string; buildingId: string; code: string } | null {
   if (typeof window === 'undefined') return null;
   const params = new URLSearchParams(window.location.search);
@@ -66,17 +66,43 @@ export function parseReferral(): { agentId: string; buildingId: string; code: st
   const bid = params.get('bid');
   const code = params.get('ref');
   if (agentId && bid && code) {
-    // 存入localStorage锁定归属
-    localStorage.setItem('referral_lock', JSON.stringify({ agentId, buildingId: bid, code, lockedAt: new Date().toISOString() }));
+    const lock = { agentId, buildingId: bid, code, lockedAt: new Date().toISOString(), expiresAt: new Date(Date.now() + 30 * 24 * 3600000).toISOString() };
+    localStorage.setItem('referral_lock', JSON.stringify(lock));
+    // 保护期内，其他经纪人链接不覆盖
+    const existing = getReferralLock();
+    if (existing && new Date(existing.expiresAt) > new Date()) {
+      return existing; // 已有有效保护期，不覆盖
+    }
+    localStorage.setItem('referral_lock', JSON.stringify(lock));
     return { agentId, buildingId: bid, code };
   }
   return null;
 }
 
 // 检查当前客户是否被某经纪人锁定
-export function getReferralLock(): { agentId: string; buildingId: string; code: string } | null {
+export function getReferralLock(): { agentId: string; buildingId: string; code: string; lockedAt: string; expiresAt: string } | null {
   if (typeof window === 'undefined') return null;
   const raw = localStorage.getItem('referral_lock');
   if (!raw) return null;
-  try { return JSON.parse(raw); } catch { return null; }
+  try {
+    const lock = JSON.parse(raw);
+    if (new Date(lock.expiresAt) < new Date()) { localStorage.removeItem('referral_lock'); return null; }
+    return lock;
+  } catch { return null; }
+}
+
+// 获取解释信息
+export function getReferralInfo(): string {
+  const lock = getReferralLock();
+  if (!lock) return '';
+  const remaining = Math.ceil((new Date(lock.expiresAt).getTime() - Date.now()) / 86400000);
+  return `已锁定·保护期剩余${remaining}天`;
+}
+
+// 生成分享推荐卡片
+export function generateShareCard(buildingId: string, buildingName: string, region: string, rent: string): string {
+  const agent = getAgentInfo();
+  const agentName = agent?.name || '经纪人';
+  const link = generateAgentLink(buildingId);
+  return `【园圈产业园推荐】${buildingName} | ${region} | ${rent}元/㎡/天 | 推荐人：${agentName} | ${link}`;
 }

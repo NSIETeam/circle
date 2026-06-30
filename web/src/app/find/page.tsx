@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { parseRequirement, summarizeRequirement, type ParsedRequirement } from '../../lib/agent-parser';
 import { initSearchEngine, searchBuildings, type BuildingData } from '../../lib/client-search';
 import { assetUrl } from '../../lib/asset';
-import { isAgent, canSeeCommission, getRole, setRole, getAgentInfo, generateAgentLink, parseReferral } from '../../lib/role';
+import { isAgent, canSeeCommission, getRole, setRole, getAgentInfo, generateAgentLink, parseReferral, getReferralLock, getReferralInfo, generateShareCard } from '../../lib/role';
 
 // 动态导入地图
 const MapContainer = dynamic(() => import('react-leaflet').then(m => m.MapContainer), { ssr: false });
@@ -746,6 +746,14 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
         </div>
         {/* 标题 */}
         <div style={{ padding: '16px 20px 8px', borderBottom: '1px solid #eee' }}>
+          {/* 经纪人推荐标签 */}
+          {getReferralLock() && (
+            <div style={{ marginBottom: 8, padding: '8px 12px', background: '#EAFBEF', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, border: '1px solid #D4EDDA' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34C759" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5z" /></svg>
+              <span style={{ color: '#34C759', fontWeight: 600 }}>已锁定归属</span>
+              <span style={{ color: '#999' }}>| {getReferralInfo()}</span>
+            </div>
+          )}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: 18, fontWeight: 700, color: '#333' }}>{building.name}</span>
             <span style={{ fontSize: 20, fontWeight: 800, color: C.primary }}>{Number(building.rent_min).toFixed(1)}<span style={{ fontSize: 12, fontWeight: 400, color: '#999' }}>元/㎡/天</span></span>
@@ -800,7 +808,7 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
         {/* 底部按钮 */}
         <div style={{ display: 'flex', gap: 10, padding: '12px 20px', borderTop: '1px solid #eee' }}>
           <button onClick={() => setShowChat(true)} style={{ flex: 2, height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>咨询招商</button>
-          {canSeeCommission() && <button onClick={() => { const link = generateAgentLink(building.id); navigator.clipboard.writeText(link); alert('专属链接已复制，分享给客户即可锁定归属'); }} style={{ flex: 1, height: 44, borderRadius: 8, border: 'none', background: '#FF6B00', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>分享赚佣金</button>}
+          {canSeeCommission() && <button onClick={() => { const card = generateShareCard(building.id, building.name, building.region, `${Number(building.rent_min).toFixed(1)}`); if (navigator.share) { navigator.share({ title: '园圈产业园推荐', text: card }); } else { navigator.clipboard.writeText(card); alert('推荐卡片已复制，可粘贴到微信发送给客户'); } }} style={{ flex: 1, height: 44, borderRadius: 8, border: 'none', background: '#FF6B00', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>分享推荐</button>}
           <button onClick={() => setShowReport(true)} style={{ flex: 1, height: 44, borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#999', fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
             举报

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { assetUrl } from '../../lib/asset';
-import { isAgent, getAgentInfo, setAgentInfo, generateAgentLink } from '../../lib/role';
+import { isAgent, getAgentInfo, setAgentInfo, generateAgentLink, generateShareCard } from '../../lib/role';
 
 const C = { primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F6FA', text: '#333', textSub: '#666', textMuted: '#999', orange: '#FF6B00' };
 
@@ -152,7 +152,7 @@ export default function AgentCoopPage() {
                           {compareTarget?.id === b.id ? '收起对比' : `附近${nearby.length}处对比`}
                         </button>
                       )}
-                      <button onClick={() => { const link = generateAgentLink(b.id); navigator.clipboard.writeText(link); alert('专属链接已复制'); }} style={{ padding: '5px 12px', borderRadius: 6, border: 'none', background: C.orange, color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>分享赚佣金</button>
+                      <button onClick={() => { const card = generateShareCard(b.id, b.name, b.region, `${Number(b.rent_min).toFixed(1)}`); if (navigator.share) { navigator.share({ title: '园圈产业园推荐', text: card }); } else { navigator.clipboard.writeText(card); alert('推荐卡片已复制'); } }} style={{ padding: '5px 12px', borderRadius: 6, border: 'none', background: C.orange, color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>分享推荐</button>
                     </div>
 
                     {/* 附近对比表 */}
