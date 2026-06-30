@@ -43,7 +43,7 @@ export default function SalesPage() {
   const [notesText, setNotesText] = useState('');
   const [generatedImage, setGeneratedImage] = useState<any>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [activeTab, setActiveTab] = useState<'listings' | 'pending' | 'history'>('listings');
+  const [activeTab, setActiveTab] = useState<'listings' | 'pending' | 'history' | 'promos' | 'park'>('listings');
   const [pendingItems, setPendingItems] = useState<any[]>([]);
   const [historyItems, setHistoryItems] = useState<any[]>([]);
   const [rejectReason, setRejectReason] = useState('');
@@ -372,10 +372,12 @@ export default function SalesPage() {
         <div style={{ display: 'flex', gap: 0, marginBottom: 16, background: '#fff', borderRadius: 8, overflow: 'hidden', border: '1px solid #eee' }}>
           {[
             { k: 'listings', l: '我的房源', count: buildings.length },
+            { k: 'promos', l: '促销管理', count: 0 },
             { k: 'pending', l: '待审核', count: pendingItems.length },
             { k: 'history', l: '审核记录', count: historyItems.length },
+            { k: 'park', l: '园区信息', count: 0 },
           ].map((t, i) => (
-            <button key={t.k} onClick={() => setActiveTab(t.k as any)} style={{ flex: 1, padding: '10px 0', border: 'none', borderRight: i < 2 ? '1px solid #eee' : 'none', background: activeTab === t.k ? '#E6F7FD' : '#fff', color: activeTab === t.k ? '#00A6E0' : '#666', fontSize: 14, fontWeight: activeTab === t.k ? 600 : 400, cursor: 'pointer' }}>
+            <button key={t.k} onClick={() => setActiveTab(t.k as any)} style={{ flex: 1, padding: '10px 0', border: 'none', borderRight: i < 4 ? '1px solid #eee' : 'none', background: activeTab === t.k ? '#E6F7FD' : '#fff', color: activeTab === t.k ? '#00A6E0' : '#666', fontSize: 14, fontWeight: activeTab === t.k ? 600 : 400, cursor: 'pointer' }}>
               {t.l} {t.count > 0 && <span style={{ fontSize: 12, color: activeTab === t.k ? '#00A6E0' : '#999' }}>({t.count})</span>}
             </button>
           ))}
@@ -456,6 +458,54 @@ export default function SalesPage() {
                 <span style={{ fontSize: 11, color: '#999' }}>{new Date(item.audited_at).toLocaleString('zh-CN')}</span>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* 促销管理 */}
+        {activeTab === 'promos' && (
+          <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden', padding: 16 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 16 }}>促销管理</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12 }}>
+              {buildings.slice(0, 6).map(b => (
+                <div key={b.id} style={{ border: '1px solid #f0f0f0', borderRadius: 10, padding: 14 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: C.text, marginBottom: 8 }}>{b.name}</div>
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+                    <select style={{ flex: 1, height: 34, padding: '0 8px', border: '1px solid #ddd', borderRadius: 6, fontSize: 13, outline: 'none', background: '#fff' }}>
+                      <option>特价</option><option>免租</option><option>赠送</option><option>减免</option>
+                    </select>
+                    <input placeholder="折扣内容" style={{ flex: 2, height: 34, padding: '0 8px', border: '1px solid #ddd', borderRadius: 6, fontSize: 13, outline: 'none' }} />
+                  </div>
+                  <input type="date" style={{ width: '100%', height: 34, padding: '0 8px', border: '1px solid #ddd', borderRadius: 6, fontSize: 13, marginBottom: 8 }} />
+                  <button style={{ width: '100%', height: 36, borderRadius: 6, border: 'none', background: C.primary, color: '#fff', fontSize: 13, cursor: 'pointer' }}>设置促销</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 园区信息 */}
+        {activeTab === 'park' && (
+          <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden', padding: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: 16 }}>
+              <div style={{ border: '1px solid #f0f0f0', borderRadius: 10, padding: 14 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 10 }}>入驻企业</div>
+                {['智芯科技（AI，已入驻2年）', '康诺生物（生物医药，已入驻1年）', '精工智造（智能制造，已入驻3年）', '芯辰微电子（集成电路，已入驻1年）'].map((c, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: i < 3 ? '1px solid #f5f5f5' : 'none' }}>
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#E6F7FD', color: C.primary, fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{c[0]}</div>
+                    <span style={{ fontSize: 13, color: C.text }}>{c}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ border: '1px solid #f0f0f0', borderRadius: 10, padding: 14 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 10 }}>周边交通</div>
+                {['最近地铁站 500m', '公交站 200m（3条线路）', '高速入口 2km', '首都机场 35km', '北京南站 25km'].map((t, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: i < 4 ? '1px solid #f5f5f5' : 'none' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span style={{ fontSize: 13, color: C.text }}>{t}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </div>
