@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { assetUrl } from '../../lib/asset';
 import { extractRequirement, hasApiKey } from '../../lib/deepseek';
+import { useRole, authenticate } from '../../lib/role-context';
 
 const C = {
   primary: '#0058A3', primaryLight: '#E5F0FA', bg: '#F5F5F5', card: '#fff',
@@ -36,6 +37,11 @@ interface SalesBuilding {
 }
 
 export default function SalesPage() {
+  const { role, setRole, setAgentInfo } = useRole();
+  const [authed, setAuthed] = useState(role === 'park' || role === 'superadmin');
+  const [loginUser, setLoginUser] = useState('');
+  const [loginPass, setLoginPass] = useState('');
+  const [loginErr, setLoginErr] = useState('');
   const [buildings, setBuildings] = useState<SalesBuilding[]>([]);
   const [selected, setSelected] = useState<SalesBuilding | null>(null);
   const [showUpload, setShowUpload] = useState(false);
@@ -43,11 +49,12 @@ export default function SalesPage() {
   const [notesText, setNotesText] = useState('');
   const [generatedImage, setGeneratedImage] = useState<any>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [activeTab, setActiveTab] = useState<'listings' | 'pending' | 'history' | 'promos' | 'park'>('listings');
+  const [activeTab, setActiveTab] = useState<'listings' | 'pending' | 'history' | 'promos' | 'park' | 'audit'>('listings');
   const [pendingItems, setPendingItems] = useState<any[]>([]);
   const [historyItems, setHistoryItems] = useState<any[]>([]);
   const [rejectReason, setRejectReason] = useState('');
   const [rejectTarget, setRejectTarget] = useState<any>(null);
+  const [applyList, setApplyList] = useState<any[]>([]);
   const [showVoiceInput, setShowVoiceInput] = useState(false);
   const [voiceText, setVoiceText] = useState('');
   const [parsing, setParsing] = useState(false);
@@ -62,6 +69,7 @@ export default function SalesPage() {
     // 加载待审核和审核记录
     setPendingItems(JSON.parse(localStorage.getItem('my_listings') || '[]').filter((b: any) => b.status === 'pending' || b.status === 'pending_review'));
     setHistoryItems(JSON.parse(localStorage.getItem('audit_history') || '[]'));
+    setApplyList(JSON.parse(localStorage.getItem('apply_list') || '[]'));
   }, []);
 
   // 审核操作
@@ -90,6 +98,18 @@ export default function SalesPage() {
     setHistoryItems(hist);
     setRejectTarget(null);
     setRejectReason('');
+  };
+
+  // 管理员审批申请
+  const handleAuditApply = (id: string, action: 'approve' | 'reject') => {
+    const updated = applyList.map(a => a.id === id ? { ...a, status: action === 'approve' ? 'approved' : 'rejected', auditedAt: new Date().toISOString() } : a);
+    localStorage.setItem('apply_list', JSON.stringify(updated));
+    setApplyList(updated.filter(a => a.status === 'pending'));
+    const hist = JSON.parse(localStorage.getItem('audit_history') || '[]');
+    const item = updated.find(a => a.id === id);
+    hist.unshift({ ...item, audit_action: action === 'approve' ? `审批通过：${item?.role === 'park' ? '产业园' : '经纪人'}入驻` : `审批驳回：${item?.role === 'park' ? '产业园' : '经纪人'}入驻` });
+    localStorage.setItem('audit_history', JSON.stringify(hist));
+    setHistoryItems(hist);
   };
 
   // 语音录入
@@ -340,6 +360,39 @@ export default function SalesPage() {
     setShowPreview(true);
   };
 
+  const handleLogin = () => {
+    if (!loginUser.trim() || !loginPass.trim()) return;
+    const account = authenticate(loginUser.trim(), loginPass);
+    if (!account || (account.role !== 'park' && account.role !== 'superadmin')) { setLoginErr('该账号无产业园端权限'); return; }
+    setAgentInfo({ name: account.name, phone: account.phone, agentId: account.agentId });
+    setRole(account.role);
+    setAuthed(true);
+  };
+
+  // 登录守卫
+  if (!authed) {
+    return (
+      <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit' }}>
+        <div style={{ maxWidth: 420, width: '90%', padding: 40, background: '#fff', borderRadius: 16, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
+          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+            <div style={{ width: 56, height: 56, borderRadius: 12, background: C.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" /></svg>
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 900, color: C.text, marginBottom: 8 }}>产业园端登录</div>
+            <div style={{ display: 'inline-block', fontSize: 11, color: C.yellow === '#FFDA1A' ? '#0058A3' : '#FF6B00', background: C.primaryLight, padding: '3px 12px', borderRadius: 4, fontWeight: 600 }}>管理后台</div>
+          </div>
+          <input value={loginUser} onChange={e => { setLoginUser(e.target.value); setLoginErr(''); }} placeholder="账号" style={{ width: '100%', height: 48, padding: '0 16px', border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 15, outline: 'none', marginBottom: 12, fontFamily: 'inherit' }} />
+          <input type="password" value={loginPass} onChange={e => { setLoginPass(e.target.value); setLoginErr(''); }} placeholder="密码" style={{ width: '100%', height: 48, padding: '0 16px', border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 15, outline: 'none', marginBottom: 12, fontFamily: 'inherit' }} />
+          {loginErr && <div style={{ color: '#E0001B', fontSize: 13, marginBottom: 12, fontWeight: 600 }}>{loginErr}</div>}
+          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 16, background: C.primaryLight, padding: '8px 12px', borderRadius: 6, lineHeight: 1.6 }}>管理员：admin / admin123<br />园区：park / park123</div>
+          <button onClick={handleLogin} style={{ width: '100%', height: 48, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>登录</button>
+          <button onClick={() => { const n = prompt('请输入园区名称'); if (!n) return; const p = prompt('请输入联系电话'); if (!p) return; const r = prompt('园区简介（选填）') || ''; const list = JSON.parse(localStorage.getItem('apply_list') || '[]'); list.push({ id: Date.now().toString(), role: 'park', name: n, phone: p, organization: n, reason: r, status: 'pending', createdAt: new Date().toISOString() }); localStorage.setItem('apply_list', JSON.stringify(list)); alert('入驻申请已提交，等待管理员审批'); }} style={{ width: '100%', height: 40, borderRadius: 8, border: 'none', background: 'transparent', color: C.textMuted, fontSize: 14, cursor: 'pointer', marginTop: 8, fontFamily: 'inherit' }}>新园区？申请入驻</button>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/`} style={{ display: 'block', textAlign: 'center', marginTop: 12, fontSize: 13, color: C.textMuted, textDecoration: 'none' }}>返回首页</a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: 'inherit' }}>
       {/* 顶部导航 */}
@@ -379,11 +432,12 @@ export default function SalesPage() {
             { k: 'listings', l: '我的房源', count: buildings.length },
             { k: 'promos', l: '促销管理', count: 0 },
             { k: 'pending', l: '待审核', count: pendingItems.length },
+            ...(role === 'superadmin' ? [{ k: 'audit' as const, l: '入驻审批', count: applyList.length }] : []),
             { k: 'history', l: '审核记录', count: historyItems.length },
             { k: 'park', l: '园区信息', count: 0 },
-          ].map((t, i) => (
-            <button key={t.k} onClick={() => setActiveTab(t.k as any)} style={{ flex: 1, padding: '10px 0', border: 'none', borderRight: i < 4 ? '1px solid #eee' : 'none', background: activeTab === t.k ? '#E6F7FD' : '#fff', color: activeTab === t.k ? '#00A6E0' : '#666', fontSize: 14, fontWeight: activeTab === t.k ? 600 : 400, cursor: 'pointer' }}>
-              {t.l} {t.count > 0 && <span style={{ fontSize: 12, color: activeTab === t.k ? '#00A6E0' : '#999' }}>({t.count})</span>}
+          ].filter(Boolean).map((t, i, arr) => (
+            <button key={t.k} onClick={() => setActiveTab(t.k as any)} style={{ flex: 1, padding: '10px 0', border: 'none', borderRight: i < arr.length - 1 ? '1px solid #eee' : 'none', background: activeTab === t.k ? C.primaryLight : '#fff', color: activeTab === t.k ? C.primary : '#767676', fontSize: 14, fontWeight: activeTab === t.k ? 700 : 400, cursor: 'pointer', fontFamily: 'inherit' }}>
+              {t.l} {t.count > 0 && <span style={{ fontSize: 12, color: activeTab === t.k ? C.primary : '#767676' }}>({t.count})</span>}
             </button>
           ))}
         </div>
@@ -485,6 +539,39 @@ export default function SalesPage() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* 入驻审批 — 仅超级管理员 */}
+        {activeTab === 'audit' && role === 'superadmin' && (
+          <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden' }}>
+            <div style={{ padding: '12px 16px', borderBottom: `1px solid ${C.border}`, fontSize: 15, fontWeight: 700, color: C.text }}>入驻申请审批（{applyList.length}）</div>
+            {applyList.length === 0 ? (
+              <div style={{ padding: 48, textAlign: 'center', color: C.textMuted, fontSize: 14 }}>
+                <div style={{ fontSize: 36, marginBottom: 8, opacity: 0.3 }}>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={C.textMuted} strokeWidth="1.5" style={{ display: 'inline-block' }}><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>
+                </div>
+                暂无待审批申请
+              </div>
+            ) : applyList.map(item => (
+              <div key={item.id} style={{ padding: '14px 16px', borderBottom: `1px solid ${C.border}` }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 8, background: item.role === 'park' ? C.primaryLight : '#FFF8E5', color: item.role === 'park' ? C.primary : '#FF6B00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 14, flexShrink: 0 }}>
+                    {item.role === 'park' ? '园' : '经'}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: C.text }}>{item.name}</div>
+                    <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{item.role === 'park' ? '产业园入驻申请' : '经纪人入驻申请'} · {item.phone} · {item.organization || '—'}</div>
+                  </div>
+                  <span style={{ fontSize: 11, color: '#FF9500', background: '#FFF8E5', padding: '3px 10px', borderRadius: 4, fontWeight: 600 }}>待审批</span>
+                </div>
+                {item.reason && <div style={{ fontSize: 13, color: C.textSub, background: C.bg, padding: 10, borderRadius: 6, marginBottom: 8, lineHeight: 1.5 }}>{item.reason}</div>}
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button onClick={() => handleAuditApply(item.id, 'approve')} style={{ flex: 1, height: 38, borderRadius: 6, border: 'none', background: '#008A00', color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>通过</button>
+                  <button onClick={() => handleAuditApply(item.id, 'reject')} style={{ flex: 1, height: 38, borderRadius: 6, border: `1px solid #E0001B`, background: '#fff', color: '#E0001B', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>驳回</button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 

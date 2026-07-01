@@ -43,7 +43,7 @@ export default function AgentCoopPage() {
   const handleLogin = () => {
     if (!loginUser.trim() || !loginPass.trim()) return;
     const account = authenticate(loginUser.trim(), loginPass);
-    if (!account) { setLoginErr('账号或密码错误'); return; }
+    if (!account || account.role !== 'agent') { setLoginErr('该账号无经纪人权限'); return; }
     setAgentInfo({ name: account.name, phone: account.phone, agentId: account.agentId });
     setRole(account.role);
     setShowLogin(false);
@@ -65,8 +65,9 @@ export default function AgentCoopPage() {
           <input value={loginUser} onChange={e => { setLoginUser(e.target.value); setLoginErr(''); }} placeholder="账号" style={{ width: '100%', height: 48, padding: '0 16px', border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 15, outline: 'none', marginBottom: 12, fontFamily: 'inherit' }} />
           <input type="password" value={loginPass} onChange={e => { setLoginPass(e.target.value); setLoginErr(''); }} placeholder="密码" style={{ width: '100%', height: 48, padding: '0 16px', border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 15, outline: 'none', marginBottom: 12, fontFamily: 'inherit' }} />
           {loginErr && <div style={{ color: '#E0001B', fontSize: 13, marginBottom: 12, fontWeight: 600 }}>{loginErr}</div>}
-          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 16, background: C.primaryLight, padding: '8px 12px', borderRadius: 6 }}>测试账号：admin / admin123</div>
+          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 16, background: C.primaryLight, padding: '8px 12px', borderRadius: 6 }}>测试账号：broker / broker123</div>
           <button onClick={handleLogin} style={{ width: '100%', height: 48, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>登录</button>
+          <button onClick={() => { const n = prompt('请输入姓名'); if (!n) return; const p = prompt('请输入手机号'); if (!p) return; const org = prompt('所属机构（选填）') || ''; const list = JSON.parse(localStorage.getItem('apply_list') || '[]'); list.push({ id: Date.now().toString(), role: 'agent', name: n, phone: p, organization: org, status: 'pending', createdAt: new Date().toISOString() }); localStorage.setItem('apply_list', JSON.stringify(list)); alert('申请已提交，等待管理员审批'); }} style={{ width: '100%', height: 40, borderRadius: 8, border: 'none', background: 'transparent', color: C.textMuted, fontSize: 14, cursor: 'pointer', marginTop: 8, fontFamily: 'inherit' }}>没有账号？申请入驻</button>
         </div>
       ) : (
         <>

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
-export type UserRole = 'visitor' | 'agent' | 'park';
+export type UserRole = 'visitor' | 'agent' | 'park' | 'superadmin';
 
 interface RoleContextType {
   role: UserRole;
@@ -78,7 +78,8 @@ export function useRole() { return useContext(Ctx); }
 
 // 预设账号
 const PRESET_ACCOUNTS: Record<string, { password: string; name: string; phone: string; role: UserRole; agentId: string }> = {
-  admin: { password: 'admin123', name: '管理员', phone: '138****8888', role: 'park', agentId: 'admin_001' },
+  admin: { password: 'admin123', name: '超级管理员', phone: '138****8888', role: 'superadmin', agentId: 'admin_001' },
+  park: { password: 'park123', name: '园区管理员', phone: '137****7777', role: 'park', agentId: 'park_001' },
   broker: { password: 'broker123', name: '张经纪', phone: '139****9999', role: 'agent', agentId: 'agt_demo_001' },
 };
 
