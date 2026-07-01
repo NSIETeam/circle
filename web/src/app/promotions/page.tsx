@@ -14,7 +14,7 @@ export default function PromotionsPage() {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: 'inherit' }}>
       <div style={{ background: C.primary, position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px' }}>
           <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/`} style={{ fontSize: 18, fontWeight: 800, color: C.primary, textDecoration: 'none' }}>园圈</a>

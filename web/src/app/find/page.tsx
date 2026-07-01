@@ -337,7 +337,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
 }
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: 'inherit' }}>
       {/* ===== 顶部导航栏 ===== */}
       <div style={{ background: IKEA_BLUE, position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '10px 20px' }}>

@@ -52,7 +52,7 @@ export default function AgentCoopPage() {
   const bp = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: 'inherit' }}>
       {showLogin ? (
         <div style={{ maxWidth: 420, margin: '80px auto', padding: 40, background: '#fff', borderRadius: 16, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
           <div style={{ textAlign: 'center', marginBottom: 24 }}>

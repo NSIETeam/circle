@@ -341,7 +341,7 @@ export default function SalesPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: 'inherit' }}>
       {/* 顶部导航 */}
       <div style={{ background: C.primary, position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px' }}>

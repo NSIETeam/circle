@@ -105,7 +105,7 @@ export default function ListBuildingPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F5F5', fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: '#F5F5F5', fontFamily: 'inherit' }}>
       {/* 导航栏 */}
       <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', background: '#fff', borderBottom: '2px solid #0058A3', position: 'sticky', top: 0, zIndex: 10 }}>
         <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ width: 36, height: 36, borderRadius: 8, border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
