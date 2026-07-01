@@ -72,52 +72,52 @@ export default function ListBuildingPage() {
     setSubmitted(true);
   };
 
-  const inputStyle: React.CSSProperties = { width: '100%', minHeight: 44, padding: '12px 16px', border: 'none', borderRadius: 10, background: '#F5F6FA', fontSize: 14, color: '#333', outline: 'none' };
-  const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: '#666', marginBottom: 6, display: 'block' };
+  const inputStyle: React.CSSProperties = { width: '100%', minHeight: 44, padding: '12px 16px', border: 'none', borderRadius: 10, background: '#F5F5F5', fontSize: 14, color: '#111', outline: 'none' };
+  const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: '#484848', marginBottom: 6, display: 'block' };
   const cardStyle: React.CSSProperties = { background: '#fff', borderRadius: 12, padding: 16, marginBottom: 16, border: '1px solid #eee' };
-  const sectionStyle: React.CSSProperties = { fontSize: 14, fontWeight: 700, color: '#333', padding: '12px 0 8px', display: 'flex', alignItems: 'center', gap: 6 };
+  const sectionStyle: React.CSSProperties = { fontSize: 14, fontWeight: 700, color: '#111', padding: '12px 0 8px', display: 'flex', alignItems: 'center', gap: 6 };
 
   if (submitted) {
     const isRejected = auditResult?.status === 'rejected';
     const isManual = auditResult?.status === 'manual_review';
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, background: '#F5F6FA' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40, background: '#F5F5F5' }}>
         <div style={{ width: 72, height: 72, borderRadius: '50%', background: isRejected ? 'rgba(255,59,48,0.1)' : 'rgba(0,166,224,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
           {isRejected ? (
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FF3B30" strokeWidth="2.5" strokeLinecap="round"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
           ) : (
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="2.5" strokeLinecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0058A3" strokeWidth="2.5" strokeLinecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
           )}
         </div>
         <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{isRejected ? '内容审核未通过' : '提交成功'}</h2>
-        <p style={{ color: '#999', textAlign: 'center', lineHeight: 1.6, marginBottom: 16 }}>
+        <p style={{ color: '#767676', textAlign: 'center', lineHeight: 1.6, marginBottom: 16 }}>
           {isRejected ? '您提交的内容包含不合规信息：' : isManual ? '内容已提交，AI检测到部分信息需人工确认，平台将在1个工作日内完成审核。' : '您的厂房信息已提交，平台将在1个工作日内审核。'}
         </p>
         {auditResult?.reasons.map((r, i) => (
-          <div key={i} style={{ fontSize: 13, color: isRejected ? '#FF3B30' : '#666', background: isRejected ? '#FFF0F0' : '#F8F9FB', padding: '6px 12px', borderRadius: 6, marginBottom: 4, width: '80%' }}>• {r}</div>
+          <div key={i} style={{ fontSize: 13, color: isRejected ? '#FF3B30' : '#484848', background: isRejected ? '#FFF0F0' : '#F8F9FB', padding: '6px 12px', borderRadius: 6, marginBottom: 4, width: '80%' }}>• {r}</div>
         ))}
         <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
-          {isRejected && <button onClick={() => { setSubmitted(false); setAuditResult(null); }} style={{ padding: '10px 24px', borderRadius: 10, border: '1px solid #ddd', background: '#fff', color: '#666', fontSize: 14, cursor: 'pointer' }}>返回修改</button>}
-          <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ padding: '10px 24px', borderRadius: 10, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{isRejected ? '返回首页' : '完成'}</button>
+          {isRejected && <button onClick={() => { setSubmitted(false); setAuditResult(null); }} style={{ padding: '10px 24px', borderRadius: 10, border: '1px solid #ddd', background: '#fff', color: '#484848', fontSize: 14, cursor: 'pointer' }}>返回修改</button>}
+          <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ padding: '10px 24px', borderRadius: 10, border: 'none', background: '#0058A3', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{isRejected ? '返回首页' : '完成'}</button>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F6FA', fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: '#F5F5F5', fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
       {/* 导航栏 */}
-      <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', background: '#fff', borderBottom: '2px solid #00A6E0', position: 'sticky', top: 0, zIndex: 10 }}>
-        <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ width: 36, height: 36, borderRadius: 8, border: 'none', background: '#F5F6FA', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', background: '#fff', borderBottom: '2px solid #0058A3', position: 'sticky', top: 0, zIndex: 10 }}>
+        <button onClick={() => { window.location.href = process.env.NEXT_PUBLIC_BASE_PATH || '/'; }} style={{ width: 36, height: 36, borderRadius: 8, border: 'none', background: '#F5F5F5', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>
         </button>
-        <span style={{ flex: 1, textAlign: 'center', fontSize: 16, fontWeight: 700, color: '#333' }}>上架厂房</span>
+        <span style={{ flex: 1, textAlign: 'center', fontSize: 16, fontWeight: 700, color: '#111' }}>上架厂房</span>
         <div style={{ width: 36 }} />
       </div>
 
       <form onSubmit={handleSubmit} style={{ padding: 16, maxWidth: 600, margin: '0 auto' }}>
         {/* 1. 厂房图片 — 支持拖拽 */}
-        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />厂房图片</div>
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#0058A3', borderRadius: 2 }} />厂房图片</div>
         <div style={cardStyle}>
           <div
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); setDragTarget('images'); }}
@@ -125,17 +125,17 @@ export default function ListBuildingPage() {
             onDrop={(e) => handleDrop(e, 'images')}
             onClick={() => fileImgRef.current?.click()}
             style={{
-              border: dragTarget === 'images' ? '2px dashed #00A6E0' : '2px dashed #ddd',
+              border: dragTarget === 'images' ? '2px dashed #0058A3' : '2px dashed #ddd',
               borderRadius: 10, padding: 20, cursor: 'pointer',
-              background: dragTarget === 'images' ? '#E6F7FD' : '#FAFBFC',
+              background: dragTarget === 'images' ? '#E5F0FA' : '#FAFBFC',
               transition: 'all 0.2s', textAlign: 'center',
             }}
           >
             {images.length === 0 ? (
               <>
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="1.5" style={{ margin: '0 auto 8px', display: 'block' }}><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
-                <div style={{ fontSize: 14, color: '#666' }}>点击或拖拽上传图片</div>
-                <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>最多6张，支持JPG/PNG</div>
+                <div style={{ fontSize: 14, color: '#484848' }}>点击或拖拽上传图片</div>
+                <div style={{ fontSize: 12, color: '#767676', marginTop: 4 }}>最多6张，支持JPG/PNG</div>
               </>
             ) : (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'flex-start' }}>
@@ -145,7 +145,7 @@ export default function ListBuildingPage() {
                     <button type="button" onClick={(e) => { e.stopPropagation(); setImages(prev => prev.filter((_, idx) => idx !== i)); }} style={{ position: 'absolute', top: -6, right: -6, width: 22, height: 22, borderRadius: '50%', border: 'none', background: 'rgba(0,0,0,0.6)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>×</button>
                   </div>
                 ))}
-                {images.length < 6 && <div style={{ width: 72, height: 72, borderRadius: 8, background: '#F5F6FA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#999' }}>+</div>}
+                {images.length < 6 && <div style={{ width: 72, height: 72, borderRadius: 8, background: '#F5F5F5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, color: '#767676' }}>+</div>}
               </div>
             )}
           </div>
@@ -153,7 +153,7 @@ export default function ListBuildingPage() {
         </div>
 
         {/* 2. 楼书上传 — 支持拖拽，多格式 */}
-        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />楼书文档</div>
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#0058A3', borderRadius: 2 }} />楼书文档</div>
         <div style={cardStyle}>
           <div
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); setDragTarget('doc'); }}
@@ -161,23 +161,23 @@ export default function ListBuildingPage() {
             onDrop={(e) => handleDrop(e, 'doc')}
             onClick={() => fileDocRef.current?.click()}
             style={{
-              border: dragTarget === 'doc' ? '2px dashed #00A6E0' : '2px dashed #ddd',
+              border: dragTarget === 'doc' ? '2px dashed #0058A3' : '2px dashed #ddd',
               borderRadius: 10, padding: 20, cursor: 'pointer',
-              background: dragTarget === 'doc' ? '#E6F7FD' : '#FAFBFC',
+              background: dragTarget === 'doc' ? '#E5F0FA' : '#FAFBFC',
               transition: 'all 0.2s', textAlign: 'center',
             }}
           >
             {docFile ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center' }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
-                <span style={{ fontSize: 14, color: '#333', fontWeight: 600 }}>{docFile.name}</span>
-                <button type="button" onClick={(e) => { e.stopPropagation(); setDocFile(null); }} style={{ width: 24, height: 24, borderRadius: '50%', border: 'none', background: '#F5F6FA', cursor: 'pointer', color: '#999' }}>×</button>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0058A3" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+                <span style={{ fontSize: 14, color: '#111', fontWeight: 600 }}>{docFile.name}</span>
+                <button type="button" onClick={(e) => { e.stopPropagation(); setDocFile(null); }} style={{ width: 24, height: 24, borderRadius: '50%', border: 'none', background: '#F5F5F5', cursor: 'pointer', color: '#767676' }}>×</button>
               </div>
             ) : (
               <>
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="1.5" style={{ margin: '0 auto 8px', display: 'block' }}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
-                <div style={{ fontSize: 14, color: '#666' }}>点击或拖拽上传楼书</div>
-                <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>支持 PDF / Word / PPT，自动解析参数和卖点</div>
+                <div style={{ fontSize: 14, color: '#484848' }}>点击或拖拽上传楼书</div>
+                <div style={{ fontSize: 12, color: '#767676', marginTop: 4 }}>支持 PDF / Word / PPT，自动解析参数和卖点</div>
               </>
             )}
           </div>
@@ -185,14 +185,14 @@ export default function ListBuildingPage() {
         </div>
 
         {/* 3. 销售笔记 */}
-        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />销售笔记</div>
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#0058A3', borderRadius: 2 }} />销售笔记</div>
         <div style={cardStyle}>
           <textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="记录卖点、优势、注意事项，每行一个要点。上传楼书后可自动生成。" style={{ width: '100%', minHeight: 120, padding: 12, border: '1px solid #eee', borderRadius: 10, fontSize: 14, lineHeight: 1.6, outline: 'none', resize: 'vertical', fontFamily: 'inherit', background: '#FAFBFC' }} />
-          <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>提示：每行一个卖点，将自动提取为长图亮点</div>
+          <div style={{ fontSize: 12, color: '#767676', marginTop: 8 }}>提示：每行一个卖点，将自动提取为长图亮点</div>
         </div>
 
         {/* 4. 基本信息 */}
-        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />基本信息</div>
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#0058A3', borderRadius: 2 }} />基本信息</div>
         <div style={cardStyle}>
           <div style={{ marginBottom: 14 }}>
             <label style={labelStyle}>厂房名称 *</label>
@@ -223,7 +223,7 @@ export default function ListBuildingPage() {
         </div>
 
         {/* 5. 厂房参数 */}
-        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />厂房参数</div>
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#0058A3', borderRadius: 2 }} />厂房参数</div>
         <div style={cardStyle}>
           <div style={{ marginBottom: 14 }}>
             <label style={labelStyle}>总面积（㎡）*</label>
@@ -256,7 +256,7 @@ export default function ListBuildingPage() {
         </div>
 
         {/* 6. 联系方式 */}
-        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#00A6E0', borderRadius: 2 }} />联系方式</div>
+        <div style={sectionStyle}><span style={{ width: 3, height: 16, background: '#0058A3', borderRadius: 2 }} />联系方式</div>
         <div style={cardStyle}>
           <div style={{ marginBottom: 14 }}>
             <label style={labelStyle}>联系人 *</label>
@@ -268,7 +268,7 @@ export default function ListBuildingPage() {
           </div>
         </div>
 
-        <button type="submit" style={{ width: '100%', height: 48, borderRadius: 10, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', marginBottom: 12, marginTop: 8 }}>提交上架</button>
+        <button type="submit" style={{ width: '100%', height: 48, borderRadius: 10, border: 'none', background: '#0058A3', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', marginBottom: 12, marginTop: 8 }}>提交上架</button>
 
         {/* 付费权益占位 */}
         <div style={{ background: '#FFFDF6', border: '1px solid #FFE0B2', borderRadius: 10, padding: 14, marginBottom: 40 }}>
@@ -281,7 +281,7 @@ export default function ListBuildingPage() {
               { label: '数据报告', desc: '客户画像', icon: 'M3 3v18h18M7 13l4-7 4 4 4-6' },
             ].map(item => (
               <div key={item.label} style={{ flex: '1 1 45%', padding: 8, background: '#fff', borderRadius: 8, border: '1px dashed #FFE0B2', textAlign: 'center', opacity: 0.7 }}>
-                <div style={{ fontSize: 12, fontWeight: 600, color: '#999' }}>{item.label}</div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: '#767676' }}>{item.label}</div>
                 <div style={{ fontSize: 11, color: '#ccc', marginTop: 2 }}>{item.desc}</div>
               </div>
             ))}

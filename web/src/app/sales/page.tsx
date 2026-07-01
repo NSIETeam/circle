@@ -5,8 +5,8 @@ import { assetUrl } from '../../lib/asset';
 import { extractRequirement, hasApiKey } from '../../lib/deepseek';
 
 const C = {
-  primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F5F5', card: '#fff',
-  text: '#333', textSub: '#666', textMuted: '#999', border: '#eee', price: '#00A6E0',
+  primary: '#0058A3', primaryLight: '#E5F0FA', bg: '#F5F5F5', card: '#fff',
+  text: '#111', textSub: '#484848', textMuted: '#767676', border: '#E5E5E5', price: '#0058A3', yellow: '#FFDA1A',
 };
 
 function fieldLabel(key: string): string {
@@ -343,12 +343,17 @@ export default function SalesPage() {
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
       {/* 顶部导航 */}
-      <div style={{ background: '#fff', borderBottom: `2px solid ${C.primary}`, position: 'sticky', top: 0, zIndex: 100 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px' }}>
-          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/`} style={{ textDecoration: 'none', fontSize: 18, fontWeight: 800, color: C.primary }}>园圈</a>
-          <span style={{ fontSize: 14, color: C.textMuted }}>| 销售端</span>
+      <div style={{ background: C.primary, position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px' }}>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/`} style={{ textDecoration: 'none', fontSize: 22, fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 6, background: C.yellow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" /></svg>
+            </div>
+            园圈
+          </a>
+          <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>| 产业园端</span>
           <div style={{ flex: 1 }} />
-          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/list-building`} style={{ fontSize: 14, color: C.primary, fontWeight: 600, background: C.primaryLight, padding: '6px 14px', borderRadius: 6, textDecoration: 'none' }}>+ 新增房源</a>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/list-building`} style={{ fontSize: 14, color: C.primary, fontWeight: 700, background: C.yellow, padding: '8px 16px', borderRadius: 6, textDecoration: 'none' }}>+ 新增房源</a>
         </div>
       </div>
 

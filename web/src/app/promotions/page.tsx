@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { assetUrl } from '../../lib/asset';
 
-const C = { primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F6FA', text: '#333', textSub: '#666', textMuted: '#999', border: '#eee' };
+const C = { primary: '#0058A3', primaryLight: '#E5F0FA', bg: '#F5F5F5', text: '#111', textSub: '#484848', textMuted: '#767676', border: '#eee' };
 const TYPE_COLORS: Record<string, string> = { '特价': '#FF3B30', '免租': '#34C759', '赠送': '#FF9500', '减免': '#5856D6' };
 
 export default function PromotionsPage() {
@@ -15,7 +15,7 @@ export default function PromotionsPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
-      <div style={{ background: '#fff', borderBottom: `2px solid ${C.primary}`, position: 'sticky', top: 0, zIndex: 100 }}>
+      <div style={{ background: C.primary, position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px' }}>
           <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/`} style={{ fontSize: 18, fontWeight: 800, color: C.primary, textDecoration: 'none' }}>园圈</a>
           <span style={{ fontSize: 14, color: C.textMuted }}>| 限时优惠</span>
@@ -44,7 +44,7 @@ export default function PromotionsPage() {
                   {p.original_price !== p.promo_price && (
                     <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>
                       <span style={{ textDecoration: 'line-through' }}>{p.original_price}元</span>
-                      <span style={{ color: '#FF3B30', fontWeight: 700, marginLeft: 6 }}>{p.promo_price}元/㎡/天</span>
+                      <span style={{ color: C.primary, fontWeight: 900, marginLeft: 6, background: '#FFDA1A', padding: '1px 6px', borderRadius: 3 }}>{p.promo_price}元/㎡/天</span>
                     </div>
                   )}
                 </div>

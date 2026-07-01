@@ -18,21 +18,26 @@ interface Building extends BuildingData {
   match_reason?: string;
 }
 
-// 水蓝色主色调
+// IKEA 宜家风格配色
 const C = {
-  primary: '#00A6E0',      // 水蓝
-  primaryLight: '#E6F7FD', // 浅水蓝背景
-  primaryDark: '#0088B8',
-  bg: '#F5F6FA',
+  primary: '#0058A3',      // 宜家蓝
+  primaryLight: '#E5F0FA', // 浅蓝背景
+  primaryDark: '#004A86',
+  bg: '#F5F5F5',
   card: '#FFFFFF',
-  text: '#333333',
-  textSub: '#666666',
-  textMuted: '#999999',
-  border: '#EEEEEE',
-  price: '#00A6E0',
-  tagBg: '#E6F7FD',
-  tagFg: '#00A6E0',
+  text: '#111111',
+  textSub: '#484848',
+  textMuted: '#767676',
+  border: '#E5E5E5',
+  price: '#0058A3',
+  tagBg: '#E5F0FA',
+  tagFg: '#0058A3',
 };
+
+// 宜家黄（价格标签）
+const IKEA_YELLOW = '#FFDA1A';
+const IKEA_BLUE = '#0058A3';
+const IKEA_SALE = '#E0001B';
 
 const AREA_OPTIONS = ['不限', '500㎡以下', '500-1000㎡', '1000-3000㎡', '3000-5000㎡', '5000㎡以上'];
 const RENT_OPTIONS = ['不限', '1元以下', '1-2元', '2-3元', '3元以上'];
@@ -334,41 +339,41 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif' }}>
       {/* ===== 顶部导航栏 ===== */}
-      <div style={{ background: '#fff', borderBottom: `2px solid ${C.primary}`, position: 'sticky', top: 0, zIndex: 100 }}>
+      <div style={{ background: IKEA_BLUE, position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '10px 20px' }}>
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: C.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"><path d="M3 21h18" /><path d="M5 21V7l8-4v18" /><path d="M19 21V11l-6-4" /></svg>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 6, background: IKEA_YELLOW, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={IKEA_BLUE} strokeWidth="2.5" strokeLinecap="round"><path d="M3 21h18" /><path d="M5 21V7l8-4v18" /><path d="M19 21V11l-6-4" /></svg>
             </div>
-            <span style={{ fontSize: 20, fontWeight: 800, color: C.primary, letterSpacing: '-0.02em' }}>园圈</span>
+            <span style={{ fontSize: 20, fontWeight: 900, color: '#fff', letterSpacing: '-0.01em' }}>园圈</span>
           </div>
           {/* 城市选择 */}
-          <button onClick={() => setShowCityPicker(!showCityPicker)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#fff', border: '1px solid #ddd', borderRadius: 6, padding: '6px 12px', cursor: 'pointer', fontSize: 14, color: C.text, fontWeight: 500, flexShrink: 0 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+          <button onClick={() => setShowCityPicker(!showCityPicker)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 6, padding: '8px 14px', cursor: 'pointer', fontSize: 14, color: '#fff', fontWeight: 600, flexShrink: 0 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
             {city}
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
           </button>
           {/* 搜索框 */}
           <div style={{ flex: 1, display: 'flex', maxWidth: 560 }}>
-            <input value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => e.key === 'Enter' && doFilter()} placeholder="搜索园区/厂房/地址/产业类型" style={{ flex: 1, height: 40, padding: '0 16px', border: `2px solid ${C.primary}`, borderRadius: '6px 0 0 6px', fontSize: 14, outline: 'none', borderRight: 'none' }} />
-            <button onClick={doFilter} style={{ background: C.primary, color: '#fff', border: 'none', borderRadius: '0 6px 6px 0', padding: '0 24px', fontSize: 15, fontWeight: 600, cursor: 'pointer', flexShrink: 0 }}>搜索</button>
+            <input value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => e.key === 'Enter' && doFilter()} placeholder="搜索园区/厂房/地址/产业类型" style={{ flex: 1, height: 44, padding: '0 16px', border: 'none', borderRadius: '6px 0 0 6px', fontSize: 14, outline: 'none' }} />
+            <button onClick={doFilter} style={{ background: IKEA_YELLOW, color: IKEA_BLUE, border: 'none', borderRadius: '0 6px 6px 0', padding: '0 24px', fontSize: 15, fontWeight: 900, cursor: 'pointer', flexShrink: 0 }}>搜索</button>
           </div>
           {/* AI选址 */}
-          <button onClick={() => setShowAI(!showAI)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: showAI ? C.primary : '#fff', color: showAI ? '#fff' : C.primary, border: `1px solid ${C.primary}`, borderRadius: 6, padding: '8px 16px', cursor: 'pointer', fontSize: 14, fontWeight: 600, flexShrink: 0 }}>
+          <button onClick={() => setShowAI(!showAI)} style={{ display: 'flex', alignItems: 'center', gap: 5, background: showAI ? IKEA_YELLOW : 'rgba(255,255,255,0.15)', color: showAI ? IKEA_BLUE : '#fff', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 6, padding: '8px 16px', cursor: 'pointer', fontSize: 14, fontWeight: 700, flexShrink: 0 }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /></svg>
             AI选址
           </button>
           {/* 登录 */}
-          {/* 导航链接 */}
+          {/* 导航链接 — 白字 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
-            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/promotions`} style={{ fontSize: 14, color: C.textSub, textDecoration: 'none', padding: '6px 10px' }}>限时优惠</a>
-            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/cases`} style={{ fontSize: 14, color: C.textSub, textDecoration: 'none', padding: '6px 10px' }}>成功案例</a>
-            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/agent-coop`} style={{ fontSize: 14, color: C.textSub, textDecoration: 'none', padding: '6px 10px' }}>经纪人合作</a>
+            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/promotions`} style={{ fontSize: 14, color: 'rgba(255,255,255,0.85)', textDecoration: 'none', padding: '6px 10px' }}>限时优惠</a>
+            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/cases`} style={{ fontSize: 14, color: 'rgba(255,255,255,0.85)', textDecoration: 'none', padding: '6px 10px' }}>成功案例</a>
+            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/agent-coop`} style={{ fontSize: 14, color: 'rgba(255,255,255,0.85)', textDecoration: 'none', padding: '6px 10px' }}>经纪人合作</a>
           </div>
-          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`} style={{ textDecoration: 'none', fontSize: 14, color: C.textSub, flexShrink: 0 }}>登录</a>
-          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/sales`} style={{ textDecoration: 'none', fontSize: 14, color: C.textSub, flexShrink: 0 }}>销售端</a>
-          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/list-building`} style={{ textDecoration: 'none', fontSize: 14, color: C.primary, fontWeight: 600, flexShrink: 0, background: C.primaryLight, padding: '6px 14px', borderRadius: 6 }}>发布房源</a>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/login`} style={{ textDecoration: 'none', fontSize: 14, color: 'rgba(255,255,255,0.85)', flexShrink: 0 }}>登录</a>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/sales`} style={{ textDecoration: 'none', fontSize: 14, color: 'rgba(255,255,255,0.85)', flexShrink: 0 }}>产业园端</a>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/list-building`} style={{ textDecoration: 'none', fontSize: 14, color: IKEA_BLUE, fontWeight: 900, flexShrink: 0, background: IKEA_YELLOW, padding: '8px 16px', borderRadius: 6 }}>发布房源</a>
         </div>
 
         {/* 城市下拉 */}
@@ -579,7 +584,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                     <div style={{ padding: 8 }}>
                       <div style={{ fontSize: 13, fontWeight: 600, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.name}</div>
                       <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{b.region} · {b.total_area?.toLocaleString()}㎡</div>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: C.price, marginTop: 4 }}>{Number(b.rent_min).toFixed(1)}<span style={{ fontSize: 11, color: C.textMuted, fontWeight: 400 }}>元/㎡/天</span></div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: IKEA_BLUE, marginTop: 4, display: 'inline-block', background: IKEA_YELLOW, padding: '2px 8px', borderRadius: 4 }}>{Number(b.rent_min).toFixed(1)}<span style={{ fontSize: 11, color: IKEA_BLUE, fontWeight: 400 }}>元/㎡/天</span></div>
                     </div>
                   </div>
                 ))}
@@ -632,7 +637,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
               </div>
               {/* 价格 */}
               <div style={{ textAlign: 'right', flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 100 }}>
-                <div><span style={{ fontSize: 20, fontWeight: 800, color: C.price }}>{Number(b.rent_min).toFixed(1)}</span><span style={{ fontSize: 12, color: C.textMuted }}>元/㎡/天</span></div>
+                <div><span style={{ fontSize: 20, fontWeight: 800, color: IKEA_BLUE, background: IKEA_YELLOW, padding: '2px 10px', borderRadius: 4, display: 'inline-block' }}>{Number(b.rent_min).toFixed(1)}</span><span style={{ fontSize: 12, color: C.textMuted, marginLeft: 4 }}>元/㎡/天</span></div>
                 {b.match_score && <div style={{ fontSize: 12, color: C.primary, marginTop: 4 }}>匹配 {b.match_score}分</div>}
                 <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{b.tenant_count}家入驻</div>
               </div>
@@ -765,7 +770,7 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
           )}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: 18, fontWeight: 700, color: '#333' }}>{building.name}</span>
-            <span style={{ fontSize: 20, fontWeight: 800, color: C.primary }}>{Number(building.rent_min).toFixed(1)}<span style={{ fontSize: 12, fontWeight: 400, color: '#999' }}>元/㎡/天</span></span>
+            <span style={{ fontSize: 20, fontWeight: 800, color: IKEA_BLUE, background: IKEA_YELLOW, padding: '4px 12px', borderRadius: 6, display: 'inline-block' }}>{Number(building.rent_min).toFixed(1)}<span style={{ fontSize: 12, fontWeight: 400, color: IKEA_BLUE }}>元/㎡/天</span></span>
           </div>
           <div style={{ fontSize: 13, color: '#999', marginTop: 4 }}>{building.region} · {building.park_name} · 已入驻{building.tenant_count}家企业</div>
           <div style={{ display: 'flex', gap: 4, marginTop: 8 }}>

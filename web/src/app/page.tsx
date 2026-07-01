@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { SvgIcon } from '../lib/icons';
-
-const C = { primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F6FA', text: '#333', textSub: '#666', textMuted: '#999' };
+import { IKEA, FONT, SHADOW, RADIUS } from '../lib/ikea-style';
 
 const FEATURES = [
   { icon: 'ai', label: 'AI选址', desc: '智能匹配厂房', path: '/find' },
@@ -11,7 +10,7 @@ const FEATURES = [
   { icon: 'chart', label: '成功案例', desc: '入驻企业故事', path: '/cases' },
   { icon: 'users', label: '经纪人合作', desc: '优先获客线索', path: '/agent-coop' },
   { icon: 'building', label: '发布房源', desc: '上架产业园', path: '/list-building' },
-  { icon: 'wrench', label: '销售端', desc: '管理房源线索', path: '/sales' },
+  { icon: 'wrench', label: '产业园端', desc: '管理房源线索', path: '/sales' },
   { icon: 'clipboard', label: 'AI诊断', desc: '企业成熟度评估', path: '/assessment' },
   { icon: 'map', label: '地图找房', desc: '地图选点定位', path: '/find' },
 ];
@@ -35,117 +34,118 @@ export default function HomePage() {
   const [showAIKey, setShowAIKey] = useState(false);
   const [aiKey, setAiKey] = useState('');
   const bp = process.env.NEXT_PUBLIC_BASE_PATH || '';
-
   const go = (path: string) => { window.location.href = `${bp}${path}`; };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
-      {/* 顶部导航 */}
-      <div style={{ background: '#fff', borderBottom: `2px solid ${C.primary}`, position: 'sticky', top: 0, zIndex: 100 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: C.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" /></svg>
+    <div style={{ minHeight: '100vh', background: IKEA.bg, fontFamily: FONT }}>
+      {/* 顶部导航 — 宜家蓝底 */}
+      <div style={{ background: IKEA.blue, position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 16, padding: '14px 24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: RADIUS.sm, background: IKEA.yellow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={IKEA.blue} strokeWidth="2.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" /></svg>
             </div>
-            <span style={{ fontSize: 20, fontWeight: 800, color: C.primary }}>园圈</span>
+            <span style={{ fontSize: 22, fontWeight: 900, color: '#fff', letterSpacing: '-0.01em' }}>园圈</span>
           </div>
           <div style={{ flex: 1 }} />
-          {/* 三个方块入口 */}
-          <div style={{ display: 'flex', gap: 10 }}>
+          {/* 三角色方块 */}
+          <div style={{ display: 'flex', gap: 8 }}>
             {[
-              { label: '我是经纪人', desc: '佣金·分享·获客', path: '/agent-coop', color: '#FF6B00', bg: '#FFF8E5' },
-              { label: '我是产业园', desc: '管理·政策·竞品', path: '/sales', color: '#00A6E0', bg: '#E6F7FD' },
-              { label: '我是管理员', desc: '审核·数据·后台', path: '/sales', color: '#5856D6', bg: '#F0EFFC' },
+              { label: '我是经纪人', path: '/agent-coop' },
+              { label: '我是产业园', path: '/sales' },
+              { label: '我是管理员', path: '/sales' },
             ].map(item => (
               <a key={item.label} href={`${bp}${item.path}`} style={{ textDecoration: 'none' }}>
-                <div style={{
-                  padding: '10px 16px', borderRadius: 12, background: item.bg, border: `1px solid ${item.color}20`,
-                  cursor: 'pointer', textAlign: 'center', minWidth: 110,
-                  transition: 'box-shadow 0.2s',
-                }}
-                  onMouseEnter={e => e.currentTarget.style.boxShadow = `0 4px 12px ${item.color}20`}
-                  onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: item.color }}>{item.label}</div>
-                  <div style={{ fontSize: 11, color: '#999', marginTop: 2 }}>{item.desc}</div>
+                <div style={{ padding: '8px 16px', borderRadius: RADIUS.sm, background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', fontSize: 13, fontWeight: 700, transition: 'background 0.2s', cursor: 'pointer' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}>
+                  {item.label}
                 </div>
               </a>
             ))}
           </div>
-          <a href={`${bp}/find`} style={{ fontSize: 14, color: '#fff', fontWeight: 600, background: '#00A6E0', padding: '10px 18px', borderRadius: 10, textDecoration: 'none', flexShrink: 0 }}>开始选址</a>
         </div>
       </div>
 
-      {/* Hero — 品牌口号 */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 20px 40px', textAlign: 'center' }}>
-        <h1 style={{ fontSize: 40, fontWeight: 800, color: C.text, marginBottom: 12, letterSpacing: '-0.02em' }}>
-          关于企业的一切，都在<span style={{ color: C.primary }}>园圈</span>
-        </h1>
-        <p style={{ fontSize: 18, color: C.textSub, marginBottom: 32, lineHeight: 1.6 }}>
-          AI智能选址 · 产业园入驻 · 企业服务生态 · 一站式解决企业空间需求
-        </p>
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-          <button onClick={() => go('/find')} style={{ padding: '14px 32px', borderRadius: 10, border: 'none', background: C.primary, color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer' }}>AI帮我选址</button>
-          <button onClick={() => go('/promotions')} style={{ padding: '14px 32px', borderRadius: 10, border: `1px solid ${C.primary}`, background: '#fff', color: C.primary, fontSize: 16, fontWeight: 600, cursor: 'pointer' }}>查看优惠</button>
+      {/* Hero — 宜家大字+黄底色块 */}
+      <div style={{ background: '#fff', borderBottom: `4px solid ${IKEA.yellow}` }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 56px', textAlign: 'center' }}>
+          <h1 style={{ fontSize: 44, fontWeight: 900, color: IKEA.text, marginBottom: 16, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+            关于企业的一切<br />都在<span style={{ background: IKEA.yellow, padding: '0 12px', borderRadius: RADIUS.sm, display: 'inline-block' }}>园圈</span>
+          </h1>
+          <p style={{ fontSize: 18, color: IKEA.textSub, marginBottom: 32, lineHeight: 1.6, fontWeight: 500 }}>
+            AI智能选址 · 产业园入驻 · 企业服务生态 · 一站式解决企业空间需求
+          </p>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+            <button onClick={() => go('/find')} style={{ padding: '16px 36px', borderRadius: RADIUS.sm, border: 'none', background: IKEA.blue, color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', fontFamily: FONT, boxShadow: SHADOW.card, transition: 'transform 0.15s' }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
+              AI帮我选址
+            </button>
+            <button onClick={() => go('/promotions')} style={{ padding: '16px 36px', borderRadius: RADIUS.sm, border: `2px solid ${IKEA.blue}`, background: '#fff', color: IKEA.blue, fontSize: 16, fontWeight: 700, cursor: 'pointer', fontFamily: FONT }}>
+              查看优惠
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* 核心功能矩阵 */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px 40px' }}>
-        <div style={{ fontSize: 20, fontWeight: 700, color: C.text, marginBottom: 16 }}>核心功能</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
+      {/* 核心功能矩阵 — 宜家方格 */}
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px' }}>
+        <h2 style={{ fontSize: 24, fontWeight: 900, color: IKEA.text, marginBottom: 24 }}>核心功能</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
           {FEATURES.map(f => (
-            <button key={f.label} onClick={() => go(f.path)} style={{ background: '#fff', borderRadius: 12, padding: 20, border: '1px solid #f0f0f0', cursor: 'pointer', textAlign: 'left', transition: 'box-shadow 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,166,224,0.1)'} onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}>
-              <div style={{ marginBottom: 8 }}><SvgIcon name={f.icon} size={28} /></div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: C.text }}>{f.label}</div>
-              <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{f.desc}</div>
+            <button key={f.label} onClick={() => go(f.path)} style={{ background: '#fff', borderRadius: RADIUS.lg, padding: 24, border: `1px solid ${IKEA.borderLight}`, cursor: 'pointer', textAlign: 'left', boxShadow: SHADOW.card, transition: 'box-shadow 0.2s, transform 0.15s', fontFamily: FONT }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = SHADOW.hover; e.currentTarget.style.transform = 'translateY(-3px)'; }} onMouseLeave={e => { e.currentTarget.style.boxShadow = SHADOW.card; e.currentTarget.style.transform = 'none'; }}>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.md, background: IKEA.blueLight, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                <SvgIcon name={f.icon} size={26} color={IKEA.blue} />
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: IKEA.text, marginBottom: 4 }}>{f.label}</div>
+              <div style={{ fontSize: 13, color: IKEA.textMuted }}>{f.desc}</div>
             </button>
           ))}
         </div>
       </div>
 
-      {/* 企业服务生态 */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px 60px' }}>
-        <div style={{ fontSize: 20, fontWeight: 700, color: C.text, marginBottom: 16 }}>企业服务生态</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 10 }}>
-          {SERVICES.map(s => (
-            <div key={s.label} style={{ background: '#fff', borderRadius: 10, padding: 16, border: '1px solid #f0f0f0', textAlign: 'center' }}>
-              <div style={{ marginBottom: 6 }}><SvgIcon name={s.icon} size={24} /></div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{s.label}</div>
-              <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{s.desc}</div>
-            </div>
-          ))}
+      {/* 企业服务生态 — 宜家黄色横幅 */}
+      <div style={{ background: IKEA.yellowLight, borderTop: `1px solid ${IKEA.borderLight}`, borderBottom: `1px solid ${IKEA.borderLight}` }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px' }}>
+          <h2 style={{ fontSize: 24, fontWeight: 900, color: IKEA.text, marginBottom: 24 }}>企业服务生态</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
+            {SERVICES.map(s => (
+              <div key={s.label} style={{ background: '#fff', borderRadius: RADIUS.md, padding: 20, border: `1px solid ${IKEA.borderLight}`, textAlign: 'center', boxShadow: SHADOW.card }}>
+                <div style={{ width: 40, height: 40, borderRadius: RADIUS.sm, background: IKEA.blueLight, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                  <SvgIcon name={s.icon} size={22} color={IKEA.blue} />
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: IKEA.text }}>{s.label}</div>
+                <div style={{ fontSize: 11, color: IKEA.textMuted, marginTop: 2 }}>{s.desc}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* 底部 */}
-      <div style={{ background: '#1a1a2e', color: '#fff', padding: '40px 20px', textAlign: 'center' }}>
-        <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>园圈 · 产业地产招商平台</div>
-        <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>关于企业的一切，都在园圈</div>
-        <div style={{ marginTop: 16, display: 'flex', gap: 16, justifyContent: 'center' }}>
-          <a href={`${bp}/find`} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none' }}>选址</a>
-          <a href={`${bp}/promotions`} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none' }}>优惠</a>
-          <a href={`${bp}/cases`} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none' }}>案例</a>
-          <a href={`${bp}/agent-coop`} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none' }}>经纪人</a>
-          <a href={`${bp}/sales`} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textDecoration: 'none' }}>销售端</a>
+      {/* 底部 — 宜家蓝底 */}
+      <div style={{ background: IKEA.blue, color: '#fff', padding: '48px 24px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: 22, fontWeight: 900, marginBottom: 8 }}>园圈 · 产业地产招商平台</div>
+          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', marginBottom: 24 }}>关于企业的一切，都在园圈</div>
+          <div style={{ display: 'flex', gap: 24, justifyContent: 'center', marginBottom: 24 }}>
+            {['/find', '/promotions', '/cases', '/agent-coop', '/sales'].map((p, i) => (
+              <a key={i} href={`${bp}${p}`} style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14, textDecoration: 'none', fontWeight: 500 }}>{['选址', '优惠', '案例', '经纪人', '产业园'][i]}</a>
+            ))}
+          </div>
+          <button onClick={() => setShowAIKey(true)} style={{ padding: '8px 16px', borderRadius: RADIUS.sm, border: '1px solid rgba(255,255,255,0.3)', background: 'transparent', color: 'rgba(255,255,255,0.5)', fontSize: 12, cursor: 'pointer', fontFamily: FONT }}>DeepSeek API 设置</button>
         </div>
-        <button onClick={() => setShowAIKey(true)} style={{ marginTop: 16, padding: '6px 14px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'rgba(255,255,255,0.4)', fontSize: 12, cursor: 'pointer' }}>DeepSeek API 设置</button>
       </div>
 
       {/* DeepSeek API Key弹窗 */}
       {showAIKey && (
         <div onClick={() => setShowAIKey(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 500, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: 380, background: '#fff', borderRadius: 12, padding: 20, animation: 'scaleIn 0.25s ease' }}>
-            <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>DeepSeek API 设置</div>
-            <div style={{ fontSize: 13, color: C.textMuted, marginBottom: 12 }}>配置API Key后，AI选址、内容审核、销售客服将使用DeepSeek模型，体验更智能。</div>
-            <input value={aiKey} onChange={e => setAiKey(e.target.value)} placeholder="sk-xxxxxxxxxxxx" style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none' }} />
-            <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
-              <button onClick={() => setShowAIKey(false)} style={{ flex: 1, height: 40, borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', fontSize: 14, cursor: 'pointer' }}>取消</button>
-              <button onClick={() => {
-                localStorage.setItem('deepseek_api_key', aiKey);
-                setShowAIKey(false);
-                alert('API Key已保存');
-              }} style={{ flex: 1, height: 40, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>保存</button>
+          <div onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: 400, background: '#fff', borderRadius: RADIUS.lg, padding: 24, boxShadow: SHADOW.deep, animation: 'scaleIn 0.25s ease', fontFamily: FONT }}>
+            <div style={{ fontSize: 18, fontWeight: 700, color: IKEA.text, marginBottom: 12 }}>DeepSeek API 设置</div>
+            <div style={{ fontSize: 13, color: IKEA.textMuted, marginBottom: 16, lineHeight: 1.6 }}>配置API Key后，AI选址、内容审核、销售客服将使用DeepSeek模型。</div>
+            <input value={aiKey} onChange={e => setAiKey(e.target.value)} placeholder="sk-xxxxxxxxxxxx" style={{ width: '100%', height: 48, padding: '0 16px', border: `1px solid ${IKEA.border}`, borderRadius: RADIUS.sm, fontSize: 15, outline: 'none', fontFamily: FONT }} />
+            <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
+              <button onClick={() => setShowAIKey(false)} style={{ flex: 1, height: 48, borderRadius: RADIUS.sm, border: `1px solid ${IKEA.border}`, background: '#fff', color: IKEA.textSub, fontSize: 15, fontWeight: 600, cursor: 'pointer', fontFamily: FONT }}>取消</button>
+              <button onClick={() => { localStorage.setItem('deepseek_api_key', aiKey); setShowAIKey(false); alert('API Key已保存'); }} style={{ flex: 1, height: 48, borderRadius: RADIUS.sm, border: 'none', background: IKEA.blue, color: '#fff', fontSize: 15, fontWeight: 700, cursor: 'pointer', fontFamily: FONT }}>保存</button>
             </div>
           </div>
         </div>

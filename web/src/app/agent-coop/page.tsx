@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { assetUrl } from '../../lib/asset';
 import { useRole, agentLink as genLink, shareCard as genCard, authenticate } from '../../lib/role-context';
 
-const C = { primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F6FA', text: '#333', textSub: '#666', textMuted: '#999', orange: '#FF6B00' };
+const C = { primary: '#0058A3', primaryLight: '#E5F0FA', bg: '#F5F5F5', text: '#111', textSub: '#484848', textMuted: '#767676', orange: '#FF6B00', yellow: '#FFDA1A', border: '#E5E5E5' };
 
 export default function AgentCoopPage() {
   const { isAgent, setRole, agentInfo, setAgentInfo } = useRole();
@@ -52,27 +52,35 @@ export default function AgentCoopPage() {
   const bp = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
   return (
-    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: C.bg, fontFamily: "'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif" }}>
       {showLogin ? (
-        <div style={{ maxWidth: 400, margin: '80px auto', padding: 32, background: '#fff', borderRadius: 16 }}>
-          <div style={{ fontSize: 20, fontWeight: 800, textAlign: 'center', marginBottom: 8 }}>经纪人登录</div>
-          <div style={{ display: 'inline-block', fontSize: 11, color: '#FF9500', background: '#FFF8E5', padding: '2px 10px', borderRadius: 4, marginBottom: 16 }}>测试阶段</div>
-          <div style={{ fontSize: 13, color: '#999', textAlign: 'center', marginBottom: 24 }}>登录后查看佣金与客户线索</div>
-          <input value={loginUser} onChange={e => { setLoginUser(e.target.value); setLoginErr(''); }} placeholder="账号" style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', marginBottom: 12 }} />
-          <input type="password" value={loginPass} onChange={e => { setLoginPass(e.target.value); setLoginErr(''); }} placeholder="密码" style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', marginBottom: 12 }} />
-          {loginErr && <div style={{ color: '#FF3B30', fontSize: 13, marginBottom: 12 }}>{loginErr}</div>}
-          <div style={{ fontSize: 12, color: '#999', marginBottom: 16 }}>测试账号：admin / admin123</div>
-          <button onClick={handleLogin} style={{ width: '100%', height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>登录</button>
+        <div style={{ maxWidth: 420, margin: '80px auto', padding: 40, background: '#fff', borderRadius: 16, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
+          <div style={{ textAlign: 'center', marginBottom: 24 }}>
+            <div style={{ width: 56, height: 56, borderRadius: 12, background: C.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></svg>
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 900, color: C.text, marginBottom: 8 }}>经纪人登录</div>
+            <div style={{ display: 'inline-block', fontSize: 11, color: C.orange, background: '#FFF8E5', padding: '3px 12px', borderRadius: 4, fontWeight: 600 }}>测试阶段</div>
+          </div>
+          <input value={loginUser} onChange={e => { setLoginUser(e.target.value); setLoginErr(''); }} placeholder="账号" style={{ width: '100%', height: 48, padding: '0 16px', border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 15, outline: 'none', marginBottom: 12, fontFamily: 'inherit' }} />
+          <input type="password" value={loginPass} onChange={e => { setLoginPass(e.target.value); setLoginErr(''); }} placeholder="密码" style={{ width: '100%', height: 48, padding: '0 16px', border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 15, outline: 'none', marginBottom: 12, fontFamily: 'inherit' }} />
+          {loginErr && <div style={{ color: '#E0001B', fontSize: 13, marginBottom: 12, fontWeight: 600 }}>{loginErr}</div>}
+          <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 16, background: C.primaryLight, padding: '8px 12px', borderRadius: 6 }}>测试账号：admin / admin123</div>
+          <button onClick={handleLogin} style={{ width: '100%', height: 48, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>登录</button>
         </div>
       ) : (
         <>
-          {/* 顶部导航 */}
-          <div style={{ background: '#fff', borderBottom: `2px solid ${C.primary}`, position: 'sticky', top: 0, zIndex: 100 }}>
-            <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px' }}>
-              <a href={`${bp}/`} style={{ fontSize: 18, fontWeight: 800, color: C.primary, textDecoration: 'none' }}>园圈</a>
-              <span style={{ fontSize: 14, color: C.textMuted }}>| 经纪端</span>
+          <div style={{ background: C.primary, position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+            <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px' }}>
+              <a href={`${bp}/`} style={{ fontSize: 22, fontWeight: 900, color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 32, height: 32, borderRadius: 6, background: C.yellow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" /></svg>
+                </div>
+                园圈
+              </a>
+              <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>| 经纪端</span>
               <div style={{ flex: 1 }} />
-              <span style={{ fontSize: 13, color: C.textSub }}>{agentInfo?.name || '经纪人'}</span>
+              <span style={{ fontSize: 14, color: '#fff', fontWeight: 600 }}>{agentInfo?.name || '经纪人'}</span>
             </div>
           </div>
 
@@ -172,7 +180,7 @@ export default function AgentCoopPage() {
 
                       {/* 佣金列 */}
                       <div style={{ textAlign: 'right', flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <div style={{ fontSize: 20, fontWeight: 800, color: C.orange }}>{b.commission}万</div>
+                        <div style={{ fontSize: 22, fontWeight: 900, color: C.primary, background: C.yellow, padding: '4px 12px', borderRadius: 6, display: 'inline-block' }}>{b.commission}万</div>
                         <div style={{ fontSize: 11, color: C.textMuted }}>{b.commission_rate}</div>
                         <div style={{ fontSize: 11, color: C.textMuted, marginTop: 2 }}>{Number(b.rent_min).toFixed(1)}元/㎡/天</div>
                       </div>
