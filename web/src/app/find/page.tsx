@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { parseRequirement, summarizeRequirement, type ParsedRequirement } from '../../lib/agent-parser';
 import { initSearchEngine, searchBuildings, type BuildingData } from '../../lib/client-search';
 import { assetUrl } from '../../lib/asset';
-import { useRole, agentLink as genLink, shareCard as genCard } from '../../lib/role-context';
+import { useRole } from '../../lib/role-context';
 
 // 动态导入地图
 const MapContainer = dynamic(() => import('react-leaflet').then(m => m.MapContainer), { ssr: false });
@@ -608,7 +608,6 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                 {/* 主推楼型 + 佣金（经纪人可见） */}
                 <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
                   {(b as any).main_type && <span style={{ fontSize: 11, color: C.textSub, background: '#F0F2F5', padding: '2px 6px', borderRadius: 3 }}>{(b as any).main_type}</span>}
-                  {canSeeCommission && (b as any).commission && <span style={{ fontSize: 11, color: '#fff', background: '#FF6B00', padding: '2px 6px', borderRadius: 3, fontWeight: 700 }}>佣金{(b as any).commission}万</span>}
                 </div>
                 {(b as any).commute && (
                   <div style={{ display: 'flex', gap: 8, marginTop: 4, fontSize: 11, color: C.textMuted }}>
@@ -794,14 +793,7 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
                 <span key={i} style={{ fontSize: 13, color: '#666', background: '#F5F5F5', padding: '6px 14px', borderRadius: 999 }}>{s}</span>
               ))}
             </div>
-            {/* 佣金信息 — 仅经纪人可见 */}
-            {canSeeCommission && (building as any).commission && (
-              <div style={{ marginTop: 20, padding: 12, background: '#FFF8E5', borderRadius: 8, border: '1px solid #FFE0B2' }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: '#FF6B00' }}>佣金信息（仅经纪人可见）</div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#FF6B00', marginTop: 4 }}>{(building as any).commission}万元</div>
-                <div style={{ fontSize: 12, color: '#999' }}>{(building as any).commission_rate || '1个月租金'}</div>
-              </div>
-            )}
+            {/* 佣金信息 — 不在C端展示，仅经纪端可见 */}
           </div>
         )}
         {/* 附近对比 */}
@@ -810,7 +802,6 @@ function DetailModal({ building, onClose }: { building: Building; onClose: () =>
         {/* 底部按钮 */}
         <div style={{ display: 'flex', gap: 10, padding: '12px 20px', borderTop: '1px solid #eee' }}>
           <button onClick={() => setShowChat(true)} style={{ flex: 2, height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>咨询招商</button>
-          {canSeeCommission && <button onClick={() => { const card = genCard(building.id, building.name, building.region, `${Number(building.rent_min).toFixed(1)}`, agentInfo?.name || ''); if (navigator.share) { navigator.share({ title: '园圈产业园推荐', text: card }); } else { navigator.clipboard.writeText(card); alert('推荐卡片已复制'); } }} style={{ flex: 1, height: 44, borderRadius: 8, border: 'none', background: '#FF6B00', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>分享推荐</button>}
           <button onClick={() => setShowReport(true)} style={{ flex: 1, height: 44, borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#999', fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>
             举报

@@ -91,6 +91,31 @@ export default function AgentCoopPage() {
               ))}
             </div>
 
+            {/* 我的客户 */}
+            <div style={{ marginBottom: 16, background: '#fff', borderRadius: 12, border: '1px solid #f0f0f0', overflow: 'hidden' }}>
+              <div style={{ padding: '12px 16px', borderBottom: '1px solid #f5f5f5', fontSize: 15, fontWeight: 700, color: C.text, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                我的客户
+                <span style={{ fontSize: 12, color: C.textMuted, fontWeight: 400 }}>
+                  {/* 显示来自localStorage的线索 */}
+                  {(() => {
+                    try { return JSON.parse(localStorage.getItem('referral_lock')||'null') ? 1 : 0; } catch { return 0; }
+                  })()} 条线索
+                </span>
+              </div>
+              <div style={{ padding: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 10 }}>
+                  <div style={{ padding: 12, background: '#F8F9FB', borderRadius: 8, border: '1px solid #EAFBEF' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34C759' }} />
+                      <span style={{ fontSize: 13, fontWeight: 600, color: '#34C759' }}>保护期内</span>
+                      <span style={{ fontSize: 11, color: '#999' }}>归属锁定30天</span>
+                    </div>
+                    <div style={{ fontSize: 12, color: '#999', marginTop: 6 }}>客户通过您的专属链接访问后，系统自动锁定归属。客户留资后在此显示。</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* 筛选栏 */}
             <div style={{ display: 'flex', gap: 8, marginBottom: 16, alignItems: 'center', flexWrap: 'wrap' }}>
               <span style={{ fontSize: 14, color: C.textSub }}>产业：</span>
