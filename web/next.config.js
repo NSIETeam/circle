@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
 const isExport = process.env.GITHUB_PAGES === 'true';
+// 自定义域名用根路径，GitHub Pages子路径用/circle
+const envBase = process.env.NEXT_PUBLIC_BASE_PATH;
+const basePath = isExport ? (envBase === undefined ? '/circle' : envBase) : '';
 
 const nextConfig = {
   output: isExport ? 'export' : undefined,
   images: { unoptimized: true },
-  // GitHub Pages 部署在 /circle/ 子路径下
-  basePath: isExport ? '/circle' : '',
-  assetPrefix: isExport ? '/circle/' : '',
+  basePath: basePath,
+  assetPrefix: basePath ? `${basePath}/` : '',
   ...(isExport ? {} : {
     async rewrites() {
       return [
