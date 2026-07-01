@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { assetUrl } from '../../lib/asset';
-import { useRole, agentLink as genLink, shareCard as genCard } from '../../lib/role-context';
+import { useRole, agentLink as genLink, shareCard as genCard, authenticate } from '../../lib/role-context';
 
 const C = { primary: '#00A6E0', primaryLight: '#E6F7FD', bg: '#F5F6FA', text: '#333', textSub: '#666', textMuted: '#999', orange: '#FF6B00' };
 
@@ -13,8 +13,9 @@ export default function AgentCoopPage() {
   const [selIndustry, setSelIndustry] = useState('');
   const [selSort, setSelSort] = useState<'commission' | 'price' | 'rating'>('commission');
   const [showLogin, setShowLogin] = useState(!isAgent);
-  const [loginName, setLoginName] = useState('');
-  const [loginPhone, setLoginPhone] = useState('');
+  const [loginUser, setLoginUser] = useState('');
+  const [loginPass, setLoginPass] = useState('');
+  const [loginErr, setLoginErr] = useState('');
   const [compareTarget, setCompareTarget] = useState<any>(null);
 
   useEffect(() => {
@@ -40,9 +41,11 @@ export default function AgentCoopPage() {
   }, [selIndustry, selSort, buildings]);
 
   const handleLogin = () => {
-    if (!loginName.trim() || !loginPhone.trim()) return;
-    setAgentInfo({ name: loginName, phone: loginPhone, agentId: 'agt_' + Date.now() });
-    setRole('agent');
+    if (!loginUser.trim() || !loginPass.trim()) return;
+    const account = authenticate(loginUser.trim(), loginPass);
+    if (!account) { setLoginErr('账号或密码错误'); return; }
+    setAgentInfo({ name: account.name, phone: account.phone, agentId: account.agentId });
+    setRole(account.role);
     setShowLogin(false);
   };
 
@@ -54,9 +57,11 @@ export default function AgentCoopPage() {
         <div style={{ maxWidth: 400, margin: '80px auto', padding: 32, background: '#fff', borderRadius: 16 }}>
           <div style={{ fontSize: 20, fontWeight: 800, textAlign: 'center', marginBottom: 8 }}>经纪人登录</div>
           <div style={{ fontSize: 13, color: '#999', textAlign: 'center', marginBottom: 24 }}>登录后查看所有在售楼盘佣金</div>
-          <input value={loginName} onChange={e => setLoginName(e.target.value)} placeholder="姓名" style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', marginBottom: 12 }} />
-          <input value={loginPhone} onChange={e => setLoginPhone(e.target.value)} placeholder="手机号" style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', marginBottom: 16 }} />
-          <button onClick={handleLogin} style={{ width: '100%', height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>进入经纪端</button>
+          <input value={loginUser} onChange={e => { setLoginUser(e.target.value); setLoginErr(''); }} placeholder="账号" style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', marginBottom: 12 }} />
+          <input type="password" value={loginPass} onChange={e => { setLoginPass(e.target.value); setLoginErr(''); }} placeholder="密码" style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', marginBottom: 12 }} />
+          {loginErr && <div style={{ color: '#FF3B30', fontSize: 13, marginBottom: 12 }}>{loginErr}</div>}
+          <div style={{ fontSize: 12, color: '#999', marginBottom: 16 }}>测试账号：admin / admin123</div>
+          <button onClick={handleLogin} style={{ width: '100%', height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>登录</button>
         </div>
       ) : (
         <>

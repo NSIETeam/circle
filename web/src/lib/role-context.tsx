@@ -76,6 +76,21 @@ export function RoleProvider({ children }: { children: ReactNode }) {
 
 export function useRole() { return useContext(Ctx); }
 
+// 预设账号
+const PRESET_ACCOUNTS: Record<string, { password: string; name: string; phone: string; role: UserRole; agentId: string }> = {
+  admin: { password: 'admin123', name: '管理员', phone: '138****8888', role: 'park', agentId: 'admin_001' },
+  broker: { password: 'broker123', name: '张经纪', phone: '139****9999', role: 'agent', agentId: 'agt_demo_001' },
+};
+
+/** 验证预设账号登录，返回用户信息或null */
+export function authenticate(username: string, password: string): { name: string; phone: string; role: UserRole; agentId: string } | null {
+  const account = PRESET_ACCOUNTS[username];
+  if (account && account.password === password) {
+    return { name: account.name, phone: account.phone, role: account.role, agentId: account.agentId };
+  }
+  return null;
+}
+
 // Utility: agent link generation
 export function agentLink(buildingId: string, agentInfo: { agentId: string } | null): string {
   if (!agentInfo) return '';
