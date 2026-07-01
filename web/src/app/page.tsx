@@ -66,21 +66,21 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero — 宜家大字+黄底色块 */}
-      <div style={{ background: '#fff', borderBottom: `4px solid ${IKEA.yellow}` }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 56px', textAlign: 'center' }}>
-          <h1 style={{ fontSize: 44, fontWeight: 900, color: IKEA.text, marginBottom: 16, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-            关于企业的一切<br />都在<span style={{ background: IKEA.yellow, padding: '0 12px', borderRadius: RADIUS.sm, display: 'inline-block' }}>园圈</span>
+      {/* Hero — 占比加大，纯蓝主色，去黄色 */}
+      <div style={{ background: '#fff' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '120px 24px 110px', textAlign: 'center' }}>
+          <h1 style={{ fontSize: 56, fontWeight: 900, color: IKEA.text, marginBottom: 28, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
+            关于企业的一切<br />都在<span style={{ color: IKEA.blue }}>园圈</span>
           </h1>
-          <p style={{ fontSize: 18, color: IKEA.textSub, marginBottom: 32, lineHeight: 1.6, fontWeight: 500 }}>
+          <p style={{ fontSize: 20, color: IKEA.textSub, marginBottom: 48, lineHeight: 1.6, fontWeight: 500 }}>
             AI智能选址 · 产业园入驻 · 企业服务生态 · 一站式解决企业空间需求
           </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-            <button onClick={() => go('/find')} style={{ padding: '16px 36px', borderRadius: RADIUS.sm, border: 'none', background: IKEA.blue, color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', fontFamily: FONT, boxShadow: SHADOW.card, transition: 'transform 0.15s' }}
+          <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+            <button onClick={() => go('/find')} style={{ padding: '18px 44px', borderRadius: RADIUS.sm, border: 'none', background: IKEA.blue, color: '#fff', fontSize: 17, fontWeight: 700, cursor: 'pointer', fontFamily: FONT, boxShadow: SHADOW.card, transition: 'transform 0.15s' }}
               onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
               AI帮我选址
             </button>
-            <button onClick={() => go('/promotions')} style={{ padding: '16px 36px', borderRadius: RADIUS.sm, border: `2px solid ${IKEA.blue}`, background: '#fff', color: IKEA.blue, fontSize: 16, fontWeight: 700, cursor: 'pointer', fontFamily: FONT }}>
+            <button onClick={() => go('/promotions')} style={{ padding: '18px 44px', borderRadius: RADIUS.sm, border: `2px solid ${IKEA.blue}`, background: '#fff', color: IKEA.blue, fontSize: 17, fontWeight: 700, cursor: 'pointer', fontFamily: FONT }}>
               查看优惠
             </button>
           </div>
@@ -105,7 +105,7 @@ export default function HomePage() {
       </div>
 
       {/* 企业服务生态 — 宜家黄色横幅 */}
-      <div style={{ background: IKEA.yellowLight, borderTop: `1px solid ${IKEA.borderLight}`, borderBottom: `1px solid ${IKEA.borderLight}` }}>
+      <div style={{ background: IKEA.blueLight, borderTop: `1px solid ${IKEA.borderLight}`, borderBottom: `1px solid ${IKEA.borderLight}` }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px' }}>
           <h2 style={{ fontSize: 24, fontWeight: 900, color: IKEA.text, marginBottom: 24 }}>企业服务生态</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
