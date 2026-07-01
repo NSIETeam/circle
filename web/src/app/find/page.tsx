@@ -605,6 +605,14 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                   </div>
                 </div>
                 {b.match_reason && <div style={{ fontSize: 12, color: C.primary, marginTop: 4 }}>{b.match_reason}</div>}
+                {/* 政策标签 — C端可见 */}
+                {(b as any).policy && (b as any).policy.length > 0 && (
+                  <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
+                    {(b as any).policy.slice(0, 2).map((p: string, i: number) => (
+                      <span key={i} style={{ fontSize: 10, color: '#34C759', background: '#EAFBEF', padding: '2px 6px', borderRadius: 3 }}>{p}</span>
+                    ))}
+                  </div>
+                )}
                 {/* 主推楼型 + 佣金（经纪人可见） */}
                 <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
                   {(b as any).main_type && <span style={{ fontSize: 11, color: C.textSub, background: '#F0F2F5', padding: '2px 6px', borderRadius: 3 }}>{(b as any).main_type}</span>}

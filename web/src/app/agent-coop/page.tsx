@@ -56,7 +56,8 @@ export default function AgentCoopPage() {
       {showLogin ? (
         <div style={{ maxWidth: 400, margin: '80px auto', padding: 32, background: '#fff', borderRadius: 16 }}>
           <div style={{ fontSize: 20, fontWeight: 800, textAlign: 'center', marginBottom: 8 }}>经纪人登录</div>
-          <div style={{ fontSize: 13, color: '#999', textAlign: 'center', marginBottom: 24 }}>登录后查看所有在售楼盘佣金</div>
+          <div style={{ display: 'inline-block', fontSize: 11, color: '#FF9500', background: '#FFF8E5', padding: '2px 10px', borderRadius: 4, marginBottom: 16 }}>测试阶段</div>
+          <div style={{ fontSize: 13, color: '#999', textAlign: 'center', marginBottom: 24 }}>登录后查看佣金与客户线索</div>
           <input value={loginUser} onChange={e => { setLoginUser(e.target.value); setLoginErr(''); }} placeholder="账号" style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', marginBottom: 12 }} />
           <input type="password" value={loginPass} onChange={e => { setLoginPass(e.target.value); setLoginErr(''); }} placeholder="密码" style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none', marginBottom: 12 }} />
           {loginErr && <div style={{ color: '#FF3B30', fontSize: 13, marginBottom: 12 }}>{loginErr}</div>}
@@ -151,7 +152,7 @@ export default function AgentCoopPage() {
                           <span style={{ fontSize: 15, fontWeight: 700, color: C.text }}>{b.name}</span>
                           {(b as any).main_type && <span style={{ fontSize: 11, color: C.primary, background: C.primaryLight, padding: '2px 6px', borderRadius: 3 }}>{(b as any).main_type}</span>}
                         </div>
-                        <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{b.park_name} · {b.region} · {b.total_area?.toLocaleString()}㎡ · {b.floor_height}m · {b.floor_load}T</div>
+                        <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{b.park_name} · {b.region} · {b.total_area?.toLocaleString()}㎡ · {b.floor_height}m · {b.floor_load}T {(b.city && b.city !== '北京') ? ` · ${b.city}` : ''}</div>
 
                         {/* 政策 + 周边 */}
                         <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>

@@ -268,7 +268,25 @@ export default function ListBuildingPage() {
           </div>
         </div>
 
-        <button type="submit" style={{ width: '100%', height: 48, borderRadius: 10, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', marginBottom: 40, marginTop: 8 }}>提交上架</button>
+        <button type="submit" style={{ width: '100%', height: 48, borderRadius: 10, border: 'none', background: '#00A6E0', color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer', marginBottom: 12, marginTop: 8 }}>提交上架</button>
+
+        {/* 付费权益占位 */}
+        <div style={{ background: '#FFFDF6', border: '1px solid #FFE0B2', borderRadius: 10, padding: 14, marginBottom: 40 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#FF6B00', marginBottom: 8 }}>推广权益（敬请期待）</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {[
+              { label: '首页置顶', desc: '7天', icon: 'M12 2L2 7l10 5 10-5z' },
+              { label: '优先推荐', desc: '流量加持', icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2' },
+              { label: '专属标签', desc: '限时优惠', icon: 'M20.6 12.6l-7.2 7.2a2 2 0 01-2.8 0L2 12V2h10z' },
+              { label: '数据报告', desc: '客户画像', icon: 'M3 3v18h18M7 13l4-7 4 4 4-6' },
+            ].map(item => (
+              <div key={item.label} style={{ flex: '1 1 45%', padding: 8, background: '#fff', borderRadius: 8, border: '1px dashed #FFE0B2', textAlign: 'center', opacity: 0.7 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: '#999' }}>{item.label}</div>
+                <div style={{ fontSize: 11, color: '#ccc', marginTop: 2 }}>{item.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </form>
     </div>
   );
