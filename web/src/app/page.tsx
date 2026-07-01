@@ -50,9 +50,28 @@ export default function HomePage() {
             <span style={{ fontSize: 20, fontWeight: 800, color: C.primary }}>园圈</span>
           </div>
           <div style={{ flex: 1 }} />
-          <a href={`${bp}/agent-coop`} style={{ fontSize: 14, color: C.textSub, textDecoration: 'none' }}>经纪人</a>
-          <a href={`${bp}/list-building`} style={{ fontSize: 14, color: C.textSub, textDecoration: 'none' }}>产业园</a>
-          <a href={`${bp}/find`} style={{ fontSize: 14, color: C.primary, fontWeight: 600, background: C.primaryLight, padding: '6px 14px', borderRadius: 6, textDecoration: 'none' }}>开始选址 →</a>
+          {/* 三个方块入口 */}
+          <div style={{ display: 'flex', gap: 10 }}>
+            {[
+              { label: '我是经纪人', desc: '佣金·分享·获客', path: '/agent-coop', color: '#FF6B00', bg: '#FFF8E5' },
+              { label: '我是产业园', desc: '管理·政策·竞品', path: '/sales', color: '#00A6E0', bg: '#E6F7FD' },
+              { label: '我是管理员', desc: '审核·数据·后台', path: '/sales', color: '#5856D6', bg: '#F0EFFC' },
+            ].map(item => (
+              <a key={item.label} href={`${bp}${item.path}`} style={{ textDecoration: 'none' }}>
+                <div style={{
+                  padding: '10px 16px', borderRadius: 12, background: item.bg, border: `1px solid ${item.color}20`,
+                  cursor: 'pointer', textAlign: 'center', minWidth: 110,
+                  transition: 'box-shadow 0.2s',
+                }}
+                  onMouseEnter={e => e.currentTarget.style.boxShadow = `0 4px 12px ${item.color}20`}
+                  onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: item.color }}>{item.label}</div>
+                  <div style={{ fontSize: 11, color: '#999', marginTop: 2 }}>{item.desc}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+          <a href={`${bp}/find`} style={{ fontSize: 14, color: '#fff', fontWeight: 600, background: '#00A6E0', padding: '10px 18px', borderRadius: 10, textDecoration: 'none', flexShrink: 0 }}>开始选址</a>
         </div>
       </div>
 

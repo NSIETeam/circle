@@ -487,19 +487,48 @@ export default function SalesPage() {
         {activeTab === 'park' && (
           <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden', padding: 16 }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: 16 }}>
+              {/* 竞品报价 */}
+              <div style={{ border: '1px solid #FFE0B2', borderRadius: 10, padding: 14, background: '#FFFDF6' }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#FF6B00', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  周边竞品报价
+                </div>
+                {buildings.slice(0, 6).sort((a,b)=>a.rent_min-b.rent_min).map((b,i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: i<5?'1px solid #f0f0f0':'none', fontSize: 13 }}>
+                    <span style={{ color: '#333' }}>{b.name}</span>
+                    <span style={{ fontWeight: 700, color: '#FF6B00' }}>{Number(b.rent_min).toFixed(1)}-{Number(b.rent_max).toFixed(1)}元/㎡/天</span>
+                  </div>
+                ))}
+                <div style={{ fontSize: 11, color: '#999', marginTop: 8 }}>本园区均价 {Math.round(buildings.reduce((s,b)=>s+((b.rent_min+b.rent_max)/2),0)/buildings.length*10)/10}元，{buildings.filter(b => (b.rent_min+b.rent_max)/2 > buildings.reduce((s,b)=>s+((b.rent_min+b.rent_max)/2),0)/buildings.length).length > buildings.length/2 ? '处于中等水平' : '有价格优势'}</div>
+              </div>
+
+              {/* 园区政策 */}
+              <div style={{ border: '1px solid #f0f0f0', borderRadius: 10, padding: 14 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 10 }}>园区政策</div>
+                {['租金补贴最高50万/年', '税收奖励区级留存50%', '高新企业申报辅导', '人才落户绿色通道', '研发补贴最高100万', '产业基金优先投资'].map((p, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', borderBottom: i<5?'1px solid #f5f5f5':'none' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34C759" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span style={{ fontSize: 13, color: C.text }}>{p}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* 入驻企业 */}
               <div style={{ border: '1px solid #f0f0f0', borderRadius: 10, padding: 14 }}>
                 <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 10 }}>入驻企业</div>
                 {['智芯科技（AI，已入驻2年）', '康诺生物（生物医药，已入驻1年）', '精工智造（智能制造，已入驻3年）', '芯辰微电子（集成电路，已入驻1年）'].map((c, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: i < 3 ? '1px solid #f5f5f5' : 'none' }}>
-                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#E6F7FD', color: C.primary, fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{c[0]}</div>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', borderBottom: i<3?'1px solid #f5f5f5':'none' }}>
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#E6F7FD', color: C.primary, fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{c[0]}</div>
                     <span style={{ fontSize: 13, color: C.text }}>{c}</span>
                   </div>
                 ))}
               </div>
+
+              {/* 周边交通 */}
               <div style={{ border: '1px solid #f0f0f0', borderRadius: 10, padding: 14 }}>
                 <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 10 }}>周边交通</div>
                 {['最近地铁站 500m', '公交站 200m（3条线路）', '高速入口 2km', '首都机场 35km', '北京南站 25km'].map((t, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: i < 4 ? '1px solid #f5f5f5' : 'none' }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', borderBottom: i<4?'1px solid #f5f5f5':'none' }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00A6E0" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     <span style={{ fontSize: 13, color: C.text }}>{t}</span>
                   </div>
