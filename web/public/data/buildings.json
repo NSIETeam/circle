@@ -3193,5 +3193,1829 @@
     "main_type": "GMP车间",
     "road": "潞城镇路",
     "road_desc": "副中心科技园，新能源/绿色"
+  },
+  {
+    "id": "bj2_11276",
+    "name": "亦庄经海路数字产业园",
+    "park_name": "亦庄经海路数字产业园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 2000,
+    "floor_height": 7,
+    "floor_load": 3,
+    "power_capacity": 22800,
+    "rent_min": 1.2,
+    "rent_max": 1.9,
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 3.7,
+    "tenant_count": 62,
+    "amenities": [
+      "污水处理",
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室",
+      "洁净室"
+    ],
+    "latitude": 39.782,
+    "longitude": 116.518,
+    "commission": 21.6,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "产业基金优先投资",
+      "行政审批协助",
+      "租金补贴最高50万"
+    ],
+    "surrounding": [
+      "医院3公里",
+      "商业中心",
+      "地铁2公里内",
+      "高速出口5分钟"
+    ],
+    "main_type": "分层厂房",
+    "road": "亦庄经海路",
+    "road_desc": "电子信息产业聚集区"
+  },
+  {
+    "id": "bj2_83690",
+    "name": "亦庄路东区科创中心",
+    "park_name": "亦庄路东区科创中心",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 18500,
+    "floor_height": 13,
+    "floor_load": 6,
+    "power_capacity": 15800,
+    "rent_min": 0.5,
+    "rent_max": 1.5,
+    "industry_tags": [
+      "AI"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.0,
+    "tenant_count": 205,
+    "amenities": [
+      "停车场",
+      "行车",
+      "货梯",
+      "卸货平台",
+      "环评",
+      "消防"
+    ],
+    "latitude": 39.801,
+    "longitude": 116.498,
+    "commission": 83.2,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "行政审批协助",
+      "租金补贴最高50万",
+      "税收奖励区级留存50%"
+    ],
+    "surrounding": [
+      "商业中心",
+      "地铁2公里内",
+      "高速出口5分钟",
+      "员工宿舍"
+    ],
+    "main_type": "研发办公",
+    "road": "亦庄荣昌东街",
+    "road_desc": "AI产业聚集区"
+  },
+  {
+    "id": "bj2_62076",
+    "name": "亦庄生物医药园D座",
+    "park_name": "亦庄生物医药园D座",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 20500,
+    "floor_height": 9,
+    "floor_load": 4,
+    "power_capacity": 19800,
+    "rent_min": 1.4,
+    "rent_max": 2.8,
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.4,
+    "tenant_count": 189,
+    "amenities": [
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室",
+      "洁净室",
+      "防静电"
+    ],
+    "latitude": 39.798,
+    "longitude": 116.524,
+    "commission": 86.1,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "专精特新奖励20万",
+      "人才落户绿色通道",
+      "研发补贴最高100万"
+    ],
+    "surrounding": [
+      "食堂",
+      "便利店",
+      "银行",
+      "医院3公里"
+    ],
+    "main_type": "GMP车间",
+    "road": "亦庄经海路",
+    "road_desc": "生物医药产业聚集区"
+  },
+  {
+    "id": "bj2_32539",
+    "name": "亦庄智能制造基地",
+    "park_name": "亦庄智能制造基地",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 15000,
+    "floor_height": 11,
+    "floor_load": 5,
+    "power_capacity": 8800,
+    "rent_min": 2.3,
+    "rent_max": 3.6,
+    "industry_tags": [
+      "智能制造"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 98,
+    "amenities": [
+      "食堂",
+      "停车场",
+      "行车",
+      "货梯",
+      "卸货平台",
+      "环评"
+    ],
+    "latitude": 39.808,
+    "longitude": 116.485,
+    "commission": 207.0,
+    "commission_rate": "2个月租金",
+    "policy": [
+      "租金补贴最高50万",
+      "税收奖励区级留存50%",
+      "高新企业申报辅导"
+    ],
+    "surrounding": [
+      "地铁2公里内",
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂"
+    ],
+    "main_type": "独栋厂房",
+    "road": "亦庄荣京东街",
+    "road_desc": "智能制造产业聚集区"
+  },
+  {
+    "id": "bj2_94559",
+    "name": "亦庄集成电路设计园",
+    "park_name": "亦庄集成电路设计园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 17000,
+    "floor_height": 7,
+    "floor_load": 3,
+    "power_capacity": 12800,
+    "rent_min": 1.7,
+    "rent_max": 2.4,
+    "industry_tags": [
+      "集成电路"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 3.7,
+    "tenant_count": 192,
+    "amenities": [
+      "除尘",
+      "通风",
+      "双回路供电",
+      "光纤接入",
+      "宿舍",
+      "食堂"
+    ],
+    "latitude": 39.792,
+    "longitude": 116.508,
+    "commission": 260.1,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "人才落户绿色通道",
+      "研发补贴最高100万",
+      "产业基金优先投资"
+    ],
+    "surrounding": [
+      "便利店",
+      "银行",
+      "医院3公里",
+      "商业中心"
+    ],
+    "main_type": "总部基地",
+    "road": "亦庄景园街",
+    "road_desc": "集成电路产业聚集区"
+  },
+  {
+    "id": "bj2_59685",
+    "name": "亦庄云产业园F栋",
+    "park_name": "亦庄云产业园F栋",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 22000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 22800,
+    "rent_min": 0.7,
+    "rent_max": 1.4,
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 82,
+    "amenities": [
+      "环评",
+      "消防",
+      "污水处理",
+      "蒸汽",
+      "天然气",
+      "GMP车间"
+    ],
+    "latitude": 39.778,
+    "longitude": 116.53,
+    "commission": 46.2,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "产业基金优先投资",
+      "行政审批协助",
+      "租金补贴最高50万"
+    ],
+    "surrounding": [
+      "医院3公里",
+      "商业中心",
+      "地铁2公里内",
+      "高速出口5分钟"
+    ],
+    "main_type": "数据中心",
+    "road": "亦庄科创十七街",
+    "road_desc": "电子信息产业聚集区"
+  },
+  {
+    "id": "bj2_38468",
+    "name": "生命科学园生物制药基地",
+    "park_name": "生命科学园生物制药基地",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 26000,
+    "floor_height": 7,
+    "floor_load": 3,
+    "power_capacity": 10800,
+    "rent_min": 2.5,
+    "rent_max": 3.0,
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.0,
+    "tenant_count": 250,
+    "amenities": [
+      "除尘",
+      "通风",
+      "双回路供电",
+      "光纤接入",
+      "宿舍",
+      "食堂"
+    ],
+    "latitude": 40.08,
+    "longitude": 116.312,
+    "commission": 585.0,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "高新企业申报辅导",
+      "专精特新奖励20万",
+      "人才落户绿色通道"
+    ],
+    "surrounding": [
+      "员工宿舍",
+      "食堂",
+      "便利店",
+      "银行"
+    ],
+    "main_type": "洁净室",
+    "road": "生命科学园路",
+    "road_desc": "生物医药产业聚集区"
+  },
+  {
+    "id": "bj2_35031",
+    "name": "未来科学城能源谷",
+    "park_name": "未来科学城能源谷",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 29500,
+    "floor_height": 9,
+    "floor_load": 4,
+    "power_capacity": 17800,
+    "rent_min": 0.7,
+    "rent_max": 1.9,
+    "industry_tags": [
+      "新能源"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 57,
+    "amenities": [
+      "防爆",
+      "危化品仓库",
+      "除尘",
+      "通风",
+      "双回路供电",
+      "光纤接入"
+    ],
+    "latitude": 40.06,
+    "longitude": 116.338,
+    "commission": 62.0,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "税收奖励区级留存50%",
+      "高新企业申报辅导",
+      "专精特新奖励20万"
+    ],
+    "surrounding": [
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂",
+      "便利店"
+    ],
+    "main_type": "研发办公",
+    "road": "未来科学城路",
+    "road_desc": "新能源产业聚集区"
+  },
+  {
+    "id": "bj2_15552",
+    "name": "北清路智能制造园",
+    "park_name": "北清路智能制造园",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 28000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 14800,
+    "rent_min": 2.4,
+    "rent_max": 3.3,
+    "industry_tags": [
+      "智能制造"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.4,
+    "tenant_count": 174,
+    "amenities": [
+      "实验室",
+      "洁净室",
+      "防静电",
+      "防爆",
+      "危化品仓库",
+      "除尘"
+    ],
+    "latitude": 40.05,
+    "longitude": 116.295,
+    "commission": 201.6,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "产业基金优先投资",
+      "行政审批协助",
+      "租金补贴最高50万"
+    ],
+    "surrounding": [
+      "医院3公里",
+      "商业中心",
+      "地铁2公里内",
+      "高速出口5分钟"
+    ],
+    "main_type": "分层厂房",
+    "road": "北清路",
+    "road_desc": "智能制造产业聚集区"
+  },
+  {
+    "id": "bj2_04685",
+    "name": "昌平生命谷创新中心",
+    "park_name": "昌平生命谷创新中心",
+    "region": "昌平区",
+    "city": "北京",
+    "total_area": 8000,
+    "floor_height": 7,
+    "floor_load": 3,
+    "power_capacity": 34800,
+    "rent_min": 0.9,
+    "rent_max": 1.8,
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 134,
+    "amenities": [
+      "GMP车间",
+      "实验室",
+      "洁净室",
+      "防静电",
+      "防爆",
+      "危化品仓库"
+    ],
+    "latitude": 40.075,
+    "longitude": 116.305,
+    "commission": 64.8,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "高新企业申报辅导",
+      "专精特新奖励20万",
+      "人才落户绿色通道"
+    ],
+    "surrounding": [
+      "员工宿舍",
+      "食堂",
+      "便利店",
+      "银行"
+    ],
+    "main_type": "GMP车间",
+    "road": "生命科学园路",
+    "road_desc": "生物医药产业聚集区"
+  },
+  {
+    "id": "bj2_81367",
+    "name": "天竺保税区跨境电商园",
+    "park_name": "天竺保税区跨境电商园",
+    "region": "顺义区",
+    "city": "北京",
+    "total_area": 22500,
+    "floor_height": 5,
+    "floor_load": 2,
+    "power_capacity": 23800,
+    "rent_min": 1.3,
+    "rent_max": 2.1,
+    "industry_tags": [
+      "物流"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 263,
+    "amenities": [
+      "食堂",
+      "停车场",
+      "行车",
+      "货梯",
+      "卸货平台",
+      "环评"
+    ],
+    "latitude": 40.075,
+    "longitude": 116.575,
+    "commission": 175.5,
+    "commission_rate": "2个月租金",
+    "policy": [
+      "行政审批协助",
+      "租金补贴最高50万",
+      "税收奖励区级留存50%"
+    ],
+    "surrounding": [
+      "商业中心",
+      "地铁2公里内",
+      "高速出口5分钟",
+      "员工宿舍"
+    ],
+    "main_type": "仓储物流",
+    "road": "天竺路",
+    "road_desc": "物流产业聚集区"
+  },
+  {
+    "id": "bj2_18510",
+    "name": "顺义汽车智能产业园",
+    "park_name": "顺义汽车智能产业园",
+    "region": "顺义区",
+    "city": "北京",
+    "total_area": 29500,
+    "floor_height": 9,
+    "floor_load": 4,
+    "power_capacity": 17800,
+    "rent_min": 2.2,
+    "rent_max": 3.4,
+    "industry_tags": [
+      "智能制造"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 147,
+    "amenities": [
+      "宿舍",
+      "食堂",
+      "停车场",
+      "行车",
+      "货梯",
+      "卸货平台"
+    ],
+    "latitude": 40.125,
+    "longitude": 116.645,
+    "commission": 194.7,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "税收奖励区级留存50%",
+      "高新企业申报辅导",
+      "专精特新奖励20万"
+    ],
+    "surrounding": [
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂",
+      "便利店"
+    ],
+    "main_type": "独栋厂房",
+    "road": "顺平路",
+    "road_desc": "智能制造产业聚集区"
+  },
+  {
+    "id": "bj2_33253",
+    "name": "临空经济区总部园",
+    "park_name": "临空经济区总部园",
+    "region": "顺义区",
+    "city": "北京",
+    "total_area": 27000,
+    "floor_height": 11,
+    "floor_load": 5,
+    "power_capacity": 32800,
+    "rent_min": 2.7,
+    "rent_max": 3.4,
+    "industry_tags": [
+      "AI"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.2,
+    "tenant_count": 202,
+    "amenities": [
+      "洁净室",
+      "防静电",
+      "防爆",
+      "危化品仓库",
+      "除尘",
+      "通风"
+    ],
+    "latitude": 40.085,
+    "longitude": 116.605,
+    "commission": 437.4,
+    "commission_rate": "2个月租金",
+    "policy": [
+      "租金补贴最高50万",
+      "税收奖励区级留存50%",
+      "高新企业申报辅导"
+    ],
+    "surrounding": [
+      "地铁2公里内",
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂"
+    ],
+    "main_type": "总部基地",
+    "road": "机场东路",
+    "road_desc": "AI产业聚集区"
+  },
+  {
+    "id": "bj2_51330",
+    "name": "望京SOHO写字楼",
+    "park_name": "望京SOHO写字楼",
+    "region": "朝阳区",
+    "city": "北京",
+    "total_area": 19000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 36800,
+    "rent_min": 2.6,
+    "rent_max": 3.7,
+    "industry_tags": [
+      "AI"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.1,
+    "tenant_count": 276,
+    "amenities": [
+      "实验室",
+      "洁净室",
+      "防静电",
+      "防爆",
+      "危化品仓库",
+      "除尘"
+    ],
+    "latitude": 39.998,
+    "longitude": 116.475,
+    "commission": 148.2,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "人才落户绿色通道",
+      "研发补贴最高100万",
+      "产业基金优先投资"
+    ],
+    "surrounding": [
+      "便利店",
+      "银行",
+      "医院3公里",
+      "商业中心"
+    ],
+    "main_type": "写字楼",
+    "road": "望京东路",
+    "road_desc": "AI产业聚集区"
+  },
+  {
+    "id": "bj2_92202",
+    "name": "电子城IT产业园",
+    "park_name": "电子城IT产业园",
+    "region": "朝阳区",
+    "city": "北京",
+    "total_area": 11500,
+    "floor_height": 9,
+    "floor_load": 4,
+    "power_capacity": 1800,
+    "rent_min": 1.6,
+    "rent_max": 2.2,
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.1,
+    "tenant_count": 191,
+    "amenities": [
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室",
+      "洁净室",
+      "防静电"
+    ],
+    "latitude": 39.978,
+    "longitude": 116.492,
+    "commission": 55.2,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "税收奖励区级留存50%",
+      "高新企业申报辅导",
+      "专精特新奖励20万"
+    ],
+    "surrounding": [
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂",
+      "便利店"
+    ],
+    "main_type": "写字楼",
+    "road": "酒仙桥路",
+    "road_desc": "电子信息产业聚集区"
+  },
+  {
+    "id": "bj2_29187",
+    "name": "朝外SOHO办公",
+    "park_name": "朝外SOHO办公",
+    "region": "朝阳区",
+    "city": "北京",
+    "total_area": 16000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 10800,
+    "rent_min": 1.0,
+    "rent_max": 1.5,
+    "industry_tags": [
+      "AI"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 3.5,
+    "tenant_count": 260,
+    "amenities": [
+      "环评",
+      "消防",
+      "污水处理",
+      "蒸汽",
+      "天然气",
+      "GMP车间"
+    ],
+    "latitude": 39.922,
+    "longitude": 116.482,
+    "commission": 48.0,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "高新企业申报辅导",
+      "专精特新奖励20万",
+      "人才落户绿色通道"
+    ],
+    "surrounding": [
+      "员工宿舍",
+      "食堂",
+      "便利店",
+      "银行"
+    ],
+    "main_type": "写字楼",
+    "road": "朝阳路",
+    "road_desc": "AI产业聚集区"
+  },
+  {
+    "id": "bj2_30418",
+    "name": "CBD国贸写字楼",
+    "park_name": "CBD国贸写字楼",
+    "region": "朝阳区",
+    "city": "北京",
+    "total_area": 27000,
+    "floor_height": 11,
+    "floor_load": 5,
+    "power_capacity": 32800,
+    "rent_min": 0.7,
+    "rent_max": 1.4,
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.2,
+    "tenant_count": 132,
+    "amenities": [
+      "货梯",
+      "卸货平台",
+      "环评",
+      "消防",
+      "污水处理",
+      "蒸汽"
+    ],
+    "latitude": 39.908,
+    "longitude": 116.458,
+    "commission": 113.4,
+    "commission_rate": "2个月租金",
+    "policy": [
+      "租金补贴最高50万",
+      "税收奖励区级留存50%",
+      "高新企业申报辅导"
+    ],
+    "surrounding": [
+      "地铁2公里内",
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂"
+    ],
+    "main_type": "写字楼",
+    "road": "建国路",
+    "road_desc": "电子信息产业聚集区"
+  },
+  {
+    "id": "bj2_92621",
+    "name": "酒仙桥798文创园",
+    "park_name": "酒仙桥798文创园",
+    "region": "朝阳区",
+    "city": "北京",
+    "total_area": 21500,
+    "floor_height": 13,
+    "floor_load": 6,
+    "power_capacity": 1800,
+    "rent_min": 1.6,
+    "rent_max": 2.2,
+    "industry_tags": [
+      "新材料"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 41,
+    "amenities": [
+      "污水处理",
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室",
+      "洁净室"
+    ],
+    "latitude": 39.984,
+    "longitude": 116.496,
+    "commission": 309.6,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "税收奖励区级留存50%",
+      "高新企业申报辅导",
+      "专精特新奖励20万"
+    ],
+    "surrounding": [
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂",
+      "便利店"
+    ],
+    "main_type": "写字楼",
+    "road": "酒仙桥路",
+    "road_desc": "新材料产业聚集区"
+  },
+  {
+    "id": "bj2_39119",
+    "name": "中关村软件园二期",
+    "park_name": "中关村软件园二期",
+    "region": "海淀区",
+    "city": "北京",
+    "total_area": 23000,
+    "floor_height": 7,
+    "floor_load": 3,
+    "power_capacity": 24800,
+    "rent_min": 0.9,
+    "rent_max": 1.8,
+    "industry_tags": [
+      "AI"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 184,
+    "amenities": [
+      "防静电",
+      "防爆",
+      "危化品仓库",
+      "除尘",
+      "通风",
+      "双回路供电"
+    ],
+    "latitude": 39.983,
+    "longitude": 116.323,
+    "commission": 186.3,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "租金补贴最高50万",
+      "税收奖励区级留存50%",
+      "高新企业申报辅导"
+    ],
+    "surrounding": [
+      "地铁2公里内",
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂"
+    ],
+    "main_type": "写字楼",
+    "road": "东北旺西路",
+    "road_desc": "AI产业聚集区"
+  },
+  {
+    "id": "bj2_00267",
+    "name": "上地中关村创业大厦",
+    "park_name": "上地中关村创业大厦",
+    "region": "海淀区",
+    "city": "北京",
+    "total_area": 7000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 12800,
+    "rent_min": 1.2,
+    "rent_max": 1.9,
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 162,
+    "amenities": [
+      "行车",
+      "货梯",
+      "卸货平台",
+      "环评",
+      "消防",
+      "污水处理"
+    ],
+    "latitude": 40.04,
+    "longitude": 116.316,
+    "commission": 25.2,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "人才落户绿色通道",
+      "研发补贴最高100万",
+      "产业基金优先投资"
+    ],
+    "surrounding": [
+      "便利店",
+      "银行",
+      "医院3公里",
+      "商业中心"
+    ],
+    "main_type": "写字楼",
+    "road": "上地信息路",
+    "road_desc": "电子信息产业聚集区"
+  },
+  {
+    "id": "bj2_62027",
+    "name": "清华科技园科技大厦",
+    "park_name": "清华科技园科技大厦",
+    "region": "海淀区",
+    "city": "北京",
+    "total_area": 6500,
+    "floor_height": 13,
+    "floor_load": 6,
+    "power_capacity": 31800,
+    "rent_min": 2.1,
+    "rent_max": 2.7,
+    "industry_tags": [
+      "AI"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 271,
+    "amenities": [
+      "除尘",
+      "通风",
+      "双回路供电",
+      "光纤接入",
+      "宿舍",
+      "食堂"
+    ],
+    "latitude": 39.997,
+    "longitude": 116.332,
+    "commission": 122.8,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "行政审批协助",
+      "租金补贴最高50万",
+      "税收奖励区级留存50%"
+    ],
+    "surrounding": [
+      "商业中心",
+      "地铁2公里内",
+      "高速出口5分钟",
+      "员工宿舍"
+    ],
+    "main_type": "写字楼",
+    "road": "中关村东路",
+    "road_desc": "AI产业聚集区"
+  },
+  {
+    "id": "bj2_16866",
+    "name": "中关村壹号写字楼",
+    "park_name": "中关村壹号写字楼",
+    "region": "海淀区",
+    "city": "北京",
+    "total_area": 1000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 800,
+    "rent_min": 2.0,
+    "rent_max": 2.5,
+    "industry_tags": [
+      "集成电路"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 3.5,
+    "tenant_count": 270,
+    "amenities": [
+      "环评",
+      "消防",
+      "污水处理",
+      "蒸汽",
+      "天然气",
+      "GMP车间"
+    ],
+    "latitude": 40.042,
+    "longitude": 116.292,
+    "commission": 6.0,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "租金补贴最高50万",
+      "税收奖励区级留存50%",
+      "高新企业申报辅导"
+    ],
+    "surrounding": [
+      "地铁2公里内",
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂"
+    ],
+    "main_type": "写字楼",
+    "road": "北清路海淀段",
+    "road_desc": "集成电路产业聚集区"
+  },
+  {
+    "id": "bj2_64110",
+    "name": "北大科技园创新中心",
+    "park_name": "北大科技园创新中心",
+    "region": "海淀区",
+    "city": "北京",
+    "total_area": 22000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 2800,
+    "rent_min": 2.2,
+    "rent_max": 2.9,
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.7,
+    "tenant_count": 222,
+    "amenities": [
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室",
+      "洁净室",
+      "防静电"
+    ],
+    "latitude": 39.988,
+    "longitude": 116.312,
+    "commission": 145.2,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "高新企业申报辅导",
+      "专精特新奖励20万",
+      "人才落户绿色通道"
+    ],
+    "surrounding": [
+      "员工宿舍",
+      "食堂",
+      "便利店",
+      "银行"
+    ],
+    "main_type": "写字楼",
+    "road": "海淀大街",
+    "road_desc": "生物医药产业聚集区"
+  },
+  {
+    "id": "bj2_49393",
+    "name": "丰台科技园总部基地",
+    "park_name": "丰台科技园总部基地",
+    "region": "丰台区",
+    "city": "北京",
+    "total_area": 21000,
+    "floor_height": 11,
+    "floor_load": 5,
+    "power_capacity": 800,
+    "rent_min": 1.0,
+    "rent_max": 1.5,
+    "industry_tags": [
+      "智能制造"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.5,
+    "tenant_count": 160,
+    "amenities": [
+      "双回路供电",
+      "光纤接入",
+      "宿舍",
+      "食堂",
+      "停车场",
+      "行车"
+    ],
+    "latitude": 39.842,
+    "longitude": 116.295,
+    "commission": 126.0,
+    "commission_rate": "2个月租金",
+    "policy": [
+      "租金补贴最高50万",
+      "税收奖励区级留存50%",
+      "高新企业申报辅导"
+    ],
+    "surrounding": [
+      "地铁2公里内",
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂"
+    ],
+    "main_type": "总部基地",
+    "road": "丰葆路",
+    "road_desc": "智能制造产业聚集区"
+  },
+  {
+    "id": "bj2_76648",
+    "name": "丰台汉威科技广场",
+    "park_name": "丰台汉威科技广场",
+    "region": "丰台区",
+    "city": "北京",
+    "total_area": 24000,
+    "floor_height": 11,
+    "floor_load": 5,
+    "power_capacity": 6800,
+    "rent_min": 1.1,
+    "rent_max": 2.2,
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 3.6,
+    "tenant_count": 36,
+    "amenities": [
+      "双回路供电",
+      "光纤接入",
+      "宿舍",
+      "食堂",
+      "停车场",
+      "行车"
+    ],
+    "latitude": 39.832,
+    "longitude": 116.305,
+    "commission": 158.4,
+    "commission_rate": "2个月租金",
+    "policy": [
+      "产业基金优先投资",
+      "行政审批协助",
+      "租金补贴最高50万"
+    ],
+    "surrounding": [
+      "医院3公里",
+      "商业中心",
+      "地铁2公里内",
+      "高速出口5分钟"
+    ],
+    "main_type": "写字楼",
+    "road": "科学城路",
+    "road_desc": "电子信息产业聚集区"
+  },
+  {
+    "id": "bj2_84714",
+    "name": "运河商务区写字楼",
+    "park_name": "运河商务区写字楼",
+    "region": "通州区",
+    "city": "北京",
+    "total_area": 16000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 30800,
+    "rent_min": 1.0,
+    "rent_max": 1.5,
+    "industry_tags": [
+      "AI"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 3.5,
+    "tenant_count": 60,
+    "amenities": [
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室",
+      "洁净室",
+      "防静电"
+    ],
+    "latitude": 39.908,
+    "longitude": 116.652,
+    "commission": 48.0,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "产业基金优先投资",
+      "行政审批协助",
+      "租金补贴最高50万"
+    ],
+    "surrounding": [
+      "医院3公里",
+      "商业中心",
+      "地铁2公里内",
+      "高速出口5分钟"
+    ],
+    "main_type": "写字楼",
+    "road": "运河大街",
+    "road_desc": "AI产业聚集区"
+  },
+  {
+    "id": "bj2_68871",
+    "name": "通州张家湾设计小镇",
+    "park_name": "通州张家湾设计小镇",
+    "region": "通州区",
+    "city": "北京",
+    "total_area": 16000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 10800,
+    "rent_min": 2.5,
+    "rent_max": 3.0,
+    "industry_tags": [
+      "智能制造"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 3.5,
+    "tenant_count": 50,
+    "amenities": [
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室",
+      "洁净室",
+      "防静电"
+    ],
+    "latitude": 39.892,
+    "longitude": 116.682,
+    "commission": 120.0,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "高新企业申报辅导",
+      "专精特新奖励20万",
+      "人才落户绿色通道"
+    ],
+    "surrounding": [
+      "员工宿舍",
+      "食堂",
+      "便利店",
+      "银行"
+    ],
+    "main_type": "写字楼",
+    "road": "张家湾路",
+    "road_desc": "智能制造产业聚集区"
+  },
+  {
+    "id": "bj2_23479",
+    "name": "大兴生物医药基地创新园",
+    "park_name": "大兴生物医药基地创新园",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 7500,
+    "floor_height": 5,
+    "floor_load": 2,
+    "power_capacity": 13800,
+    "rent_min": 2.3,
+    "rent_max": 3.1,
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial2.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.8,
+    "tenant_count": 73,
+    "amenities": [
+      "货梯",
+      "卸货平台",
+      "环评",
+      "消防",
+      "污水处理",
+      "蒸汽"
+    ],
+    "latitude": 39.73,
+    "longitude": 116.34,
+    "commission": 103.5,
+    "commission_rate": "2个月租金",
+    "policy": [
+      "研发补贴最高100万",
+      "产业基金优先投资",
+      "行政审批协助"
+    ],
+    "surrounding": [
+      "银行",
+      "医院3公里",
+      "商业中心",
+      "地铁2公里内"
+    ],
+    "main_type": "GMP车间",
+    "road": "大兴生物医药基地路",
+    "road_desc": "生物医药产业聚集区"
+  },
+  {
+    "id": "bj2_54824",
+    "name": "黄村经济技术开发区",
+    "park_name": "黄村经济技术开发区",
+    "region": "大兴区",
+    "city": "北京",
+    "total_area": 23000,
+    "floor_height": 7,
+    "floor_load": 3,
+    "power_capacity": 4800,
+    "rent_min": 1.4,
+    "rent_max": 2.3,
+    "industry_tags": [
+      "智能制造"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.9,
+    "tenant_count": 164,
+    "amenities": [
+      "除尘",
+      "通风",
+      "双回路供电",
+      "光纤接入",
+      "宿舍",
+      "食堂"
+    ],
+    "latitude": 39.74,
+    "longitude": 116.35,
+    "commission": 289.8,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "人才落户绿色通道",
+      "研发补贴最高100万",
+      "产业基金优先投资"
+    ],
+    "surrounding": [
+      "便利店",
+      "银行",
+      "医院3公里",
+      "商业中心"
+    ],
+    "main_type": "分层厂房",
+    "road": "黄村路",
+    "road_desc": "智能制造产业聚集区"
+  },
+  {
+    "id": "bj2_81062",
+    "name": "石景山首钢园",
+    "park_name": "石景山首钢园",
+    "region": "石景山区",
+    "city": "北京",
+    "total_area": 5000,
+    "floor_height": 7,
+    "floor_load": 3,
+    "power_capacity": 28800,
+    "rent_min": 2.8,
+    "rent_max": 4.1,
+    "industry_tags": [
+      "AI"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.3,
+    "tenant_count": 128,
+    "amenities": [
+      "防静电",
+      "防爆",
+      "危化品仓库",
+      "除尘",
+      "通风",
+      "双回路供电"
+    ],
+    "latitude": 39.92,
+    "longitude": 116.18,
+    "commission": 126.0,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "人才落户绿色通道",
+      "研发补贴最高100万",
+      "产业基金优先投资"
+    ],
+    "surrounding": [
+      "便利店",
+      "银行",
+      "医院3公里",
+      "商业中心"
+    ],
+    "main_type": "写字楼",
+    "road": "首钢园路",
+    "road_desc": "AI产业聚集区"
+  },
+  {
+    "id": "bj2_87411",
+    "name": "石景山银河商务区",
+    "park_name": "石景山银河商务区",
+    "region": "石景山区",
+    "city": "北京",
+    "total_area": 20500,
+    "floor_height": 9,
+    "floor_load": 4,
+    "power_capacity": 19800,
+    "rent_min": 0.9,
+    "rent_max": 2.3,
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial4.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 4.4,
+    "tenant_count": 109,
+    "amenities": [
+      "防爆",
+      "危化品仓库",
+      "除尘",
+      "通风",
+      "双回路供电",
+      "光纤接入"
+    ],
+    "latitude": 39.91,
+    "longitude": 116.22,
+    "commission": 55.4,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "专精特新奖励20万",
+      "人才落户绿色通道",
+      "研发补贴最高100万"
+    ],
+    "surrounding": [
+      "食堂",
+      "便利店",
+      "银行",
+      "医院3公里"
+    ],
+    "main_type": "写字楼",
+    "road": "银河大街",
+    "road_desc": "电子信息产业聚集区"
+  },
+  {
+    "id": "bj2_75518",
+    "name": "门头沟生态产业园",
+    "park_name": "门头沟生态产业园",
+    "region": "门头沟区",
+    "city": "北京",
+    "total_area": 11000,
+    "floor_height": 7,
+    "floor_load": 3,
+    "power_capacity": 20800,
+    "rent_min": 1.5,
+    "rent_max": 2.0,
+    "industry_tags": [
+      "新材料"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.0,
+    "tenant_count": 140,
+    "amenities": [
+      "卸货平台",
+      "环评",
+      "消防",
+      "污水处理",
+      "蒸汽",
+      "天然气"
+    ],
+    "latitude": 39.94,
+    "longitude": 116.1,
+    "commission": 148.5,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "人才落户绿色通道",
+      "研发补贴最高100万",
+      "产业基金优先投资"
+    ],
+    "surrounding": [
+      "便利店",
+      "银行",
+      "医院3公里",
+      "商业中心"
+    ],
+    "main_type": "独栋厂房",
+    "road": "门头沟路",
+    "road_desc": "新材料产业聚集区"
+  },
+  {
+    "id": "bj2_32056",
+    "name": "房山高端制造基地",
+    "park_name": "房山高端制造基地",
+    "region": "房山区",
+    "city": "北京",
+    "total_area": 27000,
+    "floor_height": 11,
+    "floor_load": 5,
+    "power_capacity": 12800,
+    "rent_min": 0.7,
+    "rent_max": 1.4,
+    "industry_tags": [
+      "智能制造"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.2,
+    "tenant_count": 182,
+    "amenities": [
+      "食堂",
+      "停车场",
+      "行车",
+      "货梯",
+      "卸货平台",
+      "环评"
+    ],
+    "latitude": 39.72,
+    "longitude": 116.15,
+    "commission": 113.4,
+    "commission_rate": "2个月租金",
+    "policy": [
+      "人才落户绿色通道",
+      "研发补贴最高100万",
+      "产业基金优先投资"
+    ],
+    "surrounding": [
+      "便利店",
+      "银行",
+      "医院3公里",
+      "商业中心"
+    ],
+    "main_type": "分层厂房",
+    "road": "房山工业园区路",
+    "road_desc": "智能制造产业聚集区"
+  },
+  {
+    "id": "bj2_80105",
+    "name": "房山新材料产业园",
+    "park_name": "房山新材料产业园",
+    "region": "房山区",
+    "city": "北京",
+    "total_area": 24500,
+    "floor_height": 13,
+    "floor_load": 6,
+    "power_capacity": 27800,
+    "rent_min": 2.2,
+    "rent_max": 3.4,
+    "industry_tags": [
+      "新材料"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 3.7,
+    "tenant_count": 47,
+    "amenities": [
+      "污水处理",
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室",
+      "洁净室"
+    ],
+    "latitude": 39.69,
+    "longitude": 116.08,
+    "commission": 485.1,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "专精特新奖励20万",
+      "人才落户绿色通道",
+      "研发补贴最高100万"
+    ],
+    "surrounding": [
+      "食堂",
+      "便利店",
+      "银行",
+      "医院3公里"
+    ],
+    "main_type": "独栋厂房",
+    "road": "房山窦店路",
+    "road_desc": "新材料产业聚集区"
+  },
+  {
+    "id": "bj2_02322",
+    "name": "怀柔科学城",
+    "park_name": "怀柔科学城",
+    "region": "怀柔区",
+    "city": "北京",
+    "total_area": 25000,
+    "floor_height": 3,
+    "floor_load": 1,
+    "power_capacity": 28800,
+    "rent_min": 2.3,
+    "rent_max": 3.6,
+    "industry_tags": [
+      "AI"
+    ],
+    "images": [
+      "/images/buildings/industrial1.jpg"
+    ],
+    "is_featured": true,
+    "park_rating": 3.8,
+    "tenant_count": 98,
+    "amenities": [
+      "宿舍",
+      "食堂",
+      "停车场",
+      "行车",
+      "货梯",
+      "卸货平台"
+    ],
+    "latitude": 40.31,
+    "longitude": 116.62,
+    "commission": 172.5,
+    "commission_rate": "1个月租金",
+    "policy": [
+      "人才落户绿色通道",
+      "研发补贴最高100万",
+      "产业基金优先投资"
+    ],
+    "surrounding": [
+      "便利店",
+      "银行",
+      "医院3公里",
+      "商业中心"
+    ],
+    "main_type": "研发办公",
+    "road": "怀柔科学城路",
+    "road_desc": "AI产业聚集区"
+  },
+  {
+    "id": "bj2_23744",
+    "name": "怀柔影视产业示范区",
+    "park_name": "怀柔影视产业示范区",
+    "region": "怀柔区",
+    "city": "北京",
+    "total_area": 9500,
+    "floor_height": 13,
+    "floor_load": 6,
+    "power_capacity": 17800,
+    "rent_min": 0.7,
+    "rent_max": 1.9,
+    "industry_tags": [
+      "电子信息"
+    ],
+    "images": [
+      "/images/buildings/industrial6.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 3.7,
+    "tenant_count": 157,
+    "amenities": [
+      "停车场",
+      "行车",
+      "货梯",
+      "卸货平台",
+      "环评",
+      "消防"
+    ],
+    "latitude": 40.35,
+    "longitude": 116.65,
+    "commission": 59.9,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "税收奖励区级留存50%",
+      "高新企业申报辅导",
+      "专精特新奖励20万"
+    ],
+    "surrounding": [
+      "高速出口5分钟",
+      "员工宿舍",
+      "食堂",
+      "便利店"
+    ],
+    "main_type": "写字楼",
+    "road": "怀柔杨宋路",
+    "road_desc": "电子信息产业聚集区"
+  },
+  {
+    "id": "bj2_80204",
+    "name": "密云生态商务区",
+    "park_name": "密云生态商务区",
+    "region": "密云区",
+    "city": "北京",
+    "total_area": 14000,
+    "floor_height": 7,
+    "floor_load": 3,
+    "power_capacity": 6800,
+    "rent_min": 0.6,
+    "rent_max": 1.7,
+    "industry_tags": [
+      "新能源"
+    ],
+    "images": [
+      "/images/buildings/industrial3.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.6,
+    "tenant_count": 256,
+    "amenities": [
+      "污水处理",
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室",
+      "洁净室"
+    ],
+    "latitude": 40.38,
+    "longitude": 116.85,
+    "commission": 75.6,
+    "commission_rate": "3个月租金",
+    "policy": [
+      "产业基金优先投资",
+      "行政审批协助",
+      "租金补贴最高50万"
+    ],
+    "surrounding": [
+      "医院3公里",
+      "商业中心",
+      "地铁2公里内",
+      "高速出口5分钟"
+    ],
+    "main_type": "总部基地",
+    "road": "密云路",
+    "road_desc": "新能源产业聚集区"
+  },
+  {
+    "id": "bj2_28708",
+    "name": "平谷农业科技创新园",
+    "park_name": "平谷农业科技创新园",
+    "region": "平谷区",
+    "city": "北京",
+    "total_area": 27000,
+    "floor_height": 11,
+    "floor_load": 5,
+    "power_capacity": 12800,
+    "rent_min": 2.2,
+    "rent_max": 2.9,
+    "industry_tags": [
+      "生物医药"
+    ],
+    "images": [
+      "/images/buildings/industrial5.jpg"
+    ],
+    "is_featured": false,
+    "park_rating": 4.2,
+    "tenant_count": 222,
+    "amenities": [
+      "消防",
+      "污水处理",
+      "蒸汽",
+      "天然气",
+      "GMP车间",
+      "实验室"
+    ],
+    "latitude": 40.14,
+    "longitude": 117.12,
+    "commission": 356.4,
+    "commission_rate": "2个月租金",
+    "policy": [
+      "人才落户绿色通道",
+      "研发补贴最高100万",
+      "产业基金优先投资"
+    ],
+    "surrounding": [
+      "便利店",
+      "银行",
+      "医院3公里",
+      "商业中心"
+    ],
+    "main_type": "研发办公",
+    "road": "平谷路",
+    "road_desc": "生物医药产业聚集区"
   }
 ]
