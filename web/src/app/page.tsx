@@ -106,6 +106,11 @@ export default function HomePage() {
             <button onClick={() => go('/promotions')} style={{ padding: '18px 44px', borderRadius: RADIUS.sm, border: `2px solid ${IKEA.blue}`, background: '#fff', color: IKEA.blue, fontSize: 17, fontWeight: 700, cursor: 'pointer', fontFamily: FONT }}>
               查看优惠
             </button>
+            <button onClick={() => go('/office')} style={{ padding: '18px 44px', borderRadius: RADIUS.sm, border: 'none', background: IKEA.yellow, color: IKEA.blue, fontSize: 17, fontWeight: 900, cursor: 'pointer', fontFamily: FONT, display: 'flex', alignItems: 'center', gap: 8 }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={IKEA.blue} strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+              AI办公
+            </button>
           </div>
         </div>
       </div>
