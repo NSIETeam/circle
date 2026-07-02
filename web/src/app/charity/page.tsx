@@ -21,6 +21,9 @@ const ICONS: Record<string, string> = {
   leaf: '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/>',
   shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
   book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  handshake: '<path d="M11 17a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H6l-2 2v4a2 2 0 0 0 2 2h1"/><path d="M16 8l-2-2H9L5 10v4"/><path d="M19 11l2 2v4a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-2"/>',
+  target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  chart: '<path d="M3 3v18h18"/><rect x="7" y="13" width="3" height="5"/><rect x="12" y="9" width="3" height="9"/><rect x="17" y="5" width="3" height="13"/>',
 };
 
 export default function CharityPage() {
@@ -96,12 +99,14 @@ export default function CharityPage() {
           <div style={{ fontSize: 18, fontWeight: 900, color: C.text, marginBottom: 16 }}>我们的公益理念</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 24, maxWidth: 800, margin: '0 auto' }}>
             {[
-              { icon: '🤝', t: '商业向善', d: '用产业园的规模效应，降低公益成本' },
-              { icon: '🎯', t: '精准帮扶', d: '需求与资源精准匹配，不浪费一分善款' },
-              { icon: '📊', t: '阳光透明', d: '所有公益流向公开可查，接受监督' },
+              { icon: 'handshake', t: '商业向善', d: '用产业园的规模效应，降低公益成本' },
+              { icon: 'target', t: '精准帮扶', d: '需求与资源精准匹配，不浪费一分善款' },
+              { icon: 'chart', t: '阳光透明', d: '所有公益流向公开可查，接受监督' },
             ].map((v, i) => (
               <div key={i}>
-                <div style={{ fontSize: 32, marginBottom: 8 }}>{v.icon}</div>
+                <div style={{ marginBottom: 8, display: 'flex', justifyContent: 'center' }}>
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: ICONS[v.icon] || '' }} />
+                </div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: C.primary }}>{v.t}</div>
                 <div style={{ fontSize: 13, color: C.textMuted, marginTop: 4, lineHeight: 1.5 }}>{v.d}</div>
               </div>
