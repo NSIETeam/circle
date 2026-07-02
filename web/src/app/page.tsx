@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { SvgIcon } from '../lib/icons';
 import { IKEA, FONT, SHADOW, RADIUS } from '../lib/ikea-style';
+import { ServiceProviderSheet } from '../components/ServiceProviderSheet';
 
 const FEATURES = [
   { icon: 'ai', label: 'AI选址', desc: '智能匹配厂房', path: '/find' },
@@ -33,6 +34,7 @@ const SERVICES = [
 export default function HomePage() {
   const [showAIKey, setShowAIKey] = useState(false);
   const [aiKey, setAiKey] = useState('');
+  const [selService, setSelService] = useState<string | null>(null);
   const bp = process.env.NEXT_PUBLIC_BASE_PATH || '';
   const go = (path: string) => { window.location.href = `${bp}${path}`; };
 
@@ -73,16 +75,16 @@ export default function HomePage() {
           <div className="hero-bg-row r1">
             {[...FEATURES, ...FEATURES].map((f, i) => (
               <div key={i}>
-                <SvgIcon name={f.icon} size={28} color="#0058A3" />
-                <span style={{ fontSize: 14, fontWeight: 700 }}>{f.label}</span>
+                <SvgIcon name={f.icon} size={28} color="#333" />
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#333' }}>{f.label}</span>
               </div>
             ))}
           </div>
           <div className="hero-bg-row r2">
             {[...FEATURES.slice().reverse(), ...FEATURES.slice().reverse()].map((f, i) => (
               <div key={i}>
-                <SvgIcon name={f.icon} size={28} color="#0058A3" />
-                <span style={{ fontSize: 14, fontWeight: 700 }}>{f.label}</span>
+                <SvgIcon name={f.icon} size={28} color="#333" />
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#333' }}>{f.label}</span>
               </div>
             ))}
           </div>
@@ -115,7 +117,7 @@ export default function HomePage() {
           <p style={{ fontSize: 14, color: IKEA.textMuted, marginBottom: 28 }}>园区入驻后，一站搞定企业日常所需，点击直接获取服务</p>
           <div className="service-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
             {SERVICES.map(s => (
-              <button key={s.label} onClick={() => alert(`${s.label}：正在为您匹配园区认证服务商，顾问将尽快联系您`)} style={{ background: '#fff', borderRadius: RADIUS.md, padding: 20, border: `1px solid ${IKEA.borderLight}`, textAlign: 'center', boxShadow: SHADOW.card, cursor: 'pointer', fontFamily: FONT, transition: 'box-shadow 0.2s, transform 0.15s' }}
+              <button key={s.label} onClick={() => setSelService(s.icon)} style={{ background: '#fff', borderRadius: RADIUS.md, padding: 20, border: `1px solid ${IKEA.borderLight}`, textAlign: 'center', boxShadow: SHADOW.card, cursor: 'pointer', fontFamily: FONT, transition: 'box-shadow 0.2s, transform 0.15s' }}
                 onMouseEnter={e => { e.currentTarget.style.boxShadow = SHADOW.hover; e.currentTarget.style.transform = 'translateY(-3px)'; }} onMouseLeave={e => { e.currentTarget.style.boxShadow = SHADOW.card; e.currentTarget.style.transform = 'none'; }}>
                 <div style={{ width: 44, height: 44, borderRadius: RADIUS.sm, background: IKEA.blueLight, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
                   <SvgIcon name={s.icon} size={24} color={IKEA.blue} />
@@ -157,6 +159,9 @@ export default function HomePage() {
           </div>
         </div>
       )}
+
+      {/* 服务商选择弹层（美团式） */}
+      {selService && <ServiceProviderSheet serviceKey={selService} onClose={() => setSelService(null)} />}
     </div>
   );
 }

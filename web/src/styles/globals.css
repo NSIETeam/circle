@@ -949,8 +949,8 @@ img {
 .hero-bg-scroll {
   position: absolute; top: 50%; left: 0; transform: translateY(-50%);
   display: flex; flex-direction: column; gap: 18px;
-  opacity: 0.16;
-  filter: blur(0.8px);
+  opacity: 0.22;
+  filter: blur(0.6px);
   pointer-events: none;
   width: max-content;
 }
@@ -961,9 +961,9 @@ img {
 .hero-bg-row.r2 { animation: heroScrollR 38s linear infinite; }
 .hero-bg-scroll > div > div {
   flex-shrink: 0; width: 180px; height: 150px;
-  background: #E5F0FA; border: 2px solid #0058A3; border-radius: 14px;
+  background: #F0F2F5; border: 2px solid #333; border-radius: 14px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: #0058A3; gap: 6px;
+  color: #333; gap: 6px;
 }
 @keyframes heroScrollL {
   from { transform: translateX(0); }

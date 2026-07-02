@@ -96,7 +96,29 @@ export function moderateContent(content: {
     return { status: 'manual_review', reasons, riskLevel };
   }
 
-  return { status: 'approved', reasons: ['内容审核通过'], riskLevel: 'low' };
+  // 明显合规自动通过：无任何风险信号 + 关键参数齐全
+  return { status: 'approved', reasons: ['内容合规，关键参数齐全，自动通过'], riskLevel: 'low' };
+}
+
+/**
+ * 自动处理判定 — 管理员端使用
+ * 返回 auto: true 表示系统已自动处理，无需人工介入
+ */
+export function autoModerate(content: {
+  name?: string; description?: string; notes?: string;
+  rent_min?: number; rent_max?: number; total_area?: number; fileName?: string;
+}): { result: ModerationResult; auto: boolean; autoAction: 'approved' | 'rejected' | 'manual' } {
+  const result = moderateContent(content);
+  // 明显违规（敏感词/价格异常/面积异常）→ 自动驳回
+  if (result.status === 'rejected') {
+    return { result, auto: true, autoAction: 'rejected' };
+  }
+  // 明显合规（无风险+参数齐全）→ 自动通过
+  if (result.status === 'approved' && result.riskLevel === 'low') {
+    return { result, auto: true, autoAction: 'approved' };
+  }
+  // 边界情况（联系方式/广告）→ 转人工
+  return { result, auto: false, autoAction: 'manual' };
 }
 
 // 脱敏函数
