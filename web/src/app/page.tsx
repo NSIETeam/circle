@@ -68,15 +68,24 @@ export default function HomePage() {
 
       {/* Hero — 虚化滚动背景(核心功能) + 居中内容 */}
       <div className="hero-bg-wrap">
-        {/* 虚化滚动背景：核心功能卡片循环 */}
+        {/* 虚化滚动背景：核心功能卡片双行错向滚动 */}
         <div className="hero-bg-scroll" aria-hidden>
-          {[...FEATURES, ...FEATURES].map((f, i) => (
-            <div key={i}>
-              <SvgIcon name={f.icon} size={32} color="#fff" />
-              <span style={{ fontSize: 15, fontWeight: 700 }}>{f.label}</span>
-              <span style={{ fontSize: 11, opacity: 0.7 }}>{f.desc}</span>
-            </div>
-          ))}
+          <div className="hero-bg-row r1">
+            {[...FEATURES, ...FEATURES].map((f, i) => (
+              <div key={i}>
+                <SvgIcon name={f.icon} size={28} color="#0058A3" />
+                <span style={{ fontSize: 14, fontWeight: 700 }}>{f.label}</span>
+              </div>
+            ))}
+          </div>
+          <div className="hero-bg-row r2">
+            {[...FEATURES.slice().reverse(), ...FEATURES.slice().reverse()].map((f, i) => (
+              <div key={i}>
+                <SvgIcon name={f.icon} size={28} color="#0058A3" />
+                <span style={{ fontSize: 14, fontWeight: 700 }}>{f.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
         {/* 渐变遮罩，让中心内容更清晰 */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.85) 100%)', pointerEvents: 'none' }} />

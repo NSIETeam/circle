@@ -945,23 +945,32 @@ img {
 
 /* Hero 虚化滚动背景 */
 .hero-bg-wrap { position: relative; overflow: hidden; background: #fff; }
+/* 虚化滚动背景：双行错向滚动，更饱满 */
 .hero-bg-scroll {
-  position: absolute; inset: 0;
-  display: flex; gap: 16px;
-  opacity: 0.10;
-  filter: blur(1.5px);
-  animation: heroScroll 28s linear infinite;
+  position: absolute; top: 50%; left: 0; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 18px;
+  opacity: 0.16;
+  filter: blur(0.8px);
   pointer-events: none;
   width: max-content;
 }
-.hero-bg-scroll > div {
-  flex-shrink: 0; width: 200px; height: 240px;
-  background: #0058A3; border-radius: 16px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: #fff; gap: 8px;
+.hero-bg-row {
+  display: flex; gap: 16px; white-space: nowrap;
 }
-@keyframes heroScroll {
+.hero-bg-row.r1 { animation: heroScrollL 32s linear infinite; }
+.hero-bg-row.r2 { animation: heroScrollR 38s linear infinite; }
+.hero-bg-scroll > div > div {
+  flex-shrink: 0; width: 180px; height: 150px;
+  background: #E5F0FA; border: 2px solid #0058A3; border-radius: 14px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #0058A3; gap: 6px;
+}
+@keyframes heroScrollL {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+@keyframes heroScrollR {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
 }
 .hero-content { position: relative; z-index: 2; }
