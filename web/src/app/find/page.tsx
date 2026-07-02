@@ -59,6 +59,7 @@ export default function HomePage() {
   const [selRent, setSelRent] = useState('不限');
   const [selSort, setSelSort] = useState('default');
   const [selRegion, setSelRegion] = useState('不限');
+  const [selRoad, setSelRoad] = useState('不限');
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [selected, setSelected] = useState<Building | null>(null);
   const [showAI, setShowAI] = useState(false);
@@ -124,9 +125,12 @@ export default function HomePage() {
   const doFilter = useCallback(() => {
     let results = [...all];
 
-    // 1. 区域筛选（城市/区域）
+    // 1. 区域筛选（区 → 路 二级）
     if (selRegion !== '不限' && selRegion !== '附近' && selRegion !== '自选定位') {
-      results = results.filter(b => b.city === selRegion || b.region?.includes(selRegion));
+      results = results.filter(b => b.region?.includes(selRegion));
+    }
+    if (selRoad !== '不限') {
+      results = results.filter(b => b.road === selRoad);
     }
     // 附近/自选定位 — 按用户位置距离筛选
     if ((selRegion === '附近' || selRegion === '自选定位') && userLocation) {
@@ -189,9 +193,9 @@ export default function HomePage() {
     }
 
     setList(results);
-  }, [all, keyword, selIndustry, selArea, selRent, selSort, selRegion, userLocation]);
+  }, [all, keyword, selIndustry, selArea, selRent, selSort, selRegion, selRoad, userLocation]);
 
-  useEffect(() => { doFilter(); }, [selIndustry, selArea, selRent, selSort, keyword, selRegion, userLocation, doFilter]);
+  useEffect(() => { doFilter(); }, [selIndustry, selArea, selRent, selSort, keyword, selRegion, selRoad, userLocation, doFilter]);
 
   // 附近 — 获取GPS定位，按距离排序，显示地图
   const handleNearby = () => {
@@ -200,6 +204,7 @@ export default function HomePage() {
     if (!navigator.geolocation) {
       alert('您的浏览器不支持定位功能');
       setSelRegion('不限');
+    setSelRoad('不限');
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -448,8 +453,25 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
               </button>
               <div style={{ height: 1, background: '#eee', margin: '4px 0' }} />
               {['不限', '大兴区', '昌平区', '顺义区', '经开区', '朝阳区', '海淀区', '丰台区', '通州区'].map(r => (
-                <button key={r} onClick={() => setSelRegion(r)} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === r ? C.primary : '#F5F5F5', color: selRegion === r ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === r ? 600 : 400 }}>{r}</button>
+                <button key={r} onClick={() => { setSelRegion(r); setSelRoad('不限'); }} style={{ textAlign: 'left', padding: '5px 10px', borderRadius: 4, border: 'none', background: selRegion === r ? C.primary : '#F5F5F5', color: selRegion === r ? '#fff' : C.textSub, fontSize: 13, cursor: 'pointer', fontWeight: selRegion === r ? 600 : 400 }}>{r}</button>
               ))}
+              {/* 路段二级筛选 — 选中具体区后显示该区的产业聚集路 */}
+              {selRegion !== '不限' && selRegion !== '附近' && selRegion !== '自选定位' && (() => {
+                const roads = [...new Set(all.filter(b => b.region?.includes(selRegion)).map(b => (b as any).road).filter(Boolean))];
+                if (roads.length === 0) return null;
+                return (
+                  <>
+                    <div style={{ height: 1, background: '#eee', margin: '4px 0' }} />
+                    <div style={{ fontSize: 11, color: C.textMuted, padding: '2px 10px' }}>{selRegion} · 产业聚集路</div>
+                    {['不限', ...roads].map(road => (
+                      <button key={road} onClick={() => setSelRoad(road)} style={{ textAlign: 'left', padding: '5px 10px 5px 16px', borderRadius: 4, border: 'none', background: selRoad === road ? C.primary : '#F5F5F5', color: selRoad === road ? '#fff' : C.textSub, fontSize: 12, cursor: 'pointer', fontWeight: selRoad === road ? 600 : 400, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12h18M3 6h18M3 18h18" /></svg>
+                        {road}
+                      </button>
+                    ))}
+                  </>
+                );
+              })()}
             </div>
           </div>
           <div style={{ background: '#fff', borderRadius: 8, padding: 16, marginBottom: 12 }}>
@@ -583,7 +605,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
                     <img src={assetUrl(b.images?.[0] || '/images/buildings/industrial1.jpg')} alt="" style={{ width: '100%', height: 100, objectFit: 'cover' }} />
                     <div style={{ padding: 8 }}>
                       <div style={{ fontSize: 13, fontWeight: 600, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.name}</div>
-                      <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{b.region} · {b.total_area?.toLocaleString()}㎡</div>
+                      <div style={{ fontSize: 12, color: C.textMuted, marginTop: 2 }}>{b.region} · {(b as any).road || b.park_name} · {b.total_area?.toLocaleString()}㎡</div>
                       <div style={{ fontSize: 14, fontWeight: 700, color: IKEA_BLUE, marginTop: 4, display: 'inline-block', background: IKEA_YELLOW, padding: '2px 8px', borderRadius: 4 }}>{Number(b.rent_min).toFixed(1)}<span style={{ fontSize: 11, color: IKEA_BLUE, fontWeight: 400 }}>元/㎡/天</span></div>
                     </div>
                   </div>
@@ -602,7 +624,7 @@ function haversine(lat1: number, lng1: number, lat2: number, lng2: number): numb
               <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 600, color: C.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.name}</div>
-                  <div style={{ fontSize: 13, color: C.textSub, marginTop: 4 }}>{b.region} · {b.park_name}</div>
+                  <div style={{ fontSize: 13, color: C.textSub, marginTop: 4 }}>{b.region} · {(b as any).road || b.park_name}{(b as any).road_desc ? ` · ${(b as any).road_desc}` : ''}</div>
                   <div style={{ fontSize: 13, color: C.textMuted, marginTop: 4 }}><strong style={{ color: C.text }}>{b.total_area?.toLocaleString()}</strong>㎡ | <strong style={{ color: C.text }}>{b.floor_height}</strong>m层高 | <strong style={{ color: C.text }}>{b.floor_load}</strong>T承重 | <strong style={{ color: C.text }}>{b.power_capacity || '-'}</strong>KVA</div>
                   <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
                     {(b.industry_tags || []).slice(0, 4).map(t => <span key={t} style={{ fontSize: 11, color: C.tagFg, background: C.tagBg, padding: '2px 8px', borderRadius: 3, border: 'none' }}>{t}</span>)}

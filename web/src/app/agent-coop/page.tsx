@@ -135,6 +135,7 @@ export default function AgentCoopPage() {
                 <div style={{ fontSize: 14, fontWeight: 700, color: C.text, lineHeight: 1.4, marginBottom: 6, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{b.name}</div>
                 <div style={{ display: 'flex', gap: 4, marginBottom: 6, flexWrap: 'wrap' }}>
                   {(b.policy || []).slice(0, 1).map((p: string, j: number) => <span key={j} style={{ fontSize: 10, color: '#008A00', background: '#EAFBEF', padding: '1px 6px', borderRadius: 3 }}>{p}</span>)}
+                  {b.road && <span style={{ fontSize: 10, color: C.primary, background: C.primaryLight, padding: '1px 6px', borderRadius: 3, fontWeight: 600 }}>{b.road}</span>}
                   {b.region && <span style={{ fontSize: 10, color: C.textMuted, background: '#F0F0F0', padding: '1px 6px', borderRadius: 3 }}>{b.region}</span>}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

@@ -29,6 +29,8 @@ export interface BuildingData {
   policy?: string[];          // 入驻政策
   surrounding?: string[];     // 周边设施
   main_type?: string;         // 主推楼型
+  road?: string;              // 产业聚集路
+  road_desc?: string;         // 路段产业描述
 }
 
 const DICT = new Set<string>([
