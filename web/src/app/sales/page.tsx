@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { assetUrl } from '../../lib/asset';
 import { extractRequirement, hasApiKey } from '../../lib/deepseek';
 import { useRole, authenticate } from '../../lib/role-context';
+import { setCurrentUserId, getConversations, AGENT_CONTACTS } from '../../lib/chat-store';
+import { ChatPanel } from '../../components/ChatPanel';
 
 const C = {
   primary: '#0058A3', primaryLight: '#E5F0FA', bg: '#F5F5F5', card: '#fff',
@@ -49,7 +51,7 @@ export default function SalesPage() {
   const [notesText, setNotesText] = useState('');
   const [generatedImage, setGeneratedImage] = useState<any>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [activeTab, setActiveTab] = useState<'listings' | 'pending' | 'history' | 'promos' | 'park' | 'audit' | 'service'>('listings');
+  const [activeTab, setActiveTab] = useState<'listings' | 'pending' | 'history' | 'promos' | 'park' | 'audit' | 'service' | 'chat'>('listings');
   const [pendingItems, setPendingItems] = useState<any[]>([]);
   const [historyItems, setHistoryItems] = useState<any[]>([]);
   const [rejectReason, setRejectReason] = useState('');
@@ -57,6 +59,9 @@ export default function SalesPage() {
   const [applyList, setApplyList] = useState<any[]>([]);
   const [serviceTab, setServiceTab] = useState<'list' | 'publish'>('list');
   const [serviceTickets, setServiceTickets] = useState<any[]>([]);
+  const [chatTarget, setChatTarget] = useState<{ id: string; name: string } | null>(null);
+  const [showContacts, setShowContacts] = useState(false);
+  const [chatTick, setChatTick] = useState(0); // 刷新会话列表
   const [selServiceType, setSelServiceType] = useState<string>('');
   const [showVoiceInput, setShowVoiceInput] = useState(false);
   const [voiceText, setVoiceText] = useState('');
@@ -396,6 +401,7 @@ export default function SalesPage() {
     if (!account || (account.role !== 'park' && account.role !== 'superadmin')) { setLoginErr('该账号无产业园端权限'); return; }
     setAgentInfo({ name: account.name, phone: account.phone, agentId: account.agentId });
     setRole(account.role);
+    setCurrentUserId(account.agentId, account.name, 'park');
     setAuthed(true);
   };
 
@@ -436,7 +442,16 @@ export default function SalesPage() {
           </a>
           <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>| 产业园端</span>
           <div style={{ flex: 1 }} />
+          <button onClick={() => { setShowContacts(true); setChatTick(t => t+1); }} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 6, padding: '8px 14px', cursor: 'pointer', color: '#fff', fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+            私聊
+          </button>
           <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/list-building`} style={{ fontSize: 14, color: C.primary, fontWeight: 700, background: C.yellow, padding: '8px 16px', borderRadius: 6, textDecoration: 'none' }}>+ 新增房源</a>
+          {/* 私聊入口 */}
+          <button onClick={() => setShowContacts(true)} style={{ position: 'relative', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 6, padding: '8px 14px', cursor: 'pointer', color: '#fff', fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+            私聊
+          </button>
         </div>
       </div>
 
@@ -703,6 +718,52 @@ export default function SalesPage() {
           </div>
         </div>
       )}
+      {/* 私聊联系人弹窗 */}
+      {showContacts && (
+        <div onClick={() => setShowContacts(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 500, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 500, background: '#fff', borderRadius: '16px 16px 0 0', padding: 20, maxHeight: '70vh', overflowY: 'auto', fontFamily: 'inherit', animation: 'scaleIn 0.25s ease' }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.text, marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              联系经纪人
+              <button onClick={() => setShowContacts(false)} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F0F0F0', cursor: 'pointer', fontSize: 14 }}>✕</button>
+            </div>
+            {/* 已有会话 */}
+            {getConversations().length > 0 && (
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 8 }}>最近会话</div>
+                {getConversations().map(c => {
+                  const contact = AGENT_CONTACTS.find(a => a.id === c.participants.find(x => x !== (JSON.parse(localStorage.getItem('chat_current_user')||'{}')).id));
+                  return (
+                    <div key={c.id} onClick={() => { setChatTarget({ id: c.participants.find(x => x !== (JSON.parse(localStorage.getItem('chat_current_user')||'{}')).id) || '', name: contact?.name || '经纪人' }); setShowContacts(false); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0', borderBottom: `1px solid ${C.border}`, cursor: 'pointer' }}>
+                      <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#FFF8E5', color: '#FF6B00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 14 }}>{(contact?.name || '经')[0]}</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{contact?.name || '经纪人'}</div>
+                        <div style={{ fontSize: 12, color: C.textMuted, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>{c.lastMessage}</div>
+                      </div>
+                      {c.unread > 0 && <span style={{ background: '#E0001B', color: '#fff', fontSize: 11, minWidth: 18, height: 18, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{c.unread}</span>}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 8 }}>经纪人列表</div>
+            {AGENT_CONTACTS.map(a => (
+              <div key={a.id} onClick={() => { setChatTarget({ id: a.id, name: a.name }); setShowContacts(false); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 0', borderBottom: `1px solid ${C.border}`, cursor: 'pointer' }}>
+                <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#FFF8E5', color: '#FF6B00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16 }}>{a.name[0]}</div>
+                <div style={{ flex: 1 }}><div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{a.name}</div><div style={{ fontSize: 12, color: C.textMuted }}>认证经纪人</div></div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2"><polyline points="9 18 15 12 9 6" /></svg>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 私聊面板（全屏覆盖） */}
+      {chatTarget && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 600, background: '#fff' }}>
+          <ChatPanel otherId={chatTarget.id} otherName={chatTarget.name} onBack={() => { setChatTarget(null); setChatTick(t=>t+1); }} />
+        </div>
+      )}
+
       {/* 语音录入弹窗 */}
       {showVoiceInput && (
         <div onClick={() => setShowVoiceInput(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

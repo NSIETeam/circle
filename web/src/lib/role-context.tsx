@@ -20,17 +20,32 @@ const Ctx = createContext<RoleContextType>({
 });
 
 export function RoleProvider({ children }: { children: ReactNode }) {
-  const [role, setRole] = useState<UserRole>('visitor');
-  const [agentInfo, setAgentInfo] = useState<RoleContextType['agentInfo']>(null);
-  const [referralLock, setReferralLock] = useState<RoleContextType['referralLock']>(null);
+  // lazy init: 首次渲染直接读 localStorage，实现登录态持久化（刷新不丢）
+  const [role, setRole] = useState<UserRole>(() => {
+    if (typeof window === 'undefined') return 'visitor';
+    return (localStorage.getItem('user_role') as UserRole) || 'visitor';
+  });
+  const [agentInfo, setAgentInfo] = useState<RoleContextType['agentInfo']>(() => {
+    if (typeof window === 'undefined') return null;
+    try { return JSON.parse(localStorage.getItem('agent_info') || 'null'); } catch { return null; }
+  });
+  const [referralLock, setReferralLock] = useState<RoleContextType['referralLock']>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const lock = JSON.parse(localStorage.getItem('referral_lock') || 'null');
+      if (lock && new Date(lock.expiresAt) > new Date()) return lock;
+      return null;
+    } catch { return null; }
+  });
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const saved = localStorage.getItem('user_role') as UserRole;
-    if (saved) setRole(saved);
-    const info = localStorage.getItem('agent_info');
-    if (info) {
-      try { setAgentInfo(JSON.parse(info)); } catch {}
+    // 同步 chat-store 的 currentUserId
+    if (agentInfo) {
+      const chatUser = localStorage.getItem('chat_current_user');
+      if (!chatUser) {
+        localStorage.setItem('chat_current_user', JSON.stringify({ id: agentInfo.agentId, name: agentInfo.name, role }));
+      }
     }
     // Parse referral from URL
     const params = new URLSearchParams(window.location.search);
@@ -41,15 +56,6 @@ export function RoleProvider({ children }: { children: ReactNode }) {
       const lock = { agentId, buildingId: bid, expiresAt: new Date(Date.now() + 30*86400000).toISOString() };
       localStorage.setItem('referral_lock', JSON.stringify(lock));
       setReferralLock(lock);
-    } else {
-      const savedLock = localStorage.getItem('referral_lock');
-      if (savedLock) {
-        try {
-          const lock = JSON.parse(savedLock);
-          if (new Date(lock.expiresAt) > new Date()) setReferralLock(lock);
-          else localStorage.removeItem('referral_lock');
-        } catch {}
-      }
     }
   }, []);
 
