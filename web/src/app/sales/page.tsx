@@ -433,25 +433,20 @@ export default function SalesPage() {
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: 'inherit' }}>
       {/* 顶部导航 */}
       <div style={{ background: C.primary, position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px' }}>
-          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/`} style={{ textDecoration: 'none', fontSize: 22, fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 6, background: C.yellow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" /></svg>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px' }}>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/`} style={{ textDecoration: 'none', fontSize: 20, fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+            <div style={{ width: 30, height: 30, borderRadius: 6, background: C.yellow, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={C.primary} strokeWidth="2.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" /></svg>
             </div>
             园圈
           </a>
-          <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>| 产业园端</span>
+          <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', flexShrink: 0 }}>| 产业园端</span>
           <div style={{ flex: 1 }} />
-          <button onClick={() => { setShowContacts(true); setChatTick(t => t+1); }} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 6, padding: '8px 14px', cursor: 'pointer', color: '#fff', fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+          <button onClick={() => { setShowContacts(true); setChatTick(t => t+1); }} style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 6, padding: '8px 12px', cursor: 'pointer', color: '#fff', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 5, fontFamily: 'inherit', flexShrink: 0, whiteSpace: 'nowrap' }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
             私聊
           </button>
-          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/list-building`} style={{ fontSize: 14, color: C.primary, fontWeight: 700, background: C.yellow, padding: '8px 16px', borderRadius: 6, textDecoration: 'none' }}>+ 新增房源</a>
-          {/* 私聊入口 */}
-          <button onClick={() => setShowContacts(true)} style={{ position: 'relative', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 6, padding: '8px 14px', cursor: 'pointer', color: '#fff', fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-            私聊
-          </button>
+          <a href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/list-building`} style={{ fontSize: 14, color: C.primary, fontWeight: 700, background: C.yellow, padding: '8px 16px', borderRadius: 6, textDecoration: 'none', whiteSpace: 'nowrap' }}>+ 新增房源</a>
         </div>
       </div>
 
