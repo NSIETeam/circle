@@ -95,9 +95,16 @@ export default function HomePage() {
           <h1 className="hero-title" style={{ fontSize: 56, fontWeight: 900, color: IKEA.text, marginBottom: 28, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
             关于企业的一切<br />都在<span style={{ color: IKEA.blue }}>园圈</span>
           </h1>
-          <p className="hero-sub" style={{ fontSize: 20, color: IKEA.textSub, marginBottom: 48, lineHeight: 1.6, fontWeight: 500 }}>
+          <p className="hero-sub" style={{ fontSize: 20, color: IKEA.textSub, marginBottom: 20, lineHeight: 1.6, fontWeight: 500 }}>
             AI智能选址 · 产业园入驻 · 企业服务生态 · 一站式解决企业空间需求
           </p>
+          {/* 园圈公益入口栏 */}
+          <a href={`${bp}/charity`} onClick={e => { e.preventDefault(); go('/charity'); }} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 999, background: IKEA.blueLight, color: IKEA.blue, fontSize: 14, fontWeight: 700, textDecoration: 'none', marginBottom: 36, cursor: 'pointer', transition: 'transform 0.15s' }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={IKEA.blue} strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+            园圈公益 · 让产业园的发展惠及更多人
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={IKEA.blue} strokeWidth="2"><polyline points="9 18 15 12 9 6" /></svg>
+          </a>
           <div className="hero-buttons" style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
             <button onClick={() => go('/find')} style={{ padding: '18px 44px', borderRadius: RADIUS.sm, border: 'none', background: IKEA.blue, color: '#fff', fontSize: 17, fontWeight: 700, cursor: 'pointer', fontFamily: FONT, boxShadow: SHADOW.card, transition: 'transform 0.15s' }}
               onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
