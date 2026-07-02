@@ -942,3 +942,26 @@ img {
   .hero-buttons { flex-direction: column !important; gap: 10px !important; }
   .hero-buttons button { width: 100% !important; }
 }
+
+/* Hero 虚化滚动背景 */
+.hero-bg-wrap { position: relative; overflow: hidden; background: #fff; }
+.hero-bg-scroll {
+  position: absolute; inset: 0;
+  display: flex; gap: 16px;
+  opacity: 0.10;
+  filter: blur(1.5px);
+  animation: heroScroll 28s linear infinite;
+  pointer-events: none;
+  width: max-content;
+}
+.hero-bg-scroll > div {
+  flex-shrink: 0; width: 200px; height: 240px;
+  background: #0058A3; border-radius: 16px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #fff; gap: 8px;
+}
+@keyframes heroScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.hero-content { position: relative; z-index: 2; }

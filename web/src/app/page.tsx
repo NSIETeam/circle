@@ -66,9 +66,21 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero — 占比加大，纯蓝主色，去黄色 */}
-      <div style={{ background: '#fff' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '120px 24px 110px', textAlign: 'center' }}>
+      {/* Hero — 虚化滚动背景(核心功能) + 居中内容 */}
+      <div className="hero-bg-wrap">
+        {/* 虚化滚动背景：核心功能卡片循环 */}
+        <div className="hero-bg-scroll" aria-hidden>
+          {[...FEATURES, ...FEATURES].map((f, i) => (
+            <div key={i}>
+              <SvgIcon name={f.icon} size={32} color="#fff" />
+              <span style={{ fontSize: 15, fontWeight: 700 }}>{f.label}</span>
+              <span style={{ fontSize: 11, opacity: 0.7 }}>{f.desc}</span>
+            </div>
+          ))}
+        </div>
+        {/* 渐变遮罩，让中心内容更清晰 */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.85) 100%)', pointerEvents: 'none' }} />
+        <div className="hero-content" style={{ maxWidth: 1200, margin: '0 auto', padding: '120px 24px 110px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
           <h1 className="hero-title" style={{ fontSize: 56, fontWeight: 900, color: IKEA.text, marginBottom: 28, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
             关于企业的一切<br />都在<span style={{ color: IKEA.blue }}>园圈</span>
           </h1>
@@ -87,36 +99,22 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* 核心功能矩阵 — 宜家方格 */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px' }}>
-        <h2 style={{ fontSize: 24, fontWeight: 900, color: IKEA.text, marginBottom: 24 }}>核心功能</h2>
-        <div className="feature-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
-          {FEATURES.map(f => (
-            <button key={f.label} onClick={() => go(f.path)} style={{ background: '#fff', borderRadius: RADIUS.lg, padding: 24, border: `1px solid ${IKEA.borderLight}`, cursor: 'pointer', textAlign: 'left', boxShadow: SHADOW.card, transition: 'box-shadow 0.2s, transform 0.15s', fontFamily: FONT }}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = SHADOW.hover; e.currentTarget.style.transform = 'translateY(-3px)'; }} onMouseLeave={e => { e.currentTarget.style.boxShadow = SHADOW.card; e.currentTarget.style.transform = 'none'; }}>
-              <div style={{ width: 48, height: 48, borderRadius: RADIUS.md, background: IKEA.blueLight, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                <SvgIcon name={f.icon} size={26} color={IKEA.blue} />
-              </div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: IKEA.text, marginBottom: 4 }}>{f.label}</div>
-              <div style={{ fontSize: 13, color: IKEA.textMuted }}>{f.desc}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 企业服务生态 — 宜家黄色横幅 */}
+      {/* 企业服务生态 — 真实可点击服务按钮 */}
       <div style={{ background: IKEA.blueLight, borderTop: `1px solid ${IKEA.borderLight}`, borderBottom: `1px solid ${IKEA.borderLight}` }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px' }}>
-          <h2 style={{ fontSize: 24, fontWeight: 900, color: IKEA.text, marginBottom: 24 }}>企业服务生态</h2>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '56px 24px' }}>
+          <h2 style={{ fontSize: 24, fontWeight: 900, color: IKEA.text, marginBottom: 8 }}>企业服务生态</h2>
+          <p style={{ fontSize: 14, color: IKEA.textMuted, marginBottom: 28 }}>园区入驻后，一站搞定企业日常所需，点击直接获取服务</p>
           <div className="service-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
             {SERVICES.map(s => (
-              <div key={s.label} style={{ background: '#fff', borderRadius: RADIUS.md, padding: 20, border: `1px solid ${IKEA.borderLight}`, textAlign: 'center', boxShadow: SHADOW.card }}>
-                <div style={{ width: 40, height: 40, borderRadius: RADIUS.sm, background: IKEA.blueLight, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-                  <SvgIcon name={s.icon} size={22} color={IKEA.blue} />
+              <button key={s.label} onClick={() => alert(`${s.label}：正在为您匹配园区认证服务商，顾问将尽快联系您`)} style={{ background: '#fff', borderRadius: RADIUS.md, padding: 20, border: `1px solid ${IKEA.borderLight}`, textAlign: 'center', boxShadow: SHADOW.card, cursor: 'pointer', fontFamily: FONT, transition: 'box-shadow 0.2s, transform 0.15s' }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = SHADOW.hover; e.currentTarget.style.transform = 'translateY(-3px)'; }} onMouseLeave={e => { e.currentTarget.style.boxShadow = SHADOW.card; e.currentTarget.style.transform = 'none'; }}>
+                <div style={{ width: 44, height: 44, borderRadius: RADIUS.sm, background: IKEA.blueLight, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                  <SvgIcon name={s.icon} size={24} color={IKEA.blue} />
                 </div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: IKEA.text }}>{s.label}</div>
                 <div style={{ fontSize: 11, color: IKEA.textMuted, marginTop: 2 }}>{s.desc}</div>
-              </div>
+                <div style={{ fontSize: 11, color: IKEA.blue, marginTop: 6, fontWeight: 600 }}>点击获取 ›</div>
+              </button>
             ))}
           </div>
         </div>

@@ -5,6 +5,7 @@ import { assetUrl } from '../../lib/asset';
 import { useRole, authenticate, agentLink as genLink } from '../../lib/role-context';
 import { setCurrentUserId, getCurrentUser, getConversations, PARK_CONTACTS } from '../../lib/chat-store';
 import { ChatPanel } from '../../components/ChatPanel';
+import { ParkDetail } from '../../components/ParkDetail';
 import { IKEA, FONT, SHADOW, RADIUS } from '../../lib/ikea-style';
 
 const C = { primary: '#0058A3', primaryLight: '#E5F0FA', bg: '#F5F5F5', text: '#111', textSub: '#484848', textMuted: '#767676', orange: '#FF6B00', yellow: '#FFDA1A', border: '#E5E5E5', sale: '#E0001B' };
@@ -20,6 +21,7 @@ export default function AgentCoopPage() {
   const [chatTarget, setChatTarget] = useState<{ id: string; name: string } | null>(null);
   const [showContacts, setShowContacts] = useState(false);
   const [showCompare, setShowCompare] = useState<any>(null);
+  const [parkDetail, setParkDetail] = useState<{ name: string; region?: string } | null>(null);
   const bp = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
   useEffect(() => {
@@ -117,7 +119,7 @@ export default function AgentCoopPage() {
           const heights = [200, 260, 230, 280, 240, 270]; // 瀑布流错落高度
           const h = heights[i % heights.length];
           return (
-            <div key={b.id} style={{ breakInside: 'avoid', marginBottom: 14, background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: SHADOW.card, border: `1px solid ${C.border}`, cursor: 'pointer' }} onClick={() => setShowCompare(b)}>
+            <div key={b.id} style={{ breakInside: 'avoid', marginBottom: 14, background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: SHADOW.card, border: `1px solid ${C.border}`, cursor: 'pointer' }} onClick={() => setParkDetail({ name: b.park_name || b.name, region: b.region })}>
               {/* 图片 */}
               <div style={{ position: 'relative', height: h }}>
                 <img src={assetUrl(b.images?.[0] || '/images/buildings/industrial1.jpg')} alt={b.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -191,7 +193,12 @@ export default function AgentCoopPage() {
         </div>
       )}
 
-      {/* 详情/对比弹窗 */}
+      {/* 园区详情 */}
+      {parkDetail && (
+        <ParkDetail parkName={parkDetail.name} region={parkDetail.region} onClose={() => setParkDetail(null)} onChatPark={(id, name) => { setParkDetail(null); setChatTarget({ id, name }); }} />
+      )}
+
+      {/* 房型快讯弹窗 */}
       {showCompare && (
         <div onClick={() => setShowCompare(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
           <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 460, background: '#fff', borderRadius: 16, overflow: 'hidden', maxHeight: '85vh', overflowY: 'auto', animation: 'scaleIn 0.25s ease', fontFamily: FONT }}>
