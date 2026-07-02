@@ -3,8 +3,8 @@
 import React, { useState, useRef } from 'react';
 import { IKEA, FONT, SHADOW, RADIUS } from '../../lib/ikea-style';
 import {
-  excelToJson, jsonToExcel, csvToExcel, docxToHtml, textToPdf, tableToPdf,
-  pdfToText, pdfPageCount, pdfSplitPages, audioToWav, audioTrimSilence,
+  excelToJson, docxToHtml, textToPdf,
+  pdfToText, pdfPageCount, pdfSplitPages, audioToWav,
   imageConvert, makeSlides, fileMeta, downloadBlob
 } from '../../lib/office-tools';
 
@@ -12,24 +12,19 @@ const C = { primary: '#0058A3', primaryLight: '#E5F0FA', bg: '#F5F5F5', text: '#
 
 const TOOLS = [
   { group: '文档处理', items: [
-    { id: 'docx2html', name: 'Word转网页', desc: '上传docx提取为HTML', icon: 'doc', accept: '.docx' },
-    { id: 'pdf2text', name: 'PDF解析', desc: '提取PDF全部文本', icon: 'pdf', accept: '.pdf' },
-    { id: 'pdfsplit', name: 'PDF拆分', desc: '按页码范围拆分PDF', icon: 'split', accept: '.pdf' },
-    { id: 'pdfinfo', name: 'PDF信息', desc: '查看PDF页数等信息', icon: 'info', accept: '.pdf' },
+    { id: 'docx2html', name: 'Word转网页', desc: '上传docx提取为可读HTML', icon: 'doc', accept: '.docx' },
+    { id: 'pdf2text', name: 'PDF解析', desc: '提取PDF全部文字内容', icon: 'pdf', accept: '.pdf' },
+    { id: 'pdfsplit', name: 'PDF拆分', desc: '按页码范围拆分提取', icon: 'split', accept: '.pdf' },
   ]},
   { group: '表格处理', items: [
-    { id: 'xlsx2json', name: 'Excel转数据', desc: '读取Excel为表格数据', icon: 'xls', accept: '.xlsx,.xls' },
-    { id: 'json2xlsx', name: '数据导Excel', desc: '文本数据导出为Excel', icon: 'xls2', accept: '' },
-    { id: 'csv2xlsx', name: 'CSV转Excel', desc: 'CSV文件转为xlsx', icon: 'csv', accept: '.csv' },
+    { id: 'xlsx2json', name: 'Excel转数据', desc: '读取Excel为可编辑表格', icon: 'xls', accept: '.xlsx,.xls' },
   ]},
   { group: 'PDF生成', items: [
-    { id: 'text2pdf', name: '文本转PDF', desc: '输入文本生成PDF', icon: 'pdf2', accept: '' },
-    { id: 'table2pdf', name: '表格转PDF', desc: '表格数据生成PDF', icon: 'pdf3', accept: '' },
+    { id: 'text2pdf', name: '文本转PDF', desc: '输入文本一键生成PDF', icon: 'pdf2', accept: '' },
     { id: 'makeppt', name: '制作PPT', desc: '快速生成演示文稿PDF', icon: 'ppt', accept: '' },
   ]},
-  { group: '音频处理', items: [
+  { group: '音视频处理', items: [
     { id: 'audio2wav', name: '音频转WAV', desc: '任意音频转为标准WAV', icon: 'audio', accept: 'audio/*' },
-    { id: 'audiotrim', name: '静音裁剪', desc: '去除音频首尾静音', icon: 'audio2', accept: 'audio/*' },
   ]},
   { group: '图片转换', items: [
     { id: 'img2png', name: '转PNG', desc: '图片转为PNG格式', icon: 'img', accept: 'image/*' },
@@ -71,11 +66,8 @@ export default function OfficePage() {
         case 'docx2html': { const html = await docxToHtml(file); setResult({ type: 'html', html, meta: fileMeta(file) }); break; }
         case 'pdf2text': { const text = await pdfToText(file); setResult({ type: 'text', text, meta: fileMeta(file) }); break; }
         case 'pdfsplit': { const n = await pdfPageCount(file); const ranges: [number, number][] = [[1, Math.ceil(n/2)], [Math.ceil(n/2)+1, n]]; const parts = await pdfSplitPages(file, ranges); setResult({ type: 'split', parts, meta: fileMeta(file), pages: n }); break; }
-        case 'pdfinfo': { const n = await pdfPageCount(file); setResult({ type: 'info', meta: fileMeta(file), pages: n }); break; }
         case 'xlsx2json': { const rows = await excelToJson(file); setResult({ type: 'table', rows, meta: fileMeta(file) }); break; }
-        case 'csv2xlsx': { await csvToExcel(file); setResult({ type: 'done', msg: '已转换为Excel并下载' }); break; }
         case 'audio2wav': { const blob = await audioToWav(file); downloadBlob(blob, file.name.replace(/\.[^.]+$/, '.wav')); setResult({ type: 'done', msg: 'WAV已下载' }); break; }
-        case 'audiotrim': { const blob = await audioTrimSilence(file); downloadBlob(blob, file.name.replace(/\.[^.]+$/, '_trimmed.wav')); setResult({ type: 'done', msg: '裁剪后WAV已下载' }); break; }
         case 'img2png': { const b = await imageConvert(file, 'png'); downloadBlob(b, file.name.replace(/\.[^.]+$/, '.png')); setResult({ type: 'done', msg: 'PNG已下载' }); break; }
         case 'img2jpg': { const b = await imageConvert(file, 'jpeg'); downloadBlob(b, file.name.replace(/\.[^.]+$/, '.jpg')); setResult({ type: 'done', msg: 'JPG已下载' }); break; }
         case 'img2webp': { const b = await imageConvert(file, 'webp'); downloadBlob(b, file.name.replace(/\.[^.]+$/, '.webp')); setResult({ type: 'done', msg: 'WebP已下载' }); break; }
@@ -89,17 +81,11 @@ export default function OfficePage() {
     setBusy(true);
     try {
       if (selTool === 'text2pdf') { textToPdf(textInput, '文本.pdf'); setResult({ type: 'done', msg: 'PDF已下载' }); }
-      else if (selTool === 'table2pdf') {
-        const rows = textInput.trim().split('\n').map(l => l.split('\t'));
-        tableToPdf(rows, '表格.pdf'); setResult({ type: 'done', msg: '表格PDF已下载' });
-      } else if (selTool === 'makeppt') {
+      else if (selTool === 'makeppt') {
         const lines = textInput.trim().split('\n');
         const title = lines[0] || '演示文稿';
         const slides = lines.slice(1).map(l => { const [t, ...c] = l.split('|'); return { title: t || '', content: c.join('|') }; });
         makeSlides(title, slides, '演示文稿.pdf'); setResult({ type: 'done', msg: 'PPT已下载(16:9 PDF)' });
-      } else if (selTool === 'json2xlsx') {
-        const rows = textInput.trim().split('\n').map(l => l.split('\t'));
-        jsonToExcel(rows, '导出.xlsx'); setResult({ type: 'done', msg: 'Excel已下载' });
       }
     } catch (e: any) { setResult({ type: 'error', msg: e.message }); }
     finally { setBusy(false); }
@@ -205,16 +191,6 @@ export default function OfficePage() {
                         </tr>
                       ))}</tbody>
                     </table>
-                  </div>
-                </div>
-              )}
-              {result?.type === 'info' && (
-                <div style={{ marginTop: 20, padding: 20, background: '#fff', borderRadius: 8, border: `1px solid ${C.border}` }}>
-                  <div style={{ fontSize: 14, marginBottom: 12 }}>文件：{result.meta.name}</div>
-                  <div style={{ display: 'flex', gap: 24 }}>
-                    <div><div style={{ fontSize: 11, color: C.textMuted }}>页数</div><div style={{ fontSize: 24, fontWeight: 900, color: C.primary }}>{result.pages}</div></div>
-                    <div><div style={{ fontSize: 11, color: C.textMuted }}>大小</div><div style={{ fontSize: 24, fontWeight: 900, color: C.text }}>{result.meta.size}</div></div>
-                    <div><div style={{ fontSize: 11, color: C.textMuted }}>类型</div><div style={{ fontSize: 14, fontWeight: 600, color: C.text, paddingTop: 6 }}>{result.meta.type}</div></div>
                   </div>
                 </div>
               )}
