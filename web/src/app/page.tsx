@@ -49,7 +49,7 @@ export default function HomePage() {
           </div>
           <div style={{ flex: 1 }} />
           {/* 三角色方块 */}
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8 }} className="nav-role-blocks">
             {[
               { label: '我是经纪人', path: '/agent-coop' },
               { label: '我是产业园', path: '/sales' },
@@ -69,13 +69,13 @@ export default function HomePage() {
       {/* Hero — 占比加大，纯蓝主色，去黄色 */}
       <div style={{ background: '#fff' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '120px 24px 110px', textAlign: 'center' }}>
-          <h1 style={{ fontSize: 56, fontWeight: 900, color: IKEA.text, marginBottom: 28, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
+          <h1 className="hero-title" style={{ fontSize: 56, fontWeight: 900, color: IKEA.text, marginBottom: 28, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
             关于企业的一切<br />都在<span style={{ color: IKEA.blue }}>园圈</span>
           </h1>
-          <p style={{ fontSize: 20, color: IKEA.textSub, marginBottom: 48, lineHeight: 1.6, fontWeight: 500 }}>
+          <p className="hero-sub" style={{ fontSize: 20, color: IKEA.textSub, marginBottom: 48, lineHeight: 1.6, fontWeight: 500 }}>
             AI智能选址 · 产业园入驻 · 企业服务生态 · 一站式解决企业空间需求
           </p>
-          <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+          <div className="hero-buttons" style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
             <button onClick={() => go('/find')} style={{ padding: '18px 44px', borderRadius: RADIUS.sm, border: 'none', background: IKEA.blue, color: '#fff', fontSize: 17, fontWeight: 700, cursor: 'pointer', fontFamily: FONT, boxShadow: SHADOW.card, transition: 'transform 0.15s' }}
               onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'} onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
               AI帮我选址
@@ -90,7 +90,7 @@ export default function HomePage() {
       {/* 核心功能矩阵 — 宜家方格 */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px' }}>
         <h2 style={{ fontSize: 24, fontWeight: 900, color: IKEA.text, marginBottom: 24 }}>核心功能</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
+        <div className="feature-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
           {FEATURES.map(f => (
             <button key={f.label} onClick={() => go(f.path)} style={{ background: '#fff', borderRadius: RADIUS.lg, padding: 24, border: `1px solid ${IKEA.borderLight}`, cursor: 'pointer', textAlign: 'left', boxShadow: SHADOW.card, transition: 'box-shadow 0.2s, transform 0.15s', fontFamily: FONT }}
               onMouseEnter={e => { e.currentTarget.style.boxShadow = SHADOW.hover; e.currentTarget.style.transform = 'translateY(-3px)'; }} onMouseLeave={e => { e.currentTarget.style.boxShadow = SHADOW.card; e.currentTarget.style.transform = 'none'; }}>
@@ -108,7 +108,7 @@ export default function HomePage() {
       <div style={{ background: IKEA.blueLight, borderTop: `1px solid ${IKEA.borderLight}`, borderBottom: `1px solid ${IKEA.borderLight}` }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px' }}>
           <h2 style={{ fontSize: 24, fontWeight: 900, color: IKEA.text, marginBottom: 24 }}>企业服务生态</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
+          <div className="service-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
             {SERVICES.map(s => (
               <div key={s.label} style={{ background: '#fff', borderRadius: RADIUS.md, padding: 20, border: `1px solid ${IKEA.borderLight}`, textAlign: 'center', boxShadow: SHADOW.card }}>
                 <div style={{ width: 40, height: 40, borderRadius: RADIUS.sm, background: IKEA.blueLight, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>

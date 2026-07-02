@@ -49,12 +49,15 @@ export default function SalesPage() {
   const [notesText, setNotesText] = useState('');
   const [generatedImage, setGeneratedImage] = useState<any>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [activeTab, setActiveTab] = useState<'listings' | 'pending' | 'history' | 'promos' | 'park' | 'audit'>('listings');
+  const [activeTab, setActiveTab] = useState<'listings' | 'pending' | 'history' | 'promos' | 'park' | 'audit' | 'service'>('listings');
   const [pendingItems, setPendingItems] = useState<any[]>([]);
   const [historyItems, setHistoryItems] = useState<any[]>([]);
   const [rejectReason, setRejectReason] = useState('');
   const [rejectTarget, setRejectTarget] = useState<any>(null);
   const [applyList, setApplyList] = useState<any[]>([]);
+  const [serviceTab, setServiceTab] = useState<'list' | 'publish'>('list');
+  const [serviceTickets, setServiceTickets] = useState<any[]>([]);
+  const [selServiceType, setSelServiceType] = useState<string>('');
   const [showVoiceInput, setShowVoiceInput] = useState(false);
   const [voiceText, setVoiceText] = useState('');
   const [parsing, setParsing] = useState(false);
@@ -70,6 +73,7 @@ export default function SalesPage() {
     setPendingItems(JSON.parse(localStorage.getItem('my_listings') || '[]').filter((b: any) => b.status === 'pending' || b.status === 'pending_review'));
     setHistoryItems(JSON.parse(localStorage.getItem('audit_history') || '[]'));
     setApplyList(JSON.parse(localStorage.getItem('apply_list') || '[]'));
+    setServiceTickets(JSON.parse(localStorage.getItem('service_tickets') || '[]'));
   }, []);
 
   // 审核操作
@@ -110,6 +114,32 @@ export default function SalesPage() {
     hist.unshift({ ...item, audit_action: action === 'approve' ? `审批通过：${item?.role === 'park' ? '产业园' : '经纪人'}入驻` : `审批驳回：${item?.role === 'park' ? '产业园' : '经纪人'}入驻` });
     localStorage.setItem('audit_history', JSON.stringify(hist));
     setHistoryItems(hist);
+  };
+
+  // 客服工单：发布公告
+  const handlePublishNotice = () => {
+    const title = prompt('公告标题');
+    if (!title) return;
+    const content = prompt('公告内容') || '';
+    const tickets = JSON.parse(localStorage.getItem('service_tickets') || '[]');
+    const newT = { id: Date.now().toString(), type: '公告发布', title, content, status: '已发布', createdAt: new Date().toISOString(), isNotice: true };
+    tickets.unshift(newT);
+    localStorage.setItem('service_tickets', JSON.stringify(tickets));
+    setServiceTickets(tickets);
+    alert('公告已发布，企业小程序将同步显示');
+  };
+
+  // 客服工单：受理（联系企业）
+  const handleTicketAccept = (id: string) => {
+    const updated = serviceTickets.map(t => t.id === id ? { ...t, status: 'processing', acceptedAt: new Date().toISOString() } : t);
+    localStorage.setItem('service_tickets', JSON.stringify(updated));
+    setServiceTickets(updated);
+  };
+  // 客服工单：完成
+  const handleTicketFinish = (id: string) => {
+    const updated = serviceTickets.map(t => t.id === id ? { ...t, status: 'done', finishedAt: new Date().toISOString() } : t);
+    localStorage.setItem('service_tickets', JSON.stringify(updated));
+    setServiceTickets(updated);
   };
 
   // 语音录入
@@ -435,6 +465,7 @@ export default function SalesPage() {
             ...(role === 'superadmin' ? [{ k: 'audit' as const, l: '入驻审批', count: applyList.length }] : []),
             { k: 'history', l: '审核记录', count: historyItems.length },
             { k: 'park', l: '园区信息', count: 0 },
+            { k: 'service', l: '客服服务', count: serviceTickets.filter(t => t.status === 'pending').length },
           ].filter(Boolean).map((t, i, arr) => (
             <button key={t.k} onClick={() => setActiveTab(t.k as any)} style={{ flex: 1, padding: '10px 0', border: 'none', borderRight: i < arr.length - 1 ? '1px solid #eee' : 'none', background: activeTab === t.k ? C.primaryLight : '#fff', color: activeTab === t.k ? C.primary : '#767676', fontSize: 14, fontWeight: activeTab === t.k ? 700 : 400, cursor: 'pointer', fontFamily: 'inherit' }}>
               {t.l} {t.count > 0 && <span style={{ fontSize: 12, color: activeTab === t.k ? C.primary : '#767676' }}>({t.count})</span>}
@@ -655,6 +686,9 @@ export default function SalesPage() {
 
       {/* PDF文件输入 */}
       <input ref={fileRef} type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,image/*" onChange={handleDocUpload} style={{ display: 'none' }} />
+
+      {/* 客服服务 */}
+      {activeTab === 'service' && <ServicePanel tickets={serviceTickets} selType={selServiceType} setSelType={setSelServiceType} onAccept={handleTicketAccept} onFinish={handleTicketFinish} />}
 
       {/* 驳回弹窗 */}
       {rejectTarget && (
@@ -902,5 +936,83 @@ function LongImagePreview({ data, onClose }: { data: any; onClose: () => void })
         </div>
       </div>
     </>
+  );
+}
+
+function ServicePanel({ tickets, selType, setSelType, onAccept, onFinish }: {
+  tickets: any[]; selType: string; setSelType: (s: string) => void;
+  onAccept: (id: string) => void; onFinish: (id: string) => void;
+}) {
+  const [showPublish, setShowPublish] = useState(false);
+  const [notice, setNotice] = useState('');
+  const SERVICES = [
+    { key: 'decorate', name: '装修管理', desc: '装修申请->沟通->线下签协议' },
+    { key: 'satisfy', name: '满意度调查', desc: '问卷模板->统计->报告' },
+    { key: 'notice', name: '公告发布', desc: '客服发布->企业同步' },
+    { key: 'parking', name: '停车位办理', desc: '线上申请->线下开通' },
+    { key: 'network', name: '网络电话', desc: '线上申请->线下开通' },
+    { key: 'meeting', name: '会议室预约', desc: '按时段申请->签手续' },
+    { key: 'recharge', name: '电卡充电', desc: '线上申请->带卡充电' },
+    { key: 'repair', name: '客户报修', desc: '选类别->分配主管->维修' },
+    { key: 'visitor', name: '来访车辆', desc: '线上/电话->转保安' },
+  ];
+  const filtered = selType ? tickets.filter(t => t.type === selType) : tickets;
+  const statusMap: Record<string, { label: string; color: string; bg: string }> = {
+    pending: { label: '待受理', color: '#FF9500', bg: '#FFF8E5' },
+    processing: { label: '处理中', color: '#0058A3', bg: '#E5F0FA' },
+    done: { label: '已完成', color: '#008A00', bg: '#EAFBEF' },
+  };
+  const typeMap: Record<string, string> = { decorate: '装修管理', satisfy: '满意度调查', notice: '公告发布', parking: '停车位', network: '网络电话', meeting: '会议室', recharge: '电卡充电', repair: '客户报修', visitor: '来访车辆' };
+  const ICONS: Record<string,string> = { decorate:'M15 12l-8.5 8.5a2.12 2.12 0 0 1-3-3L12 9', satisfy:'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2', notice:'M3 11l19-9-9 19-2-8-8-2z', parking:'M5 17H3v-5l2-5h12l2 5v5h-2', network:'M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0', meeting:'M3 21h18M5 21V7l8-4v18M19 21V11l-6-4', recharge:'M13 2L3 14h9l-1 8 10-12h-9z', repair:'M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z', visitor:'M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2' };
+  return (
+    <div>
+      <div style={{ background: '#fff', borderRadius: 8, padding: 16, marginBottom: 16, border: '1px solid ' + C.border }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 12 }}>客服服务功能</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+          {SERVICES.map(s => (
+            <div key={s.key} onClick={() => setSelType(selType === s.key ? '' : s.key)} style={{ textAlign: 'center', padding: 12, borderRadius: 8, border: '1px solid ' + (selType === s.key ? C.primary : C.border), background: selType === s.key ? C.primaryLight : '#FAFBFC', cursor: 'pointer' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={selType === s.key ? C.primary : '#767676'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 4px', display: 'block' }} dangerouslySetInnerHTML={{ __html: ICONS[s.key] || '' }} />
+              <div style={{ fontSize: 12, fontWeight: 700, color: selType === s.key ? C.primary : C.text }}>{s.name}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <button onClick={() => setShowPublish(true)} style={{ width: '100%', height: 44, borderRadius: 8, border: 'none', background: C.primary, color: '#fff', fontSize: 15, fontWeight: 700, cursor: 'pointer', marginBottom: 16, fontFamily: 'inherit' }}>发布公告通知</button>
+      <div style={{ background: '#fff', borderRadius: 8, overflow: 'hidden', border: '1px solid ' + C.border }}>
+        <div style={{ padding: '12px 16px', borderBottom: '1px solid ' + C.border, fontSize: 15, fontWeight: 700, color: C.text, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>服务工单{selType ? ' · ' + typeMap[selType] : ''}</span>
+          <span style={{ fontSize: 12, color: C.textMuted, fontWeight: 400 }}>{filtered.length} 条</span>
+        </div>
+        {filtered.length === 0 ? (
+          <div style={{ padding: 40, textAlign: 'center', color: C.textMuted, fontSize: 14 }}>暂无工单，企业提交申请后将在此显示</div>
+        ) : filtered.map(t => {
+          const st = statusMap[t.status] || statusMap.pending;
+          return (
+            <div key={t.id} style={{ padding: '14px 16px', borderBottom: '1px solid ' + C.border }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{typeMap[t.type] || t.type}</span>
+                <span style={{ fontSize: 11, color: st.color, background: st.bg, padding: '2px 8px', borderRadius: 4, fontWeight: 600 }}>{st.label}</span>
+              </div>
+              <div style={{ fontSize: 12, color: C.textMuted, lineHeight: 1.6 }}>{t.company} · {t.contact} · {new Date(t.createdAt).toLocaleString('zh-CN')}</div>
+              {t.desc && <div style={{ fontSize: 13, color: C.textSub, marginTop: 6, background: C.bg, padding: 8, borderRadius: 6 }}>{t.desc}</div>}
+              {t.status === 'pending' && <button onClick={() => onAccept(t.id)} style={{ marginTop: 10, padding: '6px 16px', borderRadius: 6, border: 'none', background: C.primary, color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>受理并联系企业</button>}
+              {t.status === 'processing' && <button onClick={() => onFinish(t.id)} style={{ marginTop: 10, padding: '6px 16px', borderRadius: 6, border: 'none', background: '#008A00', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>标记完成</button>}
+            </div>
+          );
+        })}
+      </div>
+      {showPublish && (
+        <div onClick={() => setShowPublish(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: 440, background: '#fff', borderRadius: 12, padding: 20, fontFamily: 'inherit', animation: 'scaleIn 0.25s ease' }}>
+            <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>发布公告通知</div>
+            <textarea value={notice} onChange={e => setNotice(e.target.value)} placeholder="输入公告内容，如培训通知、停水停电提醒等..." style={{ width: '100%', minHeight: 100, padding: 10, border: '1px solid ' + C.border, borderRadius: 8, fontSize: 14, outline: 'none', resize: 'vertical', fontFamily: 'inherit', marginBottom: 12 }} />
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button onClick={() => setShowPublish(false)} style={{ flex: 1, height: 42, borderRadius: 8, border: '1px solid ' + C.border, background: '#fff', color: C.textSub, fontSize: 14, cursor: 'pointer', fontFamily: 'inherit' }}>取消</button>
+              <button onClick={() => { const list = JSON.parse(localStorage.getItem('service_notices') || '[]'); list.unshift({ id: Date.now().toString(), content: notice, createdAt: new Date().toISOString() }); localStorage.setItem('service_notices', JSON.stringify(list)); setNotice(''); setShowPublish(false); alert('公告已发布，关联企业小程序将同步显示'); }} disabled={!notice.trim()} style={{ flex: 1, height: 42, borderRadius: 8, border: 'none', background: notice.trim() ? C.primary : '#ccc', color: '#fff', fontSize: 14, fontWeight: 600, cursor: notice.trim() ? 'pointer' : 'default', fontFamily: 'inherit' }}>发布</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

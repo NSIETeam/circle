@@ -906,3 +906,39 @@ img {
 .grouped-list .list-row:last-child {
   border-bottom: none;
 }
+
+/* ============================================================
+   移动端响应式适配 (IKEA风格)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* 首页导航：三角色方块横排可滚动，缩小padding */
+  .nav-role-blocks {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-role-blocks > a {
+    flex-shrink: 0;
+  }
+  .nav-role-blocks > a > div {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    min-width: auto !important;
+  }
+  /* Hero标题缩小 */
+  .hero-title { font-size: 32px !important; line-height: 1.2 !important; }
+  .hero-sub { font-size: 16px !important; }
+  /* 功能矩阵双列 */
+  .feature-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  /* 服务生态三列 */
+  .service-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 26px !important; }
+  .feature-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .service-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  /* 按钮组竖排 */
+  .hero-buttons { flex-direction: column !important; gap: 10px !important; }
+  .hero-buttons button { width: 100% !important; }
+}
